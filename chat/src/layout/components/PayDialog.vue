@@ -6,8 +6,9 @@ import { CloseOutline, PaperPlaneOutline } from '@vicons/ionicons5'
 import { useAuthStore, useGlobalStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchOrderBuyAPI, fetchOrderQueryAPI } from '@/api/order'
+import { generateVerifySign } from '@/utils/functions/auth'
 
-import type { ResData } from '@/api/types'
+import type { ResData, paymentRes } from '@/api/types'
 import QRCode from '@/components/common/QRCode/index.vue'
 import alipay from '@/assets/alipay.png'
 import wxpay from '@/assets/wxpay.png'
@@ -130,15 +131,45 @@ async function getQrCode() {
     qsPayType = isWxEnv.value ? 'jsapi' : 'native'
 
   try {
-    const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
+    // const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
+    const now = new Date();
+    const utcTime = now.toUTCString();
+    const { VITE_GLOB_API_URL, VITE_AUTH_CLIENT_ID, VITE_AUTH_CLIENT_SECRET } = import.meta.env
+    const params = {
+        clientId: VITE_AUTH_CLIENT_ID,
+	    amount: orderInfo.value.pkgInfo?.price,
+        settleCurrency: 'USD',
+        currency: 'USD',
+        vendor: payType.value,
+        ipnUrl: `${VITE_GLOB_API_URL}/ipnUrl`,
+        callbackUrl: `${VITE_GLOB_API_URL}/payback?status={status}&transactionNo={transactionNo}`,
+        terminal: 'ONLINE',
+        osType: '',
+        reference: 'test1723420752040',
+        description: 'xxxx',
+        note: 'xxx',
+        timeout: '120',
+        goodsInfo: JSON.stringify(orderInfo.value.pkgInfo),
+        creditType: 'normal',
+        paymentCount: '',
+        frequency: '',
+        cardNumber: '',
+        customerNo: '',
+        timestamp: utcTime, //UTC时间
+        verifySign: '',
+    }
+    const verifySign = generateVerifySign(params, VITE_AUTH_CLIENT_SECRET)
+    params.verifySign = verifySign
+    const res: paymentRes = await fetchOrderBuyAPI(params)
+
     const { data, success, message } = res
     if (!success)
       return ms.error(message)
 
-    const { url_qrcode: code, orderId: id, redirectUrl: url } = data
+    const { transactionNo: id, cashierUrl: url } = data.result
     redirectUrl.value = url
     orderId.value = id
-    url_qrcode.value = code
+    // url_qrcode.value = code
     qrCodeloading.value = false
     redirectloading.value = false
   }
