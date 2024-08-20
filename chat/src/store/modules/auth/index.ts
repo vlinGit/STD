@@ -4,7 +4,7 @@ import { useChatStore } from '../chat'
 import type { AuthState, GlobalConfig, UserBalance } from './helper'
 import { getToken, removeToken, setToken } from './helper'
 import { store } from '@/store'
-import { fetchGetInfo } from '@/api'
+import { fetchGetInfo, fetchRegisterAPI } from '@/api'
 import { fetchQueryConfigAPI } from '@/api/config'
 import { fetchGetBalanceQueryAPI } from '@/api/balance'
 import type { ResData } from '@/api/types'
@@ -63,15 +63,32 @@ export const useAuthStore = defineStore('auth-store', {
 			const loginCode = getUrlValue('code')
 			if (!loginCode) {
 				// 跳转授权登录
-				const { VITE_AUTH_URL, VITE_AUTH_CLIENT_ID, VITE_AUTH_REDIRECT_URI } =
-					import.meta.env
-				const loginUri = `${VITE_AUTH_URL}?client_id=${VITE_AUTH_CLIENT_ID}&scope=base&redirect_uri=${encodeURIComponent(
+				const {
+					VITE_AUTH_URL,
+					VITE_AUTH_CLIENT_ID,
+					VITE_AUTH_REDIRECT_URI,
+					VITE_AUTH_CODE_CHALLENGE,
+					VITE_AUTH_CODE_CHALLENGE_METHOD,
+					VITE_AUTH_STATE
+				} = import.meta.env
+				const loginUri = `${VITE_AUTH_URL}?client_id=${VITE_AUTH_CLIENT_ID}&redirect_uri=${encodeURIComponent(
 					VITE_AUTH_REDIRECT_URI
-				)}`
+				)}&code_challenge=${VITE_AUTH_CODE_CHALLENGE}&code_challenge_method=${VITE_AUTH_CODE_CHALLENGE_METHOD}&prompt=Welcome+back%21&response_type=code&scope=openid+profile&state=${VITE_AUTH_STATE}`
 				window.location.replace(loginUri)
 			} else {
 				// 直接登录
+				this.setToken(loginCode)
 			}
+		},
+
+		async register () {
+			const res = await fetchRegisterAPI({
+				username: '',
+				password: '',
+				email: 'abc@qq.com'
+			})
+			this.setToken(res.data)
+			this.getUserInfo()
 		},
 
 		setToken (token: string) {

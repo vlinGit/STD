@@ -41,9 +41,9 @@ const homePath = computed(() => authStore.globalConfig?.clientHomePath)
 /* 如果在vx环境并且携带了code则静默登录 */
 
 function handleCheckOtherLoginByToken() {
-  const { token } = route.query
-  if (token) {
-    authStore.setToken(token)
+  const { code } = route.query
+  if (code) {
+    authStore.setToken(code)
     const name = route.name
     router.replace({ name, query: {} })
     ms.success('账户登录成功、开始体验吧！')
