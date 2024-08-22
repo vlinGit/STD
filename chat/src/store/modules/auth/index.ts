@@ -4,11 +4,22 @@ import { useChatStore } from '../chat'
 import type { AuthState, GlobalConfig, UserBalance } from './helper'
 import { getToken, removeToken, setToken } from './helper'
 import { store } from '@/store'
-import { fetchGetInfo, fetchRegisterAPI } from '@/api'
+import {
+	fetchGetInfo,
+	fetchLoginAPI,
+	fetchRegisterAPI,
+	fetchTokenAPI
+} from '@/api'
 import { fetchQueryConfigAPI } from '@/api/config'
 import { fetchGetBalanceQueryAPI } from '@/api/balance'
 import type { ResData } from '@/api/types'
 import { getUrlValue } from '@/utils/functions/urlParams'
+import {
+	generateCodeChallenge,
+	generateCodeVerifier,
+	parseJwt
+} from '@/utils/functions/auth'
+import jwtDecode from 'jwt-decode'
 
 export const useAuthStore = defineStore('auth-store', {
 	state: (): AuthState => ({
@@ -18,7 +29,9 @@ export const useAuthStore = defineStore('auth-store', {
 		userInfo: {},
 		userBalance: {},
 		globalConfig: {} as GlobalConfig,
-		loadInit: false
+		loadInit: false,
+		codeVerifier: '',
+		codeChallenge: ''
 	}),
 
 	getters: {
@@ -63,6 +76,11 @@ export const useAuthStore = defineStore('auth-store', {
 			const loginCode = getUrlValue('code')
 			if (!loginCode) {
 				// 跳转授权登录
+				const codeVerifier = generateCodeVerifier()
+				const codeChallenge = generateCodeChallenge(codeVerifier)
+				localStorage.setItem('codeVerifier', codeVerifier)
+				localStorage.setItem('codeChallenge', codeChallenge)
+
 				const {
 					VITE_AUTH_URL,
 					VITE_AUTH_CLIENT_ID,
@@ -73,20 +91,73 @@ export const useAuthStore = defineStore('auth-store', {
 				} = import.meta.env
 				const loginUri = `${VITE_AUTH_URL}?client_id=${VITE_AUTH_CLIENT_ID}&redirect_uri=${encodeURIComponent(
 					VITE_AUTH_REDIRECT_URI
-				)}&code_challenge=${VITE_AUTH_CODE_CHALLENGE}&code_challenge_method=${VITE_AUTH_CODE_CHALLENGE_METHOD}&prompt=Welcome+back%21&response_type=code&scope=openid+profile&state=${VITE_AUTH_STATE}`
+				)}&code_challenge=${codeChallenge}&code_challenge_method=${VITE_AUTH_CODE_CHALLENGE_METHOD}&prompt=Welcome+back%21&response_type=code&scope=openid+profile&state=${VITE_AUTH_STATE}`
 				window.location.replace(loginUri)
 			} else {
 				// 直接登录
-				this.setToken(loginCode)
+				// this.setToken(loginCode)
 			}
 		},
 
-		async register () {
-			const res = await fetchRegisterAPI({
-				username: '',
-				password: '',
-				email: 'abc@qq.com'
-			})
+		async fetchLogin (params) {
+			const res = await fetchLoginAPI(params)
+			console.log(res)
+			if (res.data) {
+				this.setToken(res.data)
+			}
+		},
+
+		async code2token (code) {
+			const {
+				VITE_AUTH_URL,
+				VITE_AUTH_CLIENT_ID,
+				VITE_AUTH_REDIRECT_URI,
+				VITE_AUTH_CLIENT_SECRET,
+				VITE_AUTH_CODE_CHALLENGE,
+				VITE_AUTH_CODE_CHALLENGE_METHOD,
+				VITE_AUTH_STATE
+			} = import.meta.env
+			const codeVerifier = localStorage.getItem('codeVerifier')
+			const codeChallenge = localStorage.getItem('codeChallenge')
+			const params = {
+				grant_type: 'authorization_code',
+				code: code,
+				redirect_uri: VITE_AUTH_REDIRECT_URI,
+				client_id: VITE_AUTH_CLIENT_ID,
+				client_secret: VITE_AUTH_CLIENT_SECRET,
+				code_verifier: codeVerifier,
+				code_challenge: codeChallenge,
+				code_challenge_method: VITE_AUTH_CODE_CHALLENGE_METHOD
+			}
+			const res = await fetchTokenAPI(params)
+			console.log('res==', res)
+			if (res.id_token) {
+				// this.setToken(res.id_token)
+				const { payload } = parseJwt(res.id_token)
+
+				console.log(payload)
+				const username = payload.given_name + payload.family_name
+				const password = payload.sub
+
+				if (!localStorage.getItem(username)) {
+					localStorage.setItem('username', username)
+					localStorage.setItem('password', password)
+
+					this.register({
+						username: username,
+						password: password,
+						email: payload.email
+					})
+				}
+
+				this.fetchLogin({
+					username,
+					password
+				})
+			}
+		},
+		async register (params) {
+			const res = await fetchRegisterAPI(params)
 			this.setToken(res.data)
 			this.getUserInfo()
 		},
@@ -102,10 +173,12 @@ export const useAuthStore = defineStore('auth-store', {
 		},
 
 		setLoginDialog (bool: boolean) {
+			console.log('to login')
 			// this.loginDialog = bool
 			if (bool) {
 				// 去登录
 				this.login()
+				// this.loginWithOIDC()
 			}
 		},
 
