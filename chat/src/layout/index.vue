@@ -43,19 +43,13 @@ const homePath = computed(() => authStore.globalConfig?.clientHomePath)
 function handleCheckOtherLoginByToken() {
   const { code } = route.query
   console.log('code==', code)
-  if (code && !localStorage.getItem('username')) {
+  if (code && !isLogin.value) {
     authStore.code2token(code)
     // authStore.setToken(code)
     // const name = route.name
     // router.replace({ name, query: {} })
     // ms.success('账户登录成功、开始体验吧！')
     // authStore.getUserInfo()
-  }
-  if (localStorage.getItem('username')) {
-    authStore.fetchLogin({
-        username: localStorage.getItem('username'),
-        password: localStorage.getItem('password')
-    })
   }
 }
 

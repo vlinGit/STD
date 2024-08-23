@@ -59,6 +59,7 @@ function http<T = any> ({
 	}
 
 	const failHandler = (error: Response<Error>) => {
+		console.log('error==', error)
 		const authStore = useAuthStore()
 		let data = ''
 		error.response?.data && (data = error.response.data)
@@ -78,7 +79,8 @@ function http<T = any> ({
 			if (data && !data?.success)
 				window.$message.error(data?.message || '请求接口错误！')
 		}
-		throw new Error(error.response?.data?.message || error || 'Error')
+		// throw new Error(error.response?.data?.message || error || 'Error')
+		throw error.response?.data
 	}
 
 	beforeRequest?.()

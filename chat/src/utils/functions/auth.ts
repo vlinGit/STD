@@ -2,42 +2,41 @@
  * @Author: WGinit wginit@yeah.net
  * @Date: 2024-08-18 17:54:43
  * @LastEditors: WGinit wginit@yeah.net
- * @LastEditTime: 2024-08-23 01:26:02
+ * @LastEditTime: 2024-08-23 23:00:14
  * @FilePath: /std/chat/src/utils/functions/auth.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import CryptoJS from 'crypto-js'
-export function generateVerifySign (
-	params: { [key: string]: string | number | undefined },
-	clientSecret: string
-): string {
-	// 1. 过滤掉空值字段和 verifySign 字段
-	const filteredParams = Object.keys(params)
-		.filter(
-			key =>
-				params[key] !== undefined && params[key] !== '' && key !== 'verifySign'
-		)
-		.reduce((acc, key) => {
-			if (params[key] !== undefined) {
-				// 再次确保值不为 undefined
-				acc[key] = params[key] as string | number
-			}
-			return acc
-		}, {} as { [key: string]: string | number })
+interface Params {
+	[key: string]: any
+}
 
-	// 2. 按字典顺序排序
-	const sortedKeys = Object.keys(filteredParams).sort()
+export function generateVerifySign (params: {
+	[key: string]: string | number | undefined
+}): string {
+	const filteredParams = Object.entries(params)
+		.filter(([key, value]) => key !== 'verifySign' && value !== '')
+		.sort(([keyA], [keyB]) => keyA.localeCompare(keyB)) // 2. 按字典顺序排序
 
-	// 3. 构造签名字符串
-	const signString = sortedKeys
-		.map(key => `${key}=${filteredParams[key]}`)
+	// 3. 构造排序后的查询字符串
+	const queryString = filteredParams
+		.map(([key, value]) => `${key}=${value}`)
 		.join('&')
 
-	// 4. 使用 HMAC-SHA256 进行签名
-	const hash = CryptoJS.HmacSHA256(signString, clientSecret)
-	const verifySign = hash.toString(CryptoJS.enc.Hex)
+	console.log(import.meta.env.VITE_VERIFYSIGN_TOKEN)
+	// 4. 在查询字符串末尾加上 &token
+	const stringToSign = `${queryString}&${CryptoJS.MD5(
+		import.meta.env.VITE_VERIFYSIGN_TOKEN
+	).toString(CryptoJS.enc.Hex)}`
 
-	return verifySign
+	console.log(stringToSign)
+
+	// 5. 计算字符串的 MD5 值
+	const md5Hash = CryptoJS.MD5(stringToSign).toString(CryptoJS.enc.Hex)
+
+	console.log(md5Hash)
+
+	return md5Hash
 }
 
 // 生成随机的code_verifier

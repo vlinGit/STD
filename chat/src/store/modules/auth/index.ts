@@ -29,9 +29,7 @@ export const useAuthStore = defineStore('auth-store', {
 		userInfo: {},
 		userBalance: {},
 		globalConfig: {} as GlobalConfig,
-		loadInit: false,
-		codeVerifier: '',
-		codeChallenge: ''
+		loadInit: false
 	}),
 
 	getters: {
@@ -85,7 +83,6 @@ export const useAuthStore = defineStore('auth-store', {
 					VITE_AUTH_URL,
 					VITE_AUTH_CLIENT_ID,
 					VITE_AUTH_REDIRECT_URI,
-					VITE_AUTH_CODE_CHALLENGE,
 					VITE_AUTH_CODE_CHALLENGE_METHOD,
 					VITE_AUTH_STATE
 				} = import.meta.env
@@ -99,9 +96,15 @@ export const useAuthStore = defineStore('auth-store', {
 			}
 		},
 
-		async fetchLogin (params) {
-			const res = await fetchLoginAPI(params)
-			console.log(res)
+		async fetchLogin (params, registerParams) {
+			const res = await fetchLoginAPI(params).catch(async err => {
+				if (err.code === 403) {
+					console.log('new user')
+					await this.register(registerParams)
+					this.fetchLogin(params, registerParams)
+				}
+			})
+			console.log('1111==', res)
 			if (res.data) {
 				this.setToken(res.data)
 			}
@@ -134,26 +137,24 @@ export const useAuthStore = defineStore('auth-store', {
 			if (res.id_token) {
 				// this.setToken(res.id_token)
 				const { payload } = parseJwt(res.id_token)
-
 				console.log(payload)
 				const username = payload.given_name + payload.family_name
 				const password = payload.sub
-
-				if (!localStorage.getItem(username)) {
-					localStorage.setItem('username', username)
-					localStorage.setItem('password', password)
-
-					this.register({
+				this.fetchLogin(
+					{
+						username,
+						password
+					},
+					{
 						username: username,
 						password: password,
 						email: payload.email
-					})
-				}
+					}
+				)
+			}
 
-				this.fetchLogin({
-					username,
-					password
-				})
+			if (res.access_token) {
+				localStorage.setItem('access_token', res.access_token)
 			}
 		},
 		async register (params) {
