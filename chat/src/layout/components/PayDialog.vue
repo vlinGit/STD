@@ -186,7 +186,7 @@ async function getPayUrl() {
   }
 }
 
-// getPayUrl()
+getPayUrl()
 
 /* 跳转支付 */
 function handleRedPay() {
