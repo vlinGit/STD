@@ -19,7 +19,6 @@ import {
 	generateCodeVerifier,
 	parseJwt
 } from '@/utils/functions/auth'
-import jwtDecode from 'jwt-decode'
 
 export const useAuthStore = defineStore('auth-store', {
 	state: (): AuthState => ({
@@ -104,7 +103,6 @@ export const useAuthStore = defineStore('auth-store', {
 					this.fetchLogin(params, registerParams)
 				}
 			})
-			console.log('1111==', res)
 			if (res.data) {
 				this.setToken(res.data)
 			}
@@ -112,13 +110,10 @@ export const useAuthStore = defineStore('auth-store', {
 
 		async code2token (code) {
 			const {
-				VITE_AUTH_URL,
 				VITE_AUTH_CLIENT_ID,
 				VITE_AUTH_REDIRECT_URI,
 				VITE_AUTH_CLIENT_SECRET,
-				VITE_AUTH_CODE_CHALLENGE,
-				VITE_AUTH_CODE_CHALLENGE_METHOD,
-				VITE_AUTH_STATE
+				VITE_AUTH_CODE_CHALLENGE_METHOD
 			} = import.meta.env
 			const codeVerifier = localStorage.getItem('codeVerifier')
 			const codeChallenge = localStorage.getItem('codeChallenge')
@@ -151,10 +146,6 @@ export const useAuthStore = defineStore('auth-store', {
 						email: payload.email
 					}
 				)
-			}
-
-			if (res.access_token) {
-				localStorage.setItem('access_token', res.access_token)
 			}
 		},
 		async register (params) {

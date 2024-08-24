@@ -22,3 +22,5 @@ service/**/.env
 *.log
 *.iml
 node_modules/
+service/src/modules/pay/pay.controller.ts
+service/src/modules/pay/pay.service.ts

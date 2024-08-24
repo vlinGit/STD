@@ -139,10 +139,10 @@ async function getPayUrl() {
     orderId.value = generateOrderNumber('4076')
     const params = {
         // clientId: VITE_AUTH_CLIENT_ID,
-	    amount: '0.01' || orderInfo.value.pkgInfo?.price,
+	    amount: orderInfo.value.pkgInfo?.price,
         settleCurrency: 'USD',
         currency: 'USD',
-        vendor: 'alipay' || payType.value,
+        vendor: payType.value,
         ipnUrl: `${VITE_GLOB_API_URL}/order/queryByOrderId`,
         callbackUrl: `${window.location.origin}/user-center?status={status}&transactionNo={transactionNo}`,
         terminal: 'ONLINE',
@@ -151,7 +151,7 @@ async function getPayUrl() {
         description: 'test',
         note: 'test-note',
         timeout: '120',
-        goodsInfo: '', // JSON.stringify(orderInfo.value.pkgInfo),
+        goodsInfo: JSON.stringify(orderInfo.value.pkgInfo),
         creditType: 'normal',
         paymentCount: '',
         frequency: '',
@@ -185,8 +185,6 @@ async function getPayUrl() {
     redirectloading.value = false
   }
 }
-
-// getPayUrl()
 
 /* 跳转支付 */
 function handleRedPay() {

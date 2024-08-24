@@ -21,7 +21,7 @@ export class PayService {
     private readonly userBalanceService: UserBalanceService,
     private readonly globalConfigService: GlobalConfigService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   private WxPay;
 
@@ -37,6 +37,9 @@ export class PayService {
     }
     if (params['attach'] == 'hupi') {
       return this.notifyHupi(params);
+    }
+    if (params['verifySign'] !== '') {
+      return this.notifyPockyt(params);
     }
     if (typeof params['resource'] == 'object') {
       return this.notifyWeChat(params);
@@ -77,6 +80,23 @@ export class PayService {
     const order = await this.orderEntity.findOne({ where: { orderId } });
     if (!order) throw new HttpException('订单不存在!', HttpStatus.BAD_REQUEST);
     return order;
+  }
+
+  /* Pockyt支付通知 */
+  async notifyPockyt(params: object) {
+    const orderId = params['reference']
+    // query order
+    const order = await this.orderEntity.findOne({ where: { orderId } });
+    console.log('order:' + order);
+    if (!order) return 'failed';
+    /* add balance  log */
+    // await this.userBalanceService.addBalanceToOrder(order);
+    const result = await this.orderEntity.update({ orderId: orderId }, { status: 1, paydAt: new Date() });
+    if (result.affected != 1) {
+      return 'failed';
+    }
+    await this.userBalanceService.addBalanceToOrder(order);
+    return 'success';
   }
 
   /* 虎皮椒支付通知 */

@@ -67,7 +67,7 @@ export class UserBalanceService {
     private readonly midjourneyEntity: Repository<MidjourneyEntity>,
     private readonly salesService: SalesService,
     private readonly globalConfigService: GlobalConfigService,
-  ) {}
+  ) { }
 
   /* 新注册用户赠送消费 */
   async addBalanceToNewUser(userId: number, invitedId: number) {
@@ -275,10 +275,10 @@ export class UserBalanceService {
       deductionType === 'model3'
         ? 'memberModel3Count'
         : deductionType === 'model4'
-        ? 'memberModel4Count'
-        : deductionType === 'mjDraw'
-        ? 'memberDrawMjCount'
-        : null;
+          ? 'memberModel4Count'
+          : deductionType === 'mjDraw'
+            ? 'memberDrawMjCount'
+            : null;
 
     /* 如果不是会员 */
     const baseKey =
