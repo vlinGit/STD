@@ -173,9 +173,10 @@ setTimeout(() => {
         <NTabPane v-if="isSmallLg" name="detail" tab="我的详情">
           <Detail />
         </NTabPane>
-        <NTabPane name="account" tab="我的钱包">
+        <!-- <NTabPane name="account" tab="我的钱包">
           <Wallet />
         </NTabPane>
+
         <NTabPane name="baseInfo" tab="基础信息">
           <NCard>
             <template #header>
@@ -230,7 +231,7 @@ setTimeout(() => {
         </NTabPane>
         <NTabPane name="invite" tab="邀请得福利">
           <Invite />
-        </NTabPane>
+        </NTabPane> -->
       </NTabs>
     </div>
   </NLayout>

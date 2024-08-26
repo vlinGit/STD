@@ -8,7 +8,7 @@ import { Request } from 'express';
 @Controller('pay')
 @ApiTags('pay')
 export class PayController {
-  constructor(private readonly payService: PayService) {}
+  constructor(private readonly payService: PayService) { }
 
   @Post('notify')
   @ApiOperation({ summary: 'hupi支付结果通知' })
@@ -22,5 +22,12 @@ export class PayController {
   notifyEpay(@Query() query) {
     console.log('epay ->query: ', query);
     return this.payService.notify(query);
+  }
+
+  @Post('notify')
+  @ApiOperation({ summary: 'pockyt支付结果通知' })
+  notifyPockyt(@Body() body) {
+    console.log('pockyt ->body: ', body);
+    return this.payService.notify(body);
   }
 }

@@ -6,8 +6,10 @@ import { CloseOutline, PaperPlaneOutline } from '@vicons/ionicons5'
 import { useAuthStore, useGlobalStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchOrderBuyAPI, fetchOrderQueryAPI } from '@/api/order'
+import { generateVerifySign } from '@/utils/functions/auth'
+import { generateOrderNumber } from '@/utils/functions/index'
 
-import type { ResData } from '@/api/types'
+import type { ResData, paymentRes } from '@/api/types'
 import QRCode from '@/components/common/QRCode/index.vue'
 import alipay from '@/assets/alipay.png'
 import wxpay from '@/assets/wxpay.png'
@@ -77,7 +79,7 @@ const isRedirectPay = computed(() => {
 })
 
 watch(payType, () => {
-  getQrCode()
+  getPayUrl()
   countdownRef.value?.reset()
 })
 
@@ -121,7 +123,7 @@ function handleCloseDialog() {
 }
 
 /* 请求二维码 */
-async function getQrCode() {
+async function getPayUrl() {
   !isRedirectPay.value && (qrCodeloading.value = true)
   isRedirectPay.value && (redirectloading.value = true)
   let qsPayType = null
@@ -130,15 +132,50 @@ async function getQrCode() {
     qsPayType = isWxEnv.value ? 'jsapi' : 'native'
 
   try {
-    const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
-    const { data, success, message } = res
-    if (!success)
-      return ms.error(message)
+    // const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
+    const now = new Date();
+    const utcTime = now.toISOString();
+    const { VITE_GLOB_API_URL } = import.meta.env
+    orderId.value = generateOrderNumber('4076')
+    const params = {
+        // clientId: VITE_AUTH_CLIENT_ID,
+	    amount: orderInfo.value.pkgInfo?.price,
+        settleCurrency: 'USD',
+        currency: 'USD',
+        vendor: payType.value,
+        ipnUrl: `${VITE_GLOB_API_URL}/order/queryByOrderId`,
+        callbackUrl: `${window.location.origin}/user-center?status={status}&transactionNo={transactionNo}`,
+        terminal: 'ONLINE',
+        osType: '',
+        reference: orderId.value,
+        description: 'test',
+        note: 'test-note',
+        timeout: '120',
+        goodsInfo: JSON.stringify(orderInfo.value.pkgInfo),
+        creditType: 'normal',
+        paymentCount: '',
+        frequency: '',
+        cardNumber: '',
+        customerNo: '',
+        timestamp: utcTime, //UTC时间
+        verifySign: '',
+        merchantNo:'200043',
+        storeNo:'304076'
+    }
+    const verifySign = generateVerifySign(params)
 
-    const { url_qrcode: code, orderId: id, redirectUrl: url } = data
+    params.verifySign = verifySign
+    const res: paymentRes = await fetchOrderBuyAPI(params)
+    console.log(res)
+
+    const { ret_msg, ret_code, result } = res
+    if (ret_code !== '000100')
+      return ms.error(ret_msg)
+
+    const { transactionNo: id, cashierUrl: url } = result
     redirectUrl.value = url
-    orderId.value = id
-    url_qrcode.value = code
+    // orderId.value = id
+    // url_qrcode.value = code
     qrCodeloading.value = false
     redirectloading.value = false
   }
@@ -155,7 +192,7 @@ function handleRedPay() {
 }
 
 async function handleOpenDialog() {
-  await getQrCode()
+  await getPayUrl()
   timer = setInterval(() => {
     queryOrderStatus()
   }, POLL_INTERVAL)

@@ -3,34 +3,34 @@ import { ss } from '@/utils/storage'
 const LOCAL_NAME = 'SECRET_TOKEN'
 
 export function getToken() {
-  return ss.get(LOCAL_NAME)
+	return ss.get(LOCAL_NAME)
 }
 
 export function setToken(token: string) {
-  return ss.set(LOCAL_NAME, token)
+	return ss.set(LOCAL_NAME, token)
 }
 
 export function removeToken() {
-  return ss.remove(LOCAL_NAME)
+	return ss.remove(LOCAL_NAME)
 }
 
 export interface UserBalance {
-  isMember: boolean
-  model3Count: number
-  model4Count: number
-  drawMjCount: number
-  memberModel3Count: number
-  memberModel4Count: number
-  memberDrawMjCount: number
-  useModel3Count: number
-  useModel4Count: number
-  useModel3Token: number
-  useModel4Token: number
-  useDrawMjToken: number
-  sumModel3Count: number
-  sumModel4Count: number
-  sumDrawMjCount: number
-  expirationTime: Date
+	isMember: boolean
+	model3Count: number
+	model4Count: number
+	drawMjCount: number
+	memberModel3Count: number
+	memberModel4Count: number
+	memberDrawMjCount: number
+	useModel3Count: number
+	useModel4Count: number
+	useModel3Token: number
+	useModel4Token: number
+	useDrawMjToken: number
+	sumModel3Count: number
+	sumModel4Count: number
+	sumDrawMjCount: number
+	expirationTime: Date
 }
 
 export interface GlobalConfig {
@@ -90,21 +90,23 @@ export interface GlobalConfig {
 	isVerifyEmail: string
 }
 export interface AuthState {
-  token: string | undefined
-  loginDialog: boolean
-  globalConfigLoading: boolean
-  loadInit: boolean
-  userInfo: {
-    username: string
-    email: string
-    role: string
-    id: number
-    avatar?: string
-    sign?: string
-    inviteCode: string
-    isBindWx: boolean
-    consecutiveDays: number
-  }
-  userBalance: UserBalance
-  globalConfig: GlobalConfig
+	token: string | undefined
+	loginDialog: boolean
+	globalConfigLoading: boolean
+	loadInit: boolean
+	userInfo: {
+		username: string
+		email: string
+		role: string
+		id: number
+		avatar?: string
+		sign?: string
+		inviteCode: string
+		isBindWx: boolean
+		consecutiveDays: number
+	}
+	userBalance: UserBalance
+	globalConfig: GlobalConfig
+	codeVerifier: number
+	codeChallenge: string
 }

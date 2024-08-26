@@ -19,10 +19,7 @@ const useUserStore = defineStore(
     })
 
     // 登录
-    async function login(data: {
-      username: string
-      password: string
-    }) {
+    async function login (data: { username: string; password: string }) {
       // 通过 mock 进行登录
       const res = await apiUser.login(data)
       // localStorage.setItem('username', res.data.username)
@@ -34,7 +31,7 @@ const useUserStore = defineStore(
       // failure_time.value = res.data.failure_time
     }
     // 登出
-    async function logout() {
+    async function logout () {
       localStorage.removeItem('username')
       localStorage.removeItem('token')
       localStorage.removeItem('failure_time')
@@ -45,7 +42,7 @@ const useUserStore = defineStore(
       menuStore.setActived(0)
     }
 
-    async function getInfo() {
+    async function getInfo () {
       const res = await apiUser.getInfo()
       const { userInfo } = res.data
       localStorage.setItem('username', userInfo.username)
@@ -58,7 +55,7 @@ const useUserStore = defineStore(
     }
 
     // 获取我的权限
-    async function getPermissions() {
+    async function getPermissions () {
       // 通过 mock 获取权限
       const res = await apiUser.permission()
       const { userInfo } = res.data
@@ -70,12 +67,12 @@ const useUserStore = defineStore(
         'permission.browse',
         'permission.create',
         'permission.edit',
-        'permission.remove',
+        'permission.remove'
       ]
       return permissions.value
     }
     // 修改密码
-    async function editPassword(data: {
+    async function editPassword (data: {
       password: string
       newpassword: string
     }) {
@@ -91,9 +88,9 @@ const useUserStore = defineStore(
       logout,
       getInfo,
       getPermissions,
-      editPassword,
+      editPassword
     }
-  },
+  }
 )
 
 export default useUserStore
