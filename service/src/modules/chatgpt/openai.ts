@@ -181,7 +181,7 @@ export function getTokenCount(text: string) {
     text = String(text);
   }
   text = text.replace(/<\|endoftext\|>/g, '')
-  return tokenizer.encode(text).length
+  return tokenizer.encode(text).length * 2.18
 }
 
 

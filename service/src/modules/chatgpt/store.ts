@@ -221,7 +221,7 @@ export class NineStore implements NineStoreInterface {
     }, '');
 
     text = text.replace(/<\|endoftext\|>/g, '');
-    return tokenizer.encode(text).length;
+    return tokenizer.encode(text).length * 2.18;
   }
 
   /* 递归删除 当token超过模型限制容量  删除到在限制区域内  */
