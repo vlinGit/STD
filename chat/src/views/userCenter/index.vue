@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { NAvatar, NButton, NCard, NGi, NGrid, NInput, NLayout, NLayoutSider, NSkeleton, NSpace, NTabPane, NTabs, useMessage } from 'naive-ui'
-import { computed, onMounted, ref, watch } from 'vue'
+import { NAvatar, NButton, NLayout, NLayoutSider, NTabPane, NTabs, useMessage } from 'naive-ui'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Wallet from './components/wallet.vue'
 import Detail from './components/detail.vue'
-import Password from './components/password.vue'
-import Invite from './components/invite.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { TitleBar } from '@/components/base'
 import { useAuthStore, useGlobalStoreWithOut } from '@/store'
 import defaultAvatar from '@/assets/avatar.png'
-import { fetchVisitorCountAPI, fetchSyncVisitorDataAPI } from '@/api/balance'
+import { fetchSyncVisitorDataAPI, fetchVisitorCountAPI } from '@/api/balance'
 import { fetchUpdateInfoAPI } from '@/api/index'
 import { t } from '@/locales'
 import type { ResData } from '@/api/types'
@@ -37,17 +35,17 @@ const btnDisabled = ref(false)
 
 const { isSmallLg, isMobile } = useBasicLayout()
 
-async function getVisitorCount(){
-	const res: ResData = await fetchVisitorCountAPI()
-	visitorCount.value = res.data || 0
+async function getVisitorCount() {
+  const res: ResData = await fetchVisitorCountAPI()
+  visitorCount.value = res.data || 0
 }
 
-async function syncVisitorData(){
-	const res: ResData =  await fetchSyncVisitorDataAPI()
-	if(res.success){
+async function syncVisitorData() {
+  const res: ResData = await fetchSyncVisitorDataAPI()
+  if (res.success)
     ms.success('已同步数据完成')
-	}
-	getVisitorCount()
+
+  getVisitorCount()
 }
 
 async function updateUserInfo(options: { avatar?: string; username?: string; sign?: string }) {
@@ -73,12 +71,12 @@ function checkRoute() {
 
 onMounted(() => {
   checkRoute()
-	getVisitorCount()
+  getVisitorCount()
 })
 
 function logOut() {
   authStore.logOut()
-  router.push('/')
+  router.push('/ai')
 }
 setTimeout(() => {
   loading.value = false
@@ -151,10 +149,10 @@ setTimeout(() => {
             </div>
           </div>
 
-					<div v-if="visitorCount > 0" class="flex items-center space-x-4 pl-3 mt-3">
+          <div v-if="visitorCount > 0" class="flex items-center space-x-4 pl-3 mt-3">
             <span class="flex-shrink-0 w-[100px] text-keft text-primary">绑定微信:</span>
             <div class="w-[230px]">
-              <NButton  text @click="syncVisitorData">
+              <NButton text @click="syncVisitorData">
                 点击同步访客数据
               </NButton>
             </div>
@@ -173,11 +171,10 @@ setTimeout(() => {
         <NTabPane v-if="isSmallLg" name="detail" tab="我的详情">
           <Detail />
         </NTabPane>
-        <!-- <NTabPane name="account" tab="我的钱包">
+        <NTabPane name="account" tab="我的钱包">
           <Wallet />
         </NTabPane>
-
-        <NTabPane name="baseInfo" tab="基础信息">
+        <!-- NTabPane name="baseInfo" tab="基础信息">
           <NCard>
             <template #header>
               <NSkeleton v-if="loading || !isLogin" size="medium" width="20%" />
@@ -224,14 +221,14 @@ setTimeout(() => {
               </NGrid>
             </template>
           </NCard>
-        </NTabPane>
+        </NTabPane -->
 
-        <NTabPane name="password" tab="密码管理">
+        <!-- NTabPane name="password" tab="密码管理">
           <Password />
         </NTabPane>
         <NTabPane name="invite" tab="邀请得福利">
           <Invite />
-        </NTabPane> -->
+        </NTabPane -->
       </NTabs>
     </div>
   </NLayout>
