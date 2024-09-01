@@ -70,6 +70,27 @@
 
 4. **启动服务**
    - 使用命令：`pnpm start` 来启动项目，它将默认在 9520 端口监听。
+##  docker部署
+1. 安装 Docker 及 Docker-compose
+
+使用 Docker 官网 提供的一键安装链接安装 Docker 及 Docker-compose。
+
+curl -fsSL https://get.docker.com | bash -s docker
+也可以使用其他方式自行安装 Docker 及 Docker-compose。
+2. 服务管理
+
+后台启动服务
+
+docker-compose up -d
+查看日志
+
+docker-compose logs
+停止服务
+
+docker-compose down
+重新构建并启动服务
+
+docker-compose up -d --build
 
 # 项目部署教程（编译包）
 
