@@ -133,34 +133,34 @@ async function getPayUrl() {
 
   try {
     // const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
-    const now = new Date();
-    const utcTime = now.toISOString();
+    const now = new Date()
+    const utcTime = now.toISOString()
     const { VITE_GLOB_API_URL } = import.meta.env
     orderId.value = generateOrderNumber('4076')
     const params = {
-        // clientId: VITE_AUTH_CLIENT_ID,
+      // clientId: VITE_AUTH_CLIENT_ID,
 	    amount: orderInfo.value.pkgInfo?.price,
-        settleCurrency: 'USD',
-        currency: 'USD',
-        vendor: payType.value,
-        ipnUrl: `${VITE_GLOB_API_URL}/order/queryByOrderId`,
-        callbackUrl: `${window.location.origin}/user-center?status={status}&transactionNo={transactionNo}`,
-        terminal: 'ONLINE',
-        osType: '',
-        reference: orderId.value,
-        description: 'test',
-        note: 'test-note',
-        timeout: '120',
-        goodsInfo: JSON.stringify(orderInfo.value.pkgInfo),
-        creditType: 'normal',
-        paymentCount: '',
-        frequency: '',
-        cardNumber: '',
-        customerNo: '',
-        timestamp: utcTime, //UTC时间
-        verifySign: '',
-        merchantNo:'200043',
-        storeNo:'304076'
+      settleCurrency: 'USD',
+      currency: 'USD',
+      vendor: payType.value,
+      ipnUrl: `${VITE_GLOB_API_URL}/order/queryByOrderId`,
+      callbackUrl: `${window.location.origin}/user-center?status={status}&transactionNo={transactionNo}`,
+      terminal: 'ONLINE',
+      osType: '',
+      reference: orderId.value,
+      description: 'test',
+      note: 'test-note',
+      timeout: '120',
+      goodsInfo: JSON.stringify(orderInfo.value.pkgInfo),
+      creditType: 'normal',
+      paymentCount: '',
+      frequency: '',
+      cardNumber: '',
+      customerNo: '',
+      timestamp: utcTime, // UTC时间
+      verifySign: '',
+      merchantNo: '200043',
+      storeNo: '304076',
     }
     const verifySign = generateVerifySign(params)
 
