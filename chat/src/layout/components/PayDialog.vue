@@ -55,6 +55,7 @@ const payPlatform = computed(() => {
 /* 支付平台开启的支付渠道 */
 const payChannel = computed(() => {
   const { payEpayChannel, payMpayChannel } = authStore.globalConfig
+
   if (payPlatform.value === 'mpay')
     return payMpayChannel ? JSON.parse(payMpayChannel) : []
 
@@ -123,7 +124,7 @@ function handleCloseDialog() {
 }
 
 /* 请求二维码 */
-async function getPayUrl() {
+async function getPayUrl(cb?: Function) {
   !isRedirectPay.value && (qrCodeloading.value = true)
   isRedirectPay.value && (redirectloading.value = true)
   let qsPayType = null
@@ -178,6 +179,7 @@ async function getPayUrl() {
     // url_qrcode.value = code
     qrCodeloading.value = false
     redirectloading.value = false
+    typeof cb === 'function' && cb()
   }
   catch (error) {
     useGlobal.updatePayDialog(false)
@@ -192,10 +194,11 @@ function handleRedPay() {
 }
 
 async function handleOpenDialog() {
-  await getPayUrl()
-  timer = setInterval(() => {
-    queryOrderStatus()
-  }, POLL_INTERVAL)
+  await getPayUrl(() => {
+    timer = setInterval(() => {
+      queryOrderStatus()
+    }, POLL_INTERVAL)
+  })
 }
 
 function handleFinish() {
@@ -264,14 +267,13 @@ function handleFinish() {
               <!-- wechat -->
               <QRCode v-if="payPlatform === 'wechat' && !qrCodeloading" :value="url_qrcode" :size="240" />
 
-              <div v-if="isRedirectPay" class="flex flex-col" :class="[isRedirectPay && isMobile ? 'ml-0' : 'ml-20']">
+              <!-- <div v-if="isRedirectPay" class="flex flex-col" :class="[isRedirectPay && isMobile ? 'ml-0' : 'ml-20']">
                 <span class="mb-10 mt-5 text-base">当前站长开通了跳转支付</span>
 
-                <!-- mapy 跳转支付 -->
                 <NButton v-if="isRedirectPay" type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
                   点击前往支付
                 </NButton>
-              </div>
+              </div> -->
 
               <!-- hupi -->
               <iframe v-if="payPlatform === 'hupi' && !redirectloading" class="w-[280px] h-[280px] scale-90" :src="url_qrcode" frameborder="0" />
@@ -284,8 +286,14 @@ function handleFinish() {
             <!-- <h4 class="mb-10 font-bold text-lg">
               支付方式
             </h4> -->
-            <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm" :class="[isMobile ? 'mb-2' : 'mb-10']">
-              请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown ref="countdownRef" :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！
+            <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm flex flex-col justify-between h-full" :class="[isMobile ? 'mb-2' : 'mb-10']">
+              <span>请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown ref="countdownRef" :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！</span>
+
+              <div class="flex flex-col" :class="[isMobile ? 'ml-0' : 'ml-20']">
+                <NButton type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
+                  点击前往支付
+                </NButton>
+              </div>
             </div>
             <NRadioGroup v-model:value="payType" name="radiogroup" class="flex">
               <NSpace :vertical="!isMobile" justify="center" :size="isMobile ? 10 : 35" class="w-full">
