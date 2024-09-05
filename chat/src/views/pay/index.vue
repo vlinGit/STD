@@ -94,8 +94,8 @@ function updateTabs(val: number) {
 
 async function handlePayPkg(pkg: Pkg) {
   if (!payChannel.value.length)
-    // message.warning('管理员还未开启支付！')
-    handleBuyGoods(pkg)
+    message.warning('管理员还未开启支付！')
+  handleBuyGoods(pkg)
 }
 
 async function handleBuyGoods(pkg: Pkg) {
@@ -175,7 +175,7 @@ onMounted(() => {
           </div>
           <div class="p-5  text-lg h-[160px]  border-b dark:border-[#ffffff17] overflow-hidden relative ">
             {{ item.des }}
-            <span class="absolute bottom-1 right-2  font-semibold text-red-500  italic">￥{{ item.price }}</span>
+            <span class="absolute bottom-1 right-2  font-semibold text-red-500  italic">${{ item.price }}</span>
           </div>
           <div class="flex p-4 border-b dark:border-[#ffffff17] flex-col space-y-4">
             <div class="flex justify-between">
