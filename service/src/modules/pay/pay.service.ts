@@ -10,6 +10,7 @@ import { UserBalanceService } from '../userBalance/userBalance.service';
 import { GlobalConfigService } from '../globalConfig/globalConfig.service';
 import { createRandomNonceStr, importDynamic } from '@/common/utils';
 import { UserService } from '../user/user.service';
+import { generateVerifySign } from '@/common/utils/verifySign';
 
 @Injectable()
 export class PayService {
@@ -21,7 +22,7 @@ export class PayService {
     private readonly userBalanceService: UserBalanceService,
     private readonly globalConfigService: GlobalConfigService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   private WxPay;
 
@@ -84,7 +85,7 @@ export class PayService {
 
   /* Pockyt支付通知 */
   async notifyPockyt(params: object) {
-    const orderId = params['reference']
+    const orderId = params['reference'];
     // query order
     const order = await this.orderEntity.findOne({ where: { orderId } });
     console.log('order:' + order);
@@ -125,7 +126,7 @@ export class PayService {
       'payHupiSecret',
       'payHupiNotifyUrl',
       'payHupiReturnUrl',
-      'payHupiGatewayUrl'
+      'payHupiGatewayUrl',
     ]);
     const params = {};
     params['version'] = '1.1';
@@ -276,6 +277,11 @@ export class PayService {
     return 'success';
   }
 
+  async generateSign(params: { [key: string]: string | number }) {
+    if (!params.reference) return 'failed';
+    return 'success';
+  }
+
   /* 码支付支付 */
   async payMpay(userId: number, orderId: string, payType = 'wxpay') {
     // query order
@@ -306,7 +312,6 @@ export class PayService {
     const queryParams = new URLSearchParams(params).toString();
     const apiUrl = `${payMpayApiPayUrl}?${queryParams}`;
     return { url_qrcode: null, redirectUrl: apiUrl, channel: payType, isRedirect: true };
-    const res = await axios.get(payMpayApiPayUrl, { params });
   }
 
   /* 码支付商户信息查询 */
@@ -436,7 +441,7 @@ export class PayService {
       #     package: 'prepay_id=wx0615423208772665709493edbb4b330000',
       #     signType: 'RSA',
       #     paySign: 'JnFXsT4VNzlcamtmgOHhziw7JqdnUS9qJ5W6vmAluk3Q2nska7rxYB4hvcl0BTFAB1PBEnHEhCsUbs5zKPEig=='
-      #   } 
+      #   }
       */
       return result;
     }
@@ -475,5 +480,10 @@ export class PayService {
         .map((key) => `${key}=${params[key]}`)
         .join('&') + secret;
     return crypto.createHash('md5').update(str).digest('hex');
+  }
+
+  getVerifySign(params: { [key: string]: string | number }) {
+    const sign = generateVerifySign(params);
+    return sign;
   }
 }

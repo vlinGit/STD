@@ -6,8 +6,9 @@ import { CloseOutline, PaperPlaneOutline } from '@vicons/ionicons5'
 import { useAuthStore, useGlobalStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchOrderBuyAPI, fetchOrderQueryAPI } from '@/api/order'
-import { generateVerifySign } from '@/utils/functions/auth'
+// import { generateVerifySign } from '@/utils/functions/auth'
 import { generateOrderNumber } from '@/utils/functions/index'
+import { fetchVerifySignAPI } from '@/api/pay'
 
 import type { ResData, paymentRes } from '@/api/types'
 import QRCode from '@/components/common/QRCode/index.vue'
@@ -136,7 +137,7 @@ async function getPayUrl(cb?: Function) {
     // const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
     const now = new Date()
     const utcTime = now.toISOString()
-    const { VITE_GLOB_API_URL } = import.meta.env
+    const { VITE_GLOB_API_URL, VITE_MERCHANTNO, VITE_STORENO } = import.meta.env
     orderId.value = generateOrderNumber('4076')
     const params = {
       // clientId: VITE_AUTH_CLIENT_ID,
@@ -160,12 +161,16 @@ async function getPayUrl(cb?: Function) {
       customerNo: '',
       timestamp: utcTime, // UTC时间
       verifySign: '',
-      merchantNo: '200043',
-      storeNo: '304076',
+      merchantNo: VITE_MERCHANTNO,
+      storeNo: VITE_STORENO,
     }
-    const verifySign = generateVerifySign(params)
+    // const verifySign = generateVerifySign(params)
+    // console.log('verifySign==', verifySign)
 
-    params.verifySign = verifySign
+    const ret = await fetchVerifySignAPI(params)
+
+    params.verifySign = ret?.data as string
+
     const res: paymentRes = await fetchOrderBuyAPI(params)
     console.log(res)
 
