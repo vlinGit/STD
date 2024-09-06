@@ -6,7 +6,7 @@ import { CloseOutline, PaperPlaneOutline } from '@vicons/ionicons5'
 import { useAuthStore, useGlobalStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchOrderBuyAPI, fetchOrderQueryAPI } from '@/api/order'
-// import { generateVerifySign } from '@/utils/functions/auth'
+import { generateVerifySign } from '@/utils/functions/auth'
 import { generateOrderNumber } from '@/utils/functions/index'
 import { fetchVerifySignAPI } from '@/api/pay'
 
@@ -145,7 +145,7 @@ async function getPayUrl(cb?: Function) {
       settleCurrency: 'USD',
       currency: 'USD',
       vendor: payType.value,
-      ipnUrl: `${VITE_GLOB_API_URL}/order/queryByOrderId`,
+      ipnUrl: `${VITE_GLOB_API_URL}/pay/pockyt-notify`,
       callbackUrl: `${window.location.origin}/user-center?status={status}&transactionNo={transactionNo}`,
       terminal: 'ONLINE',
       osType: '',
@@ -153,7 +153,7 @@ async function getPayUrl(cb?: Function) {
       description: 'test',
       note: 'test-note',
       timeout: '120',
-      goodsInfo: JSON.stringify(orderInfo.value.pkgInfo),
+      goodsInfo: JSON.stringify([orderInfo.value.pkgInfo]),
       creditType: 'normal',
       paymentCount: '',
       frequency: '',
@@ -164,8 +164,8 @@ async function getPayUrl(cb?: Function) {
       merchantNo: VITE_MERCHANTNO,
       storeNo: VITE_STORENO,
     }
-    // const verifySign = generateVerifySign(params)
-    // console.log('verifySign==', verifySign)
+    const verifySign = generateVerifySign(params)
+    console.log('verifySign==', verifySign)
 
     const ret = await fetchVerifySignAPI(params)
 

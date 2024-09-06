@@ -14,18 +14,18 @@ cd service/
 pnpm build
 cd ..
 
-rm -rf YiAiQuickDeploy/dist/* YiAiQuickDeploy/public/* YiAiQuickDeploy/templates/*
+rm -rf dist/dist/* dist/public/* dist/templates/*
 
-mkdir -p YiAiQuickDeploy/dist YiAiQuickDeploy/public/admin YiAiQuickDeploy/templates
+mkdir -p dist/dist dist/public/admin dist/templates
 
-cp service/pm2.conf.json YiAiQuickDeploy/pm2.conf.json
-cp service/package.json YiAiQuickDeploy/package.json
-cp service/README.md YiAiQuickDeploy/README.md
-cp service/.env.example YiAiQuickDeploy/.env.example
+cp service/pm2.conf.json dist/pm2.conf.json
+cp service/package.json dist/package.json
+cp service/README.md dist/README.md
+cp service/.env.example dist/.env.example
 
-cp -r service/templates/* YiAiQuickDeploy/templates
-cp -r service/dist/* YiAiQuickDeploy/dist
-cp -r admin/dist/* YiAiQuickDeploy/public/admin
-cp -r chat/dist/* YiAiQuickDeploy/public
+cp -r service/templates/* dist/templates
+cp -r service/dist/* dist/dist
+cp -r admin/dist/* dist/public/admin
+cp -r chat/dist/* dist/public
 
 echo "打包完成"

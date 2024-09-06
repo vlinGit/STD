@@ -7,7 +7,7 @@ import { ss } from './utils/storage'
 import { NaiveProvider } from '@/components/common'
 import { useTheme } from '@/hooks/useTheme'
 import { useLanguage } from '@/hooks/useLanguage'
-import { useAuthStore, useGlobalStoreWithOut, useChatStore } from '@/store'
+import { useAuthStore, useChatStore, useGlobalStoreWithOut } from '@/store'
 const client = new ClientJS()
 const chatStore = useChatStore()
 

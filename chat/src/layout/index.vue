@@ -43,14 +43,13 @@ const homePath = computed(() => authStore.globalConfig?.clientHomePath)
 function handleCheckOtherLoginByToken() {
   const { code } = route.query
   console.log('code==', code)
-  if (code && !isLogin.value) {
+  if (code && !isLogin.value)
     authStore.code2token(code)
     // authStore.setToken(code)
     // const name = route.name
     // router.replace({ name, query: {} })
     // ms.success('账户登录成功、开始体验吧！')
     // authStore.getUserInfo()
-  }
 }
 
 /* 微信环境静默登录 */
@@ -121,7 +120,7 @@ const getMobileLayoutClass = computed(() => {
       <NoticeDialog :visible="noticeDialog" />
       <BindWxDialog :visible="bindWxDialog" />
       <SignInDialog :visible="signInDialog" />
-			<ModelDialog :visible="modelDialog" />
+      <ModelDialog :visible="modelDialog" />
     </div>
   </div>
 </template>
