@@ -94,7 +94,7 @@ function updateTabs(val: number) {
 
 async function handlePayPkg(pkg: Pkg) {
   if (!payChannel.value.length)
-    message.warning('管理员还未开启支付！')
+    // message.warning('管理员还未开启支付！')
   handleBuyGoods(pkg)
 }
 

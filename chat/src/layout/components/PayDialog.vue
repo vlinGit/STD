@@ -50,7 +50,7 @@ const payPlatform = computed(() => {
   if (Number(payHupiStatus) === 1)
     return 'hupi'
 
-  return null
+  return 'pockyt'
 })
 
 /* 支付平台开启的支付渠道 */
@@ -69,7 +69,7 @@ const payChannel = computed(() => {
   if (payPlatform.value === 'hupi')
     return ['wxpay']
 
-  return []
+  return ['pockyt']
 })
 
 const plat = computed(() => payType.value === 'wxpay' ? '微信' : '支付宝')
@@ -126,67 +126,28 @@ function handleCloseDialog() {
 
 /* 请求二维码 */
 async function getPayUrl(cb?: Function) {
-  !isRedirectPay.value && (qrCodeloading.value = true)
-  isRedirectPay.value && (redirectloading.value = true)
+//   !isRedirectPay.value && (qrCodeloading.value = true)
+//   isRedirectPay.value && (redirectloading.value = true)
+  redirectloading.value = true
   let qsPayType = null
   qsPayType = payType.value
   if (payPlatform.value === 'wechat')
     qsPayType = isWxEnv.value ? 'jsapi' : 'native'
 
   try {
-    // const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
-    const now = new Date()
-    const utcTime = now.toISOString()
-    const { VITE_GLOB_API_URL, VITE_MERCHANTNO, VITE_STORENO } = import.meta.env
-    orderId.value = generateOrderNumber('4076')
-    const params = {
-      // clientId: VITE_AUTH_CLIENT_ID,
-	    amount: orderInfo.value.pkgInfo?.price,
-      settleCurrency: 'USD',
-      currency: 'USD',
-      vendor: payType.value,
-      ipnUrl: `${VITE_GLOB_API_URL}/pay/pockyt-notify`,
-      callbackUrl: `${window.location.origin}/user-center?status={status}&transactionNo={transactionNo}`,
-      terminal: 'ONLINE',
-      osType: '',
-      reference: orderId.value,
-      description: 'test',
-      note: 'test-note',
-      timeout: '120',
-      goodsInfo: JSON.stringify([orderInfo.value.pkgInfo]),
-      creditType: 'normal',
-      paymentCount: '',
-      frequency: '',
-      cardNumber: '',
-      customerNo: '',
-      timestamp: utcTime, // UTC时间
-      verifySign: '',
-      merchantNo: VITE_MERCHANTNO,
-      storeNo: VITE_STORENO,
-    }
-    const verifySign = generateVerifySign(params)
-    console.log('verifySign==', verifySign)
+    const res: ResData = await fetchOrderBuyAPI({ goodsId: orderInfo.value.pkgInfo.id, payType: qsPayType })
 
-    const ret = await fetchVerifySignAPI(params)
-
-    params.verifySign = ret?.data as string
-
-    const res: paymentRes = await fetchOrderBuyAPI(params)
-    console.log(res)
-
-    const { ret_msg, ret_code, result } = res
-    if (ret_code !== '000100')
-      return ms.error(ret_msg)
-
-    const { transactionNo: id, cashierUrl: url } = result
+    console.log('res===', res)
+    const { orderId: id, redirectUrl: url } = res.data
+    console.log('url===', url)
     redirectUrl.value = url
-    // orderId.value = id
-    // url_qrcode.value = code
+    orderId.value = id
     qrCodeloading.value = false
     redirectloading.value = false
     typeof cb === 'function' && cb()
   }
   catch (error) {
+    console.log('error000', error)
     useGlobal.updatePayDialog(false)
     qrCodeloading.value = false
     redirectloading.value = false
@@ -215,7 +176,7 @@ function handleFinish() {
 </script>
 
 <template>
-  <NModal :show="visible" style="width: 90%; max-width: 750px" :on-after-enter="handleOpenDialog" :on-after-leave="handleCloseDialog">
+  <NModal :show="visible" style="width: 90%; max-width: 500px" :on-after-enter="handleOpenDialog" :on-after-leave="handleCloseDialog">
     <div class="p-4 bg-white rounded dark:bg-slate-800">
       <div class="flex justify-between" @click="useGlobal.updatePayDialog(false)">
         <div class="flex text-xl font-bold mb-[20px] bg-currentflex items-center ">
@@ -259,7 +220,7 @@ function handleFinish() {
             <!-- <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm">
               请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！
             </div> -->
-            <div class="flex items-center justify-center my-3 relative ">
+            <div v-if="payPlatform != 'pockyt'" class="flex items-center justify-center my-3 relative ">
               <!-- qrCodeloading -->
               <NSpin v-if="qrCodeloading && !isRedirectPay" size="large" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               <NSkeleton v-if="qrCodeloading" :width="240" :height="240" :sharp="false" size="medium" />
@@ -283,9 +244,9 @@ function handleFinish() {
               <!-- hupi -->
               <iframe v-if="payPlatform === 'hupi' && !redirectloading" class="w-[280px] h-[280px] scale-90" :src="url_qrcode" frameborder="0" />
             </div>
-            <span v-if="!isRedirectPay" class="flex items-center justify-center text-lg ">
+            <!-- <span v-if="!isRedirectPay" class="flex items-center justify-center text-lg ">
               {{ `打开${plat}扫码支付` }}
-            </span>
+            </span> -->
           </div>
           <div class=" flex flex-col" :class="[isMobile ? 'w-full ' : ' ml-10 w-[200] ']">
             <!-- <h4 class="mb-10 font-bold text-lg">
@@ -294,7 +255,7 @@ function handleFinish() {
             <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm flex flex-col justify-between h-full" :class="[isMobile ? 'mb-2' : 'mb-10']">
               <span>请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown ref="countdownRef" :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！</span>
 
-              <div class="flex flex-col" :class="[isMobile ? 'ml-0' : 'ml-20']">
+              <div class="flex flex-col mt-8" :class="[isMobile ? 'ml-0' : 'ml-0']">
                 <NButton type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
                   点击前往支付
                 </NButton>

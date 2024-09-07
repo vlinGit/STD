@@ -39,7 +39,7 @@ const payPlatform = computed(() => {
 
   if (Number(payEpayStatus) === 1)
     return 'epay'
-  return null
+  return 'pockyt'
 })
 
 const payChannel = computed(() => {
@@ -56,7 +56,7 @@ const payChannel = computed(() => {
   if (payPlatform.value === 'hupi')
     return ['wxpay']
 
-  return []
+  return ['pockyt']
 })
 
 interface Props {
@@ -222,7 +222,7 @@ function handleSuccess(pkg: Pkg) {
     positiveText: '确认购买',
     onPositiveClick: () => {
       if (!payChannel.value.length)
-        message.warning('管理员还未开启支付！')
+        // message.warning('管理员还未开启支付！')
 
       handleBuyGoods(pkg)
     },

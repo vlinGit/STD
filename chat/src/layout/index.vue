@@ -50,6 +50,7 @@ function handleCheckOtherLoginByToken() {
     // router.replace({ name, query: {} })
     // ms.success('账户登录成功、开始体验吧！')
     // authStore.getUserInfo()
+
 }
 
 /* 微信环境静默登录 */

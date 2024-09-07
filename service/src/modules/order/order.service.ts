@@ -4,7 +4,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { In, Repository } from 'typeorm'
 import { OrderEntity } from './order.entity'
 import { CramiPackageEntity } from '../crami/cramiPackage.entity'
-import { createOrderId } from '@/common/utils'
+import { createOrderId, generateOrderId } from '@/common/utils'
 import { BuyDto } from './dto/buy.dto'
 import { Request } from 'express'
 import { PayService } from '../pay/pay.service'
@@ -66,13 +66,13 @@ export class OrderService {
 
   /* 创建工单 */
   async create (userId: number, goodsId: number, count: number, payType: string) {
-    const payPlatform = await this.globalConfigService.queryPayType()
+    const payPlatform = 'pockyt' || (await this.globalConfigService.queryPayType())
     // query goods
     const goods = await this.cramiPackageEntity.findOne({ where: { id: goodsId } })
     if (!goods) throw new HttpException('套餐不存在!', HttpStatus.BAD_REQUEST)
     // assemble order
     const doc = {}
-    doc['orderId'] = createOrderId()
+    doc['orderId'] = generateOrderId('4076')
     doc['userId'] = userId
     doc['goodsId'] = goodsId
     doc['price'] = Number(goods.price)

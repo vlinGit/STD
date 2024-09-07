@@ -112,7 +112,6 @@ export const useAuthStore = defineStore('auth-store', {
 			const {
 				VITE_AUTH_CLIENT_ID,
 				VITE_AUTH_REDIRECT_URI,
-				VITE_AUTH_CLIENT_SECRET,
 				VITE_AUTH_CODE_CHALLENGE_METHOD
 			} = import.meta.env
 			const codeVerifier = localStorage.getItem('codeVerifier')
@@ -122,7 +121,6 @@ export const useAuthStore = defineStore('auth-store', {
 				code: code,
 				redirect_uri: VITE_AUTH_REDIRECT_URI,
 				client_id: VITE_AUTH_CLIENT_ID,
-				client_secret: VITE_AUTH_CLIENT_SECRET,
 				code_verifier: codeVerifier,
 				code_challenge: codeChallenge,
 				code_challenge_method: VITE_AUTH_CODE_CHALLENGE_METHOD

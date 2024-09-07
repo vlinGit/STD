@@ -31,6 +31,7 @@ import { SendPhoneCodeDto } from './dto/sendPhoneCode.dto'
 import { UserRegisterByPhoneDto } from './dto/userRegisterByPhone.dto'
 import * as bcrypt from 'bcryptjs'
 import { AdminLoginDto } from './dto/adminLogin.dto'
+import axios from 'axios'
 
 @Injectable()
 export class AuthService {
@@ -257,6 +258,23 @@ export class AuthService {
     /* 记录发送的验证码是什么 */
     await this.redisCacheService.set({ key, val: code }, 1 * 60)
     return '验证码发送成功、请填写验证码完成注册！'
+  }
+
+  /* oidc code 解析token */
+  async code2token (parmas: Record<string, string>) {
+    try {
+      const { CODE_2_TOKEN_URL, AUTH_CLIENT_SECRET } = process.env
+      parmas.client_secret = AUTH_CLIENT_SECRET
+      console.log('code2token parmas===', CODE_2_TOKEN_URL, parmas)
+      const res: any = await axios.post(CODE_2_TOKEN_URL, parmas)
+      console.log(res)
+      if (!res.data.id_token) {
+        throw new HttpException(`获取TOKEN失败！`, HttpStatus.BAD_REQUEST)
+      }
+      return res.data
+    } catch (error) {
+      throw new HttpException(`获取TOKEN失败！`, HttpStatus.BAD_REQUEST)
+    }
   }
 
   /* create token */
