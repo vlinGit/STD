@@ -32,7 +32,7 @@ onMounted(() => {
   queryChatBox()
 })
 
-const siteRobotName = authStore.globalConfig?.siteRobotName || 'Ai Robot'
+const siteRobotName = authStore.globalConfig?.siteRobotName || 'ChatGpt'
 
 function handleClick(box) {
   const { appId, prompt, url } = box
