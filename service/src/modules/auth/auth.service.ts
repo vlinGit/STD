@@ -273,6 +273,7 @@ export class AuthService {
       }
       return res.data
     } catch (error) {
+      console.log('code2token error->', error)
       throw new HttpException(`获取TOKEN失败！`, HttpStatus.BAD_REQUEST)
     }
   }
