@@ -266,7 +266,11 @@ export class AuthService {
       const { CODE_2_TOKEN_URL, AUTH_CLIENT_SECRET } = process.env
       parmas.client_secret = AUTH_CLIENT_SECRET
       console.log('code2token parmas===', CODE_2_TOKEN_URL, parmas)
-      const res: any = await axios.post(CODE_2_TOKEN_URL, parmas)
+      const res: any = await axios.post(CODE_2_TOKEN_URL, parmas, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
       console.log(res)
       if (!res.data.id_token) {
         throw new HttpException(`获取TOKEN失败！`, HttpStatus.BAD_REQUEST)
