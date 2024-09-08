@@ -2,7 +2,7 @@ import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { get, post } from '@/utils/request'
 
 /* 流失对话聊天 */
-export function fetchChatAPIProcess<T = any>(params: {
+export function fetchChatAPIProcess<T = any> (params: {
 	prompt: string
 	appId?: number
 	options?: {
@@ -22,20 +22,20 @@ export function fetchChatAPIProcess<T = any>(params: {
 			appId: params?.appId,
 			options: params.options,
 			imageUrl: params.imageUrl,
-			model: params.model,
+			model: params.model
 		},
 		signal: params.signal,
-		onDownloadProgress: params.onDownloadProgress,
+		onDownloadProgress: params.onDownloadProgress
 	})
 }
 
 /* 获取个人信息 */
-export function fetchGetInfo<T>() {
+export function fetchGetInfo<T> () {
 	return get<T>({ url: '/auth/getInfo' })
 }
 
 /* 注册 */
-export function fetchRegisterAPI<T>(data: {
+export function fetchRegisterAPI<T> (data: {
 	username: string
 	password: string
 	email: string
@@ -44,7 +44,7 @@ export function fetchRegisterAPI<T>(data: {
 }
 
 /* 注册 */
-export function fetchRegisterByPhoneAPI<T>(data: {
+export function fetchRegisterByPhoneAPI<T> (data: {
 	username: string
 	password: string
 	phone: string
@@ -54,26 +54,22 @@ export function fetchRegisterByPhoneAPI<T>(data: {
 }
 
 /* 登录 */
-export function fetchLoginAPI<T>(data: {
+export function fetchLoginAPI<T> (data: {
 	username: string
 	password: string
 }): Promise<T> {
 	return post<T>({ url: '/auth/login', data }) as Promise<T>
 }
 
-export function fetchTokenAPI<T>(data: any): Promise<T> {
+export function fetchTokenAPI<T> (data: any): Promise<T> {
 	return post<T>({
-		url: '/oidc/oauth/token',
-		data,
-		baseURL: import.meta.env.VITE_GLOB_API_HOST,
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-		},
+		url: '/auth/code2token',
+		data
 	}) as Promise<T>
 }
 
 /* 手机号登录 */
-export function fetchLoginByPhoneAPI<T>(data: {
+export function fetchLoginByPhoneAPI<T> (data: {
 	phone: string
 	password: string
 }): Promise<T> {
@@ -81,7 +77,7 @@ export function fetchLoginByPhoneAPI<T>(data: {
 }
 
 /* 修改个人信息 */
-export function fetchUpdateInfoAPI<T>(data: {
+export function fetchUpdateInfoAPI<T> (data: {
 	username?: string
 	avatar?: string
 }): Promise<T> {
@@ -89,12 +85,12 @@ export function fetchUpdateInfoAPI<T>(data: {
 }
 
 /* 获取个人绘画记录 */
-export function fetchGetChatLogDraw<T>(data: { model: string }): Promise<T> {
+export function fetchGetChatLogDraw<T> (data: { model: string }): Promise<T> {
 	return get<T>({ url: '/chatLog/draw', data }) as Promise<T>
 }
 
 /* 获取所有绘画记录 */
-export function fetchGetAllChatLogDraw<T>(data: {
+export function fetchGetAllChatLogDraw<T> (data: {
 	size: number
 	rec: number
 	model: string
@@ -103,7 +99,7 @@ export function fetchGetAllChatLogDraw<T>(data: {
 }
 
 /* chatgpt的dall-e2绘画 */
-export function fetchChatDraw<T>(data: {
+export function fetchChatDraw<T> (data: {
 	prompt: string
 	n: number
 	size: string
@@ -112,7 +108,7 @@ export function fetchChatDraw<T>(data: {
 }
 
 /* 修改密码 */
-export function fetchUpdatePasswordAPI<T>(data: {
+export function fetchUpdatePasswordAPI<T> (data: {
 	oldPassword?: string
 	password?: string
 }): Promise<T> {
@@ -120,7 +116,7 @@ export function fetchUpdatePasswordAPI<T>(data: {
 }
 
 /* 同步对话 */
-export function fetchGetchatSyncApi<T = any>(params: {
+export function fetchGetchatSyncApi<T = any> (params: {
 	prompt: string
 	options?: {
 		conversationId?: string
@@ -134,12 +130,12 @@ export function fetchGetchatSyncApi<T = any>(params: {
 		url: '/chatgpt/chat-sync',
 		data: { prompt: params.prompt, options: params.options },
 		signal: params.signal,
-		onDownloadProgress: params.onDownloadProgress,
+		onDownloadProgress: params.onDownloadProgress
 	})
 }
 
 /* 获取mind绘画联想词 */
-export function fetchGetchatMindApi<T = any>(params: {
+export function fetchGetchatMindApi<T = any> (params: {
 	prompt: string
 	options?: {
 		conversationId?: string
@@ -153,26 +149,26 @@ export function fetchGetchatMindApi<T = any>(params: {
 		url: '/chatgpt/chat-mind',
 		data: { prompt: params.prompt, options: params.options },
 		signal: params.signal,
-		onDownloadProgress: params.onDownloadProgress,
+		onDownloadProgress: params.onDownloadProgress
 	})
 }
 
 /* 获取MJ绘画联想词 */
-export function fetchGetMjPromptAssociateApi<T>(data: {
+export function fetchGetMjPromptAssociateApi<T> (data: {
 	prompt: string
 }): Promise<T> {
 	return post<T>({ url: '/chatgpt/mj-associate', data }) as Promise<T>
 }
 
 /* 获取MJ绘画联想词 */
-export function fetchGetMjPromptFanyiApi<T>(data: {
+export function fetchGetMjPromptFanyiApi<T> (data: {
 	prompt: string
 }): Promise<T> {
 	return post<T>({ url: '/chatgpt/mj-fy', data }) as Promise<T>
 }
 
 /* 获取我得绘制列表 */
-export function fetchMidjourneyDrawList<T>(data: {
+export function fetchMidjourneyDrawList<T> (data: {
 	page?: number
 	size?: number
 }): Promise<T> {
@@ -180,22 +176,22 @@ export function fetchMidjourneyDrawList<T>(data: {
 }
 
 /* 获取Mj提示词 */
-export function fetchMidjourneyPromptList<T>(): Promise<T> {
+export function fetchMidjourneyPromptList<T> (): Promise<T> {
 	return get<T>({ url: '/midjourney/queryPrompts' }) as Promise<T>
 }
 
 /* 获取Mj完整提示词 */
-export function fetchMidjourneyFullPrompt<T>(data: any): Promise<T> {
+export function fetchMidjourneyFullPrompt<T> (data: any): Promise<T> {
 	return get<T>({ url: '/midjourney/getFullPrompt', data }) as Promise<T>
 }
 
 /* 删除MJ绘画记录 */
-export function fetchDownloadImg<T>(data: { id: number }): Promise<T> {
+export function fetchDownloadImg<T> (data: { id: number }): Promise<T> {
 	return post<T>({ url: '/midjourney/delete', data }) as Promise<T>
 }
 
 /* 获取我得绘制列表 */
-export function fetchMidjourneyGetList<T>(data: {
+export function fetchMidjourneyGetList<T> (data: {
 	page?: number
 	size?: number
 	rec: number
@@ -204,17 +200,17 @@ export function fetchMidjourneyGetList<T>(data: {
 }
 
 /* 推荐图片 */
-export function fetchRecDraw<T>(data: { id: number }): Promise<T> {
+export function fetchRecDraw<T> (data: { id: number }): Promise<T> {
 	return post<T>({ url: '/midjourney/rec', data }) as Promise<T>
 }
 
 /* 获取图片验证码 */
-export function fetchCaptchaImg<T>(data: { color: string }): Promise<T> {
+export function fetchCaptchaImg<T> (data: { color: string }): Promise<T> {
 	return post<T>({ url: '/auth/captcha', data }) as Promise<T>
 }
 
 /* 发送手机验证码 */
-export function fetchSendSms<T>(data: {
+export function fetchSendSms<T> (data: {
 	phone: string
 	captchaId: string
 	captchaCode: string
@@ -223,11 +219,11 @@ export function fetchSendSms<T>(data: {
 }
 
 /* 获取九宫格设置 */
-export function fetchGetChatBoxList<T>() {
+export function fetchGetChatBoxList<T> () {
 	return get<T>({ url: '/chatgpt/queryChatBoxFrontend' })
 }
 
 /* 获取快问设置 */
-export function fetchGetChatPreList<T>() {
+export function fetchGetChatPreList<T> () {
 	return get<T>({ url: '/chatgpt/queryChatPreList' })
 }

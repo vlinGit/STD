@@ -93,30 +93,30 @@ function updateTabs(val: number) {
 }
 
 async function handlePayPkg(pkg: Pkg) {
-  if (!payChannel.value.length)
-    message.warning('管理员还未开启支付！')
+//   if (!payChannel.value.length)
+    // message.warning('管理员还未开启支付！')
   handleBuyGoods(pkg)
 }
 
 async function handleBuyGoods(pkg: Pkg) {
   // 如果是微信环境判断有没有开启微信支付,开启了则直接调用jsapi支付即可
-  if (isWxEnv.value && payPlatform.value === 'wechat' && Number(authStore.globalConfig.payWechatStatus) === 1) {
-    if (typeof WeixinJSBridge == 'undefined') {
-      if (document.addEventListener) {
-        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
-      }
-      else if (document.attachEvent) {
-        document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
-        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
-      }
-    }
-    else {
-      const res: ResData = await fetchOrderBuyAPI({ goodsId: pkg.id, payType: 'jsapi' })
-      const { success, data } = res
-      success && onBridgeReady(data)
-    }
-    return
-  }
+//   if (isWxEnv.value && payPlatform.value === 'wechat' && Number(authStore.globalConfig.payWechatStatus) === 1) {
+//     if (typeof WeixinJSBridge == 'undefined') {
+//       if (document.addEventListener) {
+//         document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
+//       }
+//       else if (document.attachEvent) {
+//         document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
+//         document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
+//       }
+//     }
+//     else {
+//       const res: ResData = await fetchOrderBuyAPI({ goodsId: pkg.id, payType: 'jsapi' })
+//       const { success, data } = res
+//       success && onBridgeReady(data)
+//     }
+//     return
+//   }
 
   /* 其他场景打开支付窗口 */
   useGlobalStore.updateOrderInfo({ pkgInfo: pkg })
