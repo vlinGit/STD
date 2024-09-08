@@ -464,6 +464,8 @@ export class PayService {
       /* add balance  log */
       // await this.userBalanceService.addBalanceToOrder(order);
       const result = await this.orderEntity.update({ orderId: orderId }, { status: 1, paydAt: new Date() })
+
+      console.log('pay -> result', result)
       if (result.affected != 1) {
         return 'failed'
       }
