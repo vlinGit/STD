@@ -6,9 +6,6 @@ import { CloseOutline, PaperPlaneOutline } from '@vicons/ionicons5'
 import { useAuthStore, useGlobalStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchOrderBuyAPI, fetchOrderQueryAPI } from '@/api/order'
-import { generateVerifySign } from '@/utils/functions/auth'
-import { generateOrderNumber } from '@/utils/functions/index'
-import { fetchVerifySignAPI } from '@/api/pay'
 
 import type { ResData, paymentRes } from '@/api/types'
 import QRCode from '@/components/common/QRCode/index.vue'
@@ -24,6 +21,7 @@ const POLL_INTERVAL = 1000
 const ms = useMessage()
 const active = ref(true)
 const payType = ref('alipay') // 默认支付宝支付
+const payResult = ref('')
 
 interface Props {
   visible: boolean
@@ -101,10 +99,11 @@ const queryOrderStatus = async () => {
   const { success, data } = result
   if (success) {
     const { status } = data
-    if (status === 1) {
+    if (status === 1 && !payResult.value) {
       clearInterval(timer)
       ms.success('恭喜你支付成功、祝您使用愉快！')
       active.value = false
+      payResult.value = 'success'
       authStore.getUserInfo()
       setTimeout(() => {
         useGlobal.updatePayDialog(false)
@@ -129,6 +128,7 @@ async function getPayUrl(cb?: Function) {
 //   !isRedirectPay.value && (qrCodeloading.value = true)
 //   isRedirectPay.value && (redirectloading.value = true)
   redirectloading.value = true
+  payResult.value = ''
   let qsPayType = null
   qsPayType = payType.value
   if (payPlatform.value === 'wechat')
