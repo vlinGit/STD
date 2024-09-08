@@ -216,22 +216,22 @@ function handleFinish() {
         </div> -->
 
         <div class="flex justify-center" :class="[isMobile ? 'flex-col' : 'flex-row', isRedirectPay ? 'flex-row-reverse' : '']">
-          <div>
+          <!-- <div> -->
             <!-- <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm">
               请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！
             </div> -->
-            <div v-if="payPlatform != 'pockyt'" class="flex items-center justify-center my-3 relative ">
+            <!-- <div v-if="payPlatform != 'pockyt'" class="flex items-center justify-center my-3 relative "> -->
               <!-- qrCodeloading -->
-              <NSpin v-if="qrCodeloading && !isRedirectPay" size="large" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              <NSkeleton v-if="qrCodeloading" :width="240" :height="240" :sharp="false" size="medium" />
+              <!-- <NSpin v-if="qrCodeloading && !isRedirectPay" size="large" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              <NSkeleton v-if="qrCodeloading" :width="240" :height="240" :sharp="false" size="medium" /> -->
 
               <!-- epay -->
-              <QRCode v-if="payPlatform === 'epay' && !qrCodeloading && !redirectloading && !isRedirectPay" :value="url_qrcode" :size="240" />
+              <!-- <QRCode v-if="payPlatform === 'epay' && !qrCodeloading && !redirectloading && !isRedirectPay" :value="url_qrcode" :size="240" />
               <img v-if="payType === 'wxpay' && !qrCodeloading && !isRedirectPay" :src="wxpay" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 bg-[#fff]">
-              <img v-if="payType === 'alipay' && !qrCodeloading && !isRedirectPay" :src="alipay" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 bg-[#fff]">
+              <img v-if="payType === 'alipay' && !qrCodeloading && !isRedirectPay" :src="alipay" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 bg-[#fff]"> -->
 
               <!-- wechat -->
-              <QRCode v-if="payPlatform === 'wechat' && !qrCodeloading" :value="url_qrcode" :size="240" />
+              <!-- <QRCode v-if="payPlatform === 'wechat' && !qrCodeloading" :value="url_qrcode" :size="240" /> -->
 
               <!-- <div v-if="isRedirectPay" class="flex flex-col" :class="[isRedirectPay && isMobile ? 'ml-0' : 'ml-20']">
                 <span class="mb-10 mt-5 text-base">当前站长开通了跳转支付</span>
@@ -242,12 +242,12 @@ function handleFinish() {
               </div> -->
 
               <!-- hupi -->
-              <iframe v-if="payPlatform === 'hupi' && !redirectloading" class="w-[280px] h-[280px] scale-90" :src="url_qrcode" frameborder="0" />
-            </div>
+              <!-- <iframe v-if="payPlatform === 'hupi' && !redirectloading" class="w-[280px] h-[280px] scale-90" :src="url_qrcode" frameborder="0" />
+            </div> -->
             <!-- <span v-if="!isRedirectPay" class="flex items-center justify-center text-lg ">
               {{ `打开${plat}扫码支付` }}
             </span> -->
-          </div>
+          <!-- </div> -->
           <div class=" flex flex-col" :class="[isMobile ? 'w-full ' : ' ml-10 w-[200] ']">
             <!-- <h4 class="mb-10 font-bold text-lg">
               支付方式

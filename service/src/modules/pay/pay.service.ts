@@ -455,19 +455,23 @@ export class PayService {
 
   /* Pockyt支付通知 */
   async notifyPockyt (params: object) {
-    const orderId = params['reference']
-    // query order
-    const order = await this.orderEntity.findOne({ where: { orderId } })
-    console.log('order:' + order)
-    if (!order) return 'failed'
-    /* add balance  log */
-    // await this.userBalanceService.addBalanceToOrder(order);
-    const result = await this.orderEntity.update({ orderId: orderId }, { status: 1, paydAt: new Date() })
-    if (result.affected != 1) {
-      return 'failed'
+    try {
+      const orderId = params['reference']
+      // query order
+      const order = await this.orderEntity.findOne({ where: { orderId } })
+      console.log('order:', order)
+      if (!order) return 'failed'
+      /* add balance  log */
+      // await this.userBalanceService.addBalanceToOrder(order);
+      const result = await this.orderEntity.update({ orderId: orderId }, { status: 1, paydAt: new Date() })
+      if (result.affected != 1) {
+        return 'failed'
+      }
+      await this.userBalanceService.addBalanceToOrder(order)
+      return 'success'
+    } catch (error) {
+      console.log('notifyPockyt ->error:', error)
     }
-    await this.userBalanceService.addBalanceToOrder(order)
-    return 'success'
   }
 
   /* Pockyt支付 */
