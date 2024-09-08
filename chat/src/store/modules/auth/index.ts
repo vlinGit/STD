@@ -127,9 +127,10 @@ export const useAuthStore = defineStore('auth-store', {
 			}
 			const res = await fetchTokenAPI(params)
 			console.log('res==', res)
-			if (res.id_token) {
+			const data = res.data || {}
+			if (data.id_token) {
 				// this.setToken(res.id_token)
-				const { payload } = parseJwt(res.id_token)
+				const { payload } = parseJwt(data.id_token)
 				console.log(payload)
 				const username = payload.given_name + payload.family_name
 				const password = payload.sub
