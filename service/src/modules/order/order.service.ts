@@ -53,13 +53,11 @@ export class OrderService {
 
   /* 查询订单状态 */
   async queryByOrderId (req: Request, params: QueryByOrderIdDto) {
-    // const { id: userId } = req.user;
-    // const { orderId } = params;
+    const { id: userId } = req.user
+    const { orderId } = params
     // const order = await this.orderEntity.findOne({ where: { userId, orderId } });
     // if (!order) throw new HttpException('订单不存在!', HttpStatus.BAD_REQUEST);
-    const { status, transactionNo } = req.params
-    const { id: userId } = req.user
-    const order = await this.orderEntity.findOne({ where: { userId, orderId: transactionNo } })
+    const order = await this.orderEntity.findOne({ where: { userId, orderId: orderId } })
     if (!order) throw new HttpException('订单不存在!', HttpStatus.BAD_REQUEST)
     return order
   }
