@@ -1,3 +1,4 @@
+
 <script setup lang='ts'>
 import { computed, onMounted, watch } from 'vue'
 import { NLayout } from 'naive-ui'
@@ -51,7 +52,15 @@ async function handleAppId(appId: string) {
   }
 }
 
+function checkRoute() {
+  if (isLogin.value)
+    return
+  authStore.setLoginDialog(true)
+}
+
+
 onMounted(() => {
+  checkRoute()
   if (appId.value)
     handleAppId(appId.value)
 })
