@@ -93,30 +93,30 @@ function updateTabs(val: number) {
 }
 
 async function handlePayPkg(pkg: Pkg) {
-//   if (!payChannel.value.length)
-    // message.warning('管理员还未开启支付！')
+  if (!payChannel.value.length)
+    message.warning('管理员还未开启支付！')
   handleBuyGoods(pkg)
 }
 
 async function handleBuyGoods(pkg: Pkg) {
   // 如果是微信环境判断有没有开启微信支付,开启了则直接调用jsapi支付即可
-//   if (isWxEnv.value && payPlatform.value === 'wechat' && Number(authStore.globalConfig.payWechatStatus) === 1) {
-//     if (typeof WeixinJSBridge == 'undefined') {
-//       if (document.addEventListener) {
-//         document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
-//       }
-//       else if (document.attachEvent) {
-//         document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
-//         document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
-//       }
-//     }
-//     else {
-//       const res: ResData = await fetchOrderBuyAPI({ goodsId: pkg.id, payType: 'jsapi' })
-//       const { success, data } = res
-//       success && onBridgeReady(data)
-//     }
-//     return
-//   }
+  if (isWxEnv.value && payPlatform.value === 'wechat' && Number(authStore.globalConfig.payWechatStatus) === 1) {
+    if (typeof WeixinJSBridge == 'undefined') {
+      if (document.addEventListener) {
+        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
+      }
+      else if (document.attachEvent) {
+        document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
+        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
+      }
+    }
+    else {
+      const res: ResData = await fetchOrderBuyAPI({ goodsId: pkg.id, payType: 'jsapi' })
+      const { success, data } = res
+      success && onBridgeReady(data)
+    }
+    return
+  }
 
   /* 其他场景打开支付窗口 */
   useGlobalStore.updateOrderInfo({ pkgInfo: pkg })
@@ -169,9 +169,7 @@ onMounted(() => {
         <div v-for="item in packageList" :key="item.id" class="border dark:border-[#ffffff17] h-[580px] rounded-xl card-item flex flex-col" @click="handlePayPkg(item)">
           <div class="w-full rounded-t-xl overflow-hidden border dark:border-[#ffffff17] relative " :style="{ height: '40%' }">
             <img :src="item.coverImg" class="object-cover w-full h-full cover" alt="">
-            <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 -translate-y-1/2 text-lg text-[#fff] ]">
-              {{ item.name }}
-            </div>
+            <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 -translate-y-1/2 text-lg text-[#fff] ]" />
           </div>
           <div class="p-5  text-lg h-[160px]  border-b dark:border-[#ffffff17] overflow-hidden relative ">
             {{ item.des }}

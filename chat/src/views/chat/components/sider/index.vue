@@ -4,7 +4,6 @@ import { computed, nextTick, ref, watch } from 'vue'
 import type { NumberAnimationInst } from 'naive-ui'
 import {
   NButton,
-  NInput,
   NLayoutSider,
   NNumberAnimation,
   useDialog,
@@ -35,7 +34,7 @@ const dialog = useDialog()
 
 /* 当前选用的模型的扣费类型 1: 普通 2： 高级  */
 const activeModelKeyDeductType = computed(
-  () => chatStore?.activeModelKeyDeductType
+  () => chatStore?.activeModelKeyDeductType,
 )
 const activeModelKeyPrice = computed(() => chatStore?.activeModelKeyPrice)
 
@@ -56,7 +55,7 @@ watch(
   {
     immediate: true,
     flush: 'post',
-  }
+  },
 )
 watch(
   () => authStore.userBalance.useModel4Token,
@@ -68,7 +67,7 @@ watch(
   {
     immediate: true,
     flush: 'post',
-  }
+  },
 )
 
 const { isMobile } = useBasicLayout()
@@ -88,7 +87,7 @@ function handleBlurInput() {
 }
 
 function handleOpenRole() {
-  router.push('/role')
+  router.push('/ai/role')
 }
 
 /* 新增一个对话 */
@@ -99,8 +98,10 @@ async function handleAdd() {
     await chatStore.queryMyGroup()
     addLoading.value = false
 
-    if (isMobile.value) appStore.setSiderCollapsed(true)
-  } catch (error) {
+    if (isMobile.value)
+      appStore.setSiderCollapsed(true)
+  }
+  catch (error) {
     addLoading.value = false
   }
 }
@@ -156,7 +157,7 @@ watch(
   {
     immediate: true,
     flush: 'post',
-  }
+  },
 )
 </script>
 
@@ -198,7 +199,7 @@ watch(
                   class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-700 placeholder:text-gray-400 sm:text-sm dark:bg-gray-900 dark:text-gray-400"
                   @blur="handleBlurInput"
                   @input="handleInputGroupSearch"
-                />
+                >
               </div>
             </div>
             <!-- 新建对话按钮 -->
@@ -220,21 +221,24 @@ watch(
           <div class="flex-1 min-h-0 pb-4 overflow-hidden">
             <List />
           </div>
-          <!-- <div
+
+          <!-- 购买套餐按钮 ---->>
+          <div
             v-if="!isMobile"
-            class="px-6 py-2 flex items-center border-t dark:border-t-neutral-800"
+            class="px-6 py-6 flex items-center border-t dark:border-t-neutral-800"
           >
             <div
-              class="flex items-center w-full p-1 mb-1 text-[#3076fd] rounded cursor-pointer transition hover:bg-[#eef0f3] dark:border-neutral-700 dark:hover:bg-[#33373c]"
+              class="flex items-center w-full p-1 mb-1 text-[#3076f4] rounded cursor-pointer transition hover:bg-[#eef0f3] dark:border-neutral-700 dark:hover:bg-[#33373c]"
+              style="font-size: 20px;"
               @click="useGlobalStore.updateGoodsDialog(true)"
             >
               <SvgIcon
                 icon="material-symbols:shopping-bag-outline"
-                class="mr-1 text-base"
+                class="mr-1"
               />
-              进入市场选购您的商品
+              选购您的方案
             </div>
-          </div> -->
+          </div>
           <div class="p-4 border-t dark:border-t-neutral-800 flex flex-col">
             <div
               v-if="activeModelKeyDeductType === 1"
