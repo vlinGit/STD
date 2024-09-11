@@ -76,7 +76,7 @@ onMounted(() => {
 
 function logOut() {
   authStore.logOut()
-  router.push('/ai')
+  router.push('/')
 }
 setTimeout(() => {
   loading.value = false
