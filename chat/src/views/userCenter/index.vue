@@ -76,7 +76,7 @@ onMounted(() => {
 
 function logOut() {
   authStore.logOut()
-  router.push('/ai')
+  router.push('/chat')
 }
 setTimeout(() => {
   loading.value = false
@@ -140,7 +140,7 @@ setTimeout(() => {
           </div>
 
           <div v-if="isUseWxLogin" class="flex items-center space-x-4 pl-3 mt-3">
-            <span class="flex-shrink-0 w-[100px] text-keft text-primary">绑定微信:</span>
+            <!-- span class="flex-shrink-0 w-[100px] text-keft text-primary">绑定微信:</span>
             <div class="w-[230px]">
               <NButton v-if="!isBindWx" text @click="useGlobalStore.updateBindwxDialog(true)">
                 点击绑定微信
@@ -154,8 +154,8 @@ setTimeout(() => {
             <div class="w-[230px]">
               <NButton text @click="syncVisitorData">
                 点击同步访客数据
-              </NButton>
-            </div>
+              </NButton >
+          </div -->
           </div>
         </div>
       </div>

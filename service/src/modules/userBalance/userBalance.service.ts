@@ -182,12 +182,12 @@ export class UserBalanceService {
     /* 如果是会员 */
     if (b.packageId && b[memberKey] < amount) {
       if (b[baseKey] < amount) {
-        throw new HttpException(`您的账户余额不足,如果想继续体验服务,请联系管理员 <VX: ${vxNumber}> 或购买专属套餐 ！`, HttpStatus.PAYMENT_REQUIRED);
+        throw new HttpException(`抱歉，您的试用余额已用完，请购买Pockyt AI Shop专属套餐。`, HttpStatus.PAYMENT_REQUIRED);
       }
     }
     /* 如果不是会员 */
     if (!b.packageId && b[baseKey] < amount) {
-      throw new HttpException(`您的账户余额不足,如果想继续体验服务,请联系管理员 <VX: ${vxNumber}> 或购买专属套餐 ！`, HttpStatus.PAYMENT_REQUIRED);
+      throw new HttpException(`抱歉，您的试用余额已用完，请购买Pockyt AI Shop专属套餐。`, HttpStatus.PAYMENT_REQUIRED);
     }
     return b;
   }

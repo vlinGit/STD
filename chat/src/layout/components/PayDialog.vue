@@ -190,7 +190,7 @@ function handleFinish() {
         </NIcon>
       </div>
       <div class="p-4 ">
-        <div><span class="whitespace-nowrap font-bold">需要支付：</span> <i class="text-xl text-[red] font-bold">{{ `￥${orderInfo.pkgInfo?.price}` }}</i></div>
+        <div><span class="whitespace-nowrap font-bold">需要支付：</span> <i class="text-xl text-[red] font-bold">{{ `$${orderInfo.pkgInfo?.price}` }}</i></div>
         <div class="mt-2 flex">
           <span class="whitespace-nowrap font-bold">套餐名称：</span><span class="ml-2"> {{ orderInfo.pkgInfo?.name }}</span>
         </div>

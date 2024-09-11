@@ -87,7 +87,7 @@ function handleBlurInput() {
 }
 
 function handleOpenRole() {
-  router.push('/ai/role')
+  router.push('/role')
 }
 
 /* 新增一个对话 */
