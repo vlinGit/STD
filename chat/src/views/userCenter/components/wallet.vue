@@ -162,7 +162,7 @@ onMounted(() => {
             MJ绘画余额
           </div>
           <b class="text-3xl text-[#555]">{{ userBalance.sumDrawMjCount ?? 0 }}</b> <span class="ml-4 text-[#989898]">不同画图消耗不同积分！</span>
-        </NGridItem><NGridItem class="border dark:border-[#ffffff17] rounded-sm p-3">
+        <!-- /NGridItem><NGridItem class="border dark:border-[#ffffff17] rounded-sm p-3">
           <div class="text-[#95aac9] mb-2 text-base">
             卡密充值
           </div>
@@ -175,7 +175,7 @@ onMounted(() => {
             <NButton v-if="buyCramiAddress" type="success" @click="openDrawer">
               购买卡密
             </NButton>
-          </NSpace>
+          </NSpace -->
         </NGridItem>
       </NGrid>
     </NCard>
