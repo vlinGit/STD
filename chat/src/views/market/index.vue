@@ -62,7 +62,7 @@ function loadMore() {
       </div>
     </div>
     <div class="px-4 mb-1 pr-5">
-      <n-input v-model:value="keyword" placeholder="prompt关键词搜索">
+      <n-input v-model:value="keyword" placeholder="关键词搜索">
         <template #prefix>
           <n-icon :component="FlashOutline" />
         </template>
