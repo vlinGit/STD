@@ -76,7 +76,7 @@ onMounted(() => {
 
 function logOut() {
   authStore.logOut()
-  router.push('/')
+  router.push('/chat')
 }
 setTimeout(() => {
   loading.value = false
