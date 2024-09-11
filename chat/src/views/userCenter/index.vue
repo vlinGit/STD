@@ -96,7 +96,7 @@ setTimeout(() => {
         <NAvatar
           :size="148"
           :src="avatar"
-          :fallback-src="defaultAvatar"
+          :fallback-src="defaultAvatar" round
         />
         <b class="mt-3 text-lg text-[#555]">{{ username }}</b>
         <span class="text-[#95aac9] mt-2"> {{ email }}</span>
