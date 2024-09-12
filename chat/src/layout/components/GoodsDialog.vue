@@ -267,7 +267,7 @@ function handleSuccess(pkg: Pkg) {
                   <span class="font-bold">{{ item.drawMjCount }}</span>
                 </div>
                 <div class="flex justify-between items-end mt-5">
-                  <i class="text-xl text-[red] font-bold">{{ `￥${item.price}` }}</i>
+                  <i class="text-xl text-[red] font-bold">{{ `$${item.price}` }}</i>
                   <NButton type="primary" dashed size="small" @click="handleSuccess(item)">
                     购买套餐
                   </NButton>
