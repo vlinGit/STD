@@ -245,7 +245,6 @@ function handleSuccess(pkg: Pkg) {
             <NCard size="small" embedded>
               <template #header>
                 <div class="relative">
-                  <b>{{ item.name }}</b>
                   <img v-if="item.extraReward === 1" :src="preferentialIcon" class="w-8 absolute -right-4 -top-3">
                 </div>
               </template>
