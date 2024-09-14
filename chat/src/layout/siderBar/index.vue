@@ -283,7 +283,7 @@ watch(
       <NTooltip v-if="isLogin" trigger="hover" placement="right">
         <template #trigger>
           <NAvatar
-            :size="42"
+            :size="50"
             :src="avatar"
             round
             bordered
