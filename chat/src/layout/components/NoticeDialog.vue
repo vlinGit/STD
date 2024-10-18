@@ -32,7 +32,8 @@ const { isSmallLg } = useBasicLayout()
 const theme = computed(() => appStore.theme)
 
 const html = computed(() => {
-  if (!notice.value.noticeInfo) return ''
+  if (!notice.value.noticeInfo)
+    return ''
   return marked(notice.value.noticeInfo)
 })
 
@@ -47,7 +48,8 @@ function handleClose() {
 async function queryNotice() {
   const res: ResData = await fetchGetGlobalNoticeAPI()
   const { success, data } = res
-  if (success) notice.value = data
+  if (success)
+    notice.value = data
 }
 
 async function openDrawerAfter() {
@@ -84,9 +86,8 @@ function handleReminder() {
         </div>
         <template v-else>
           <div
-            :class="[darkMode ? 'text-[#fff]' : 'text-[#000]', 'pb-5']"
-            :style="{ background: theme === 'dark' ? '#2c2c32' : '#fff' }"
-            class="p-[20px] markdown-body markdown-body-generate max-h-[500px] overflow-y-auto overflow-x-hidden"
+            :class="[darkMode ? 'text-[#fff]' : 'text-[#000]']"
+            class="p-[20px] markdown-body markdown-body-generate max-h-[500px] overflow-y-auto overflow-x-hidden pb-5"
             v-html="html"
           />
         </template>
@@ -94,7 +95,9 @@ function handleReminder() {
           <NButton type="text" @click="handleReminder">
             今日不再提示
           </NButton>
-          <NButton type="primary" @click="useGlobalStore.updateNoticeDialog(false)"> 我已知晓 </NButton>
+          <NButton type="primary" class="primary-button" @click="useGlobalStore.updateNoticeDialog(false)">
+            我已知晓
+          </NButton>
         </div>
       </NCard>
     </NSpace>
@@ -102,7 +105,25 @@ function handleReminder() {
 </template>
 
 <style scoped>
-/deep/ .n-card__content {
+:deep(.n-card__content) {
   padding: 0 !important;
+}
+.n-card {
+  filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 1)); /* 添加不透明的黑色阴影 */
+  border: 2px solid rgb(0, 0, 0) !important; /* 添加黑色加粗的边框 */
+  border-radius: 20px;
+}
+.primary-button {
+  border-radius: 20px;
+  border: 1.5px solid rgb(0, 0, 0) !important; /* 添加黑色加粗的边框 */
+  font-size: 16px;
+  padding: 20px 30px;
+  background-color: #27E093; /* 按钮背景颜色 */
+  color: #000000; /* 按钮文字颜色 */
+}
+.primary-button:hover {
+  background-color: #27E093 !important; /* 鼠标悬停时保持绿色 */
+  color: #000000!important; /* 鼠标悬停时文字颜色 */
+  filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 1)); /* 添加不透明的黑色阴影 */
 }
 </style>
