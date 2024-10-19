@@ -77,8 +77,8 @@ function isActive(uuid: number) {
   </p>
   <div v-for="item of dataSources" :key="`${item.uuid}`">
     <a
-      class="relative flex items-center gap-3 px-3 py-2.5 break-all border rounded-md cursor-pointer hover:bg-neutral-100 group dark:border-neutral-800 dark:hover:bg-[#24272e]"
-      :class="isActive(item.uuid) && ['border-[#3076FD]', 'bg-neutral-100', 'text-[#3076FD]', 'dark:bg-[#24272e]', 'dark:border-[#3076fd]', 'pr-20']"
+      class="relative flex items-center gap-3 px-3 py-2.5 break-all  rounded-md cursor-pointer hover:bg-neutral-100 group dark:border-neutral-800 dark:hover:bg-[#24272e]"
+      :class="isActive(item.uuid) && ['border-[#3076FD]', 'bg-neutral-100', 'text-[#000]', 'dark:bg-[#24272e]', 'dark:border-[#3076fd]', 'pr-20']"
       @click="handleSelect(item)"
     >
       <span>
@@ -90,7 +90,7 @@ function isActive(uuid: number) {
           v-model:value="item.title" size="tiny"
           @keypress="handleEnter(item, $event)"
         />
-        <span v-else>{{ item.title }}</span>
+        <span v-else:>{{ item.title }}</span>
       </div>
       <div v-if="isActive(item.uuid)" class="absolute z-10 flex visible right-1">
         <template v-if="item.isEdit">
@@ -118,3 +118,19 @@ function isActive(uuid: number) {
     </a>
   </div>
 </template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap');
+
+* {
+  font-family: 'DM Sans'; /* 设置字体为 DM Sans */
+  font-size: 14px; /* 设置字体大小为 14px */
+}
+a {
+  transition: background-color 0.3s; /* 背景颜色过渡 */
+}
+
+a:hover {
+  background-color: rgba(39, 224, 147, 0.233); /* 鼠标悬停时背景颜色为绿色且透明度低 */
+}
+</style>

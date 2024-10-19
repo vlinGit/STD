@@ -184,39 +184,34 @@ watch(
           >
             <!-- 搜索框 -->
             <div class="flex-1 relative">
-              <div class="flex-1 relative">
-                <!-- 搜索图标按钮 -->
-                <SvgIcon
-                  icon="material-symbols-light:search"
-                  class="pointer-events-none absolute inset-y-0 left-0 h-full w-6 h-6 text-gray-400"
-                />
-                <!-- 搜索输入框 -->
+              <div class="search-container">
                 <input
                   ref="searchRef"
                   v-model="groupKeyWord"
                   type="text"
                   placeholder="搜索历史对话"
-                  class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-700 placeholder:text-gray-400 sm:text-sm dark:bg-gray-900 dark:text-gray-400"
+                  class="search"
                   @blur="handleBlurInput"
                   @input="handleInputGroupSearch"
                 >
+                <!-- 新建对话按钮 -->
+                <button
+                  type="button"
+                  class="add-button"
+                  @click="handleAdd"
+                >
+                  <SvgIcon icon="material-symbols-light:add" class="h-6 w-6" />
+                </button>
+                <!-- 删除对话按钮 -->
+                <button
+                  type="button"
+                  class="delete-button"
+                  @click="handleDelGroup"
+                >
+                  <SvgIcon icon="material-symbols-light:delete-outline" class="h-6 w-6" />
+                </button>
               </div>
             </div>
-            <!-- 新建对话按钮 -->
-            <button
-              type="button"
-              class="rounded-md p-2 text-sm focus-visible:outline bg-white text-gray-400 dark:bg-gray-800"
-              @click="handleAdd"
-            >
-              <SvgIcon icon="material-symbols-light:add" class="h-6 w-6" />
-            </button>
-            <button
-              type="button"
-              class="rounded-md p-2 text-sm focus-visible:outline bg-white text-gray-400 dark:bg-gray-800"
-              @click="handleDelGroup"
-            >
-              <SvgIcon icon="material-symbols-light:delete-outline" class="h-6 w-6" />
-            </button>
           </div>
           <div class="flex-1 min-h-0 pb-4 overflow-hidden">
             <List />
@@ -225,16 +220,16 @@ watch(
           <!-- 购买套餐按钮 ---->>
           <div
             v-if="!isMobile"
-            class="px-6 py-6 flex items-center border-t dark:border-t-neutral-800"
+            class="px-2 py-2 flex items-center border-t dark:border-t-neutral-800"
           >
             <div
-              class="flex items-center w-full p-1 mb-1 text-[#3076f4] rounded cursor-pointer transition hover:bg-[#eef0f3] dark:border-neutral-700 dark:hover:bg-[#33373c]"
-              style="font-size: 20px;"
+              class="container flex items-center"
               @click="useGlobalStore.updateGoodsDialog(true)"
             >
               <SvgIcon
                 icon="material-symbols:shopping-bag-outline"
-                class="mr-1"
+                class="mr-2"
+                style="font-size:20px;"
               />
               选购您的方案
             </div>
@@ -246,7 +241,8 @@ watch(
             >
               <SvgIcon
                 icon="material-symbols:account-balance-wallet-outline"
-                class="ml-2 mr-2 text-base"
+                class="ml-0 mr-2 text-base"
+                style="font-size:20px;"
               />普通额度： {{ `${userBalance.sumModel3Count || 0} 积分` }}
             </div>
             <div
@@ -255,7 +251,8 @@ watch(
             >
               <SvgIcon
                 icon="ic:twotone-hourglass-top"
-                class="ml-2 mr-2 text-base"
+                class="ml-0 mr-2 text-base"
+                style="font-size:20px;"
               />
               我已使用：
               <NNumberAnimation
@@ -269,7 +266,11 @@ watch(
               v-if="activeModelKeyDeductType === 1"
               class="my-1 flex items-center select-none"
             >
-              <SvgIcon icon="mingcute:bill-line" class="ml-2 mr-2 text-base" />
+              <SvgIcon
+                icon="mingcute:bill-line"
+                class="ml-0 mr-2 text-base"
+                style="font-size:20px;"
+              />
               模型费用： {{ `${activeModelKeyPrice || 0}积分 / 次对话` }}
             </div>
 
@@ -303,20 +304,19 @@ watch(
             >
               <SvgIcon
                 icon="mingcute:bill-line"
-                class="ml-2 mr-2 text-base"
+                class="ml-4 mr-4 text-base"
               />模型费用： {{ `${activeModelKeyPrice || 0}积分 / 次对话` }}
             </div>
 
             <div class="flex justify-between my-3">
               <NButton
-                type="tertiary"
-                size="small"
+                class="green-button"
                 @click="useGlobalStore.updateNoticeDialog(true)"
               >
                 <SvgIcon icon="mdi:notice-board" class="ml-2 mr-2 text-sm" />
                 <span class="mr-2">公告栏</span>
               </NButton>
-              <NButton type="tertiary" size="small" @click="handleOpenRole">
+              <NButton class="green-button" @click="handleOpenRole">
                 <SvgIcon
                   icon="ri:emoji-sticker-line"
                   class="ml-2 mr-2 text-sm"
@@ -355,3 +355,86 @@ watch(
     </template>
   </div>
 </template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap');
+
+* {
+  font-family: 'DM Sans'; /* 设置字体为 DM Sans */
+  font-size: 12px; /* 设置字体大小为 14px */
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  border: 2px solid #000000!important; /* 边框 */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  justify-content: flex-start; /* 改为 flex-start 使按钮更靠近搜索框 */
+}
+.search {
+  padding:8px;
+  width: 110px;
+  height: 35px;
+  border: none;
+  border-radius: 0.5rem; /* 圆角 */
+  outline: none; /* 去掉轮廓 */
+  font-size: small ; /* 字体大小 */
+  margin-right: 40px; /* 缩小搜索框与按钮之间的间距 */
+}
+.add-button {
+  background-color: #27E093;
+  border: 2px solid #000000;
+  padding: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 0.7rem; /* 圆角 */
+  margin-left: 5px; /* 调整间距 */
+}
+.delete-button {
+  background-color: #f0f0f0; /* 或者任何你想要的颜色 */
+  border: 2px solid #000000;
+  padding: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 0.7rem; /* 圆角 */
+  margin-left: 5px; /* 调整间距 */
+}
+
+.add-button:hover {
+  background-color: #00ff95;
+}
+
+.delete-button:hover {
+  background-color: #ffffff;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  font-weight: bold; /* 加粗图标 */
+  }
+.container {
+  width: 300px;
+  border: none;
+  margin: 0 auto;
+}
+.container:hover {
+  color: #000000;
+  cursor: pointer;
+}
+.green-button {
+  color: #000000;
+  background-color: #27E093; /* 背景颜色为绿色 */
+  border-radius: 1rem; /* 圆角效果，可以根据需要调整 */
+  border: 2px solid #000000;
+  padding: 14px; /* 内边距根据需要调整 */
+  margin-left: 4px; /* 调整左边距 */
+  transition: background-color 0.3s, padding 0.3s; /* 添加过渡效果 */
+}
+.green-button:hover{
+  background-color:#00ff95!important;  /* 背景颜色变为黑色 */
+  color: #000000!important; /* 字体颜色变为黑色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+  outline: none; /* 去掉任何轮廓 */
+}
+</style>
