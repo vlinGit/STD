@@ -61,9 +61,11 @@ const themeOptions: {
 ]
 
 const modelName = computed(() => {
-  if (!chatStore.activeConfig) return
+  if (!chatStore.activeConfig)
+    return
   const { modelTypeInfo, modelInfo } = chatStore.activeConfig
-  if (!modelTypeInfo || !modelInfo) return
+  if (!modelTypeInfo || !modelInfo)
+    return
   return `${modelTypeInfo?.label} / ${modelInfo.modelName}`
 })
 
@@ -83,7 +85,8 @@ function handleUpdateCollapsed() {
 
 function onScrollToTop() {
   const scrollRef = document.querySelector('#scrollRef')
-  if (scrollRef) nextTick(() => (scrollRef.scrollTop = 0))
+  if (scrollRef)
+    nextTick(() => (scrollRef.scrollTop = 0))
 }
 
 function handleExport() {
@@ -197,11 +200,11 @@ function handleSignIn() {
             <NTooltip trigger="hover" :disabled="isMobile">
               <template #trigger>
                 <button
-                  class="flex h-8 w-8 items-center justify-center rounded border transition hover:bg-[#eef0f3] dark:border-neutral-700 dark:hover:bg-[#33373c]"
-                  @click="handleExport"
                   v-show="!isMobile"
+                  class="flex h-8 w-8 items-center justify-center rounded-xl border-2 border-black text-lg transition-all hover:bg-green-500 dark:border-neutral-700 dark:hover:bg-[#27E093]"
+                  @click="handleExport"
                 >
-                  <span class="text-base text-slate-500 dark:text-slate-400">
+                  <span class="text-base" style="color: #000000;">
                     <SvgIcon
                       icon="material-symbols:sim-card-download-outline-rounded"
                     />
@@ -213,12 +216,10 @@ function handleSignIn() {
             <NTooltip trigger="hover" :disabled="isMobile">
               <template #trigger>
                 <button
-                  class="flex h-8 w-8 items-center justify-center rounded border transition hover:bg-[#eef0f3] dark:border-neutral-700 dark:hover:bg-[#33373c]"
+                  class="flex h-8 w-8 items-center justify-center rounded-xl border-2 border-black text-lg transition-all hover:bg-green-500 dark:border-neutral-700 dark:hover:bg-[#27E093]"
                   @click="handleClear"
                 >
-                  <span class="text-base text-slate-500 dark:text-slate-400"
-                    ><SvgIcon icon="material-symbols:delete-outline"
-                  /></span>
+                  <span class="text-base" style="color: #000000;"><SvgIcon icon="material-symbols:delete-outline" /></span>
                 </button>
               </template>
               删除本页内容
@@ -226,12 +227,10 @@ function handleSignIn() {
             <NTooltip trigger="hover" :disabled="isMobile">
               <template #trigger>
                 <button
-                  class="flex h-8 w-8 items-center justify-center rounded border transition hover:bg-[#eef0f3] dark:border-neutral-700 dark:hover:bg-[#33373c]"
+                  class="flex h-8 w-8 items-center justify-center rounded-xl border-2 border-black text-lg transition-all hover:bg-green-500 dark:border-neutral-700 dark:hover:bg-[#27E093]"
                   @click="handleScrollBtm"
                 >
-                  <span class="text-base text-slate-500 dark:text-slate-400"
-                    ><SvgIcon icon="material-symbols:keyboard-arrow-down"
-                  /></span>
+                  <span class="text-base" style="color: #000000;"><SvgIcon icon="material-symbols:keyboard-arrow-down" /></span>
                 </button>
               </template>
               滚动到底部
