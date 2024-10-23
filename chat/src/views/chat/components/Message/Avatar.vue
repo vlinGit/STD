@@ -27,8 +27,11 @@ const activeGroupInfo = computed(() => chatStore.groupList.find((item: any) => i
 
 <template>
   <template v-if="image">
-    <NAvatar v-if="isString(avatar) && avatar.length > 0" :size="isMobile ? 32 : 42" :src="avatar" :fallback-src="defaultAvatar" style="border-radius: 50%;" />
-    <NAvatar v-else :size="isMobile ? 32 : 42" :src="defaultAvatar" style="border-radius: 50%;" />
+    <div style="margin-right: 60px;">
+      <!-- 添加一个外部 div，用于调整位置 -->
+      <NAvatar v-if="isString(avatar) && avatar.length > 0" :size="isMobile ? 32 : 42" :src="avatar" :fallback-src="defaultAvatar" style="border-radius: 50%;" />
+      <NAvatar v-else :size="isMobile ? 32 : 42" :src="defaultAvatar" style="border-radius: 50%;" />
+    </div>
   </template>
   <span v-else class="text-[28px] dark:text-white">
     <NAvatar v-if="isString(robotAvatar) && robotAvatar.length > 0" style="background-color: transparent;border-radius: 50%;" :size="isMobile ? 32 : 42" :src="robotAvatar" :fallback-src="defaultAvatar" />
