@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { NButton, NEmpty, NIcon, NInput, NInputGroup, useMessage } from 'naive-ui'
+import { NButton, NIcon, NInput, NInputGroup, useMessage } from 'naive-ui'
 import { ImagesOutline } from '@vicons/ionicons5'
 import { Icon } from '@iconify/vue' // 局部引入 Icon 组件
 import { fetchChatDraw, fetchGetAllChatLogDraw, fetchGetChatLogDraw } from '@/api'
@@ -294,15 +294,12 @@ onMounted(() => {
         </div>
 
         <div class="tab-content">
-          <div v-if="activeTab === 'all'" class="min-h-screen flex items-center justify-center">
+          <div v-if="activeTab === 'all'" class="min-h-screen">
             <OldGridManager use-propmpt :gap="8" pre-origin :data-list="allDrawList" :scale-width="50" />
           </div>
-          <NEmpty v-else size="huge" description="暂无数据哟~" style="margin-top: 20px;" />
-
           <div v-if="activeTab === 'mine'" class="min-h-screen">
             <OldGridManager use-propmpt :gap="8" pre-origin :data-list="mineDrawList" :scale-width="50" />
           </div>
-          <NEmpty v-else size="huge" description="暂无数据哟~" />
         </div>
       </div>
     </div>
