@@ -1,28 +1,26 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { NButton, useMessage, NInput, NScrollbar } from 'naive-ui'
-import type { App } from '../helpter'
+import { NButton, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
-import { fetchCollectAppAPI, fetchQueryAppsAPI } from '@/api/appStore'
+import { Icon } from '@iconify/vue'
+import type { App } from '../helpter'
+import { fetchCollectAppAPI, fetchQueryAppCatsAPI, fetchQueryAppsAPI } from '@/api/appStore'
 import { useAppCatStore, useAuthStore } from '@/store'
-import { SvgIcon } from '@/components/common'
 import type { ResData } from '@/api/types'
 import { fetchQueryModelsListAPI } from '@/api/models'
-import { fetchQueryAppCatsAPI } from '@/api/appStore'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchQueryMenuAPI } from '@/api/config'
 import Motion from '@/utils/motion/index'
 
+const emit = defineEmits<Emit>()
 const { isMobile } = useBasicLayout()
 const authStore = useAuthStore()
-const siteRobotName = authStore.globalConfig?.siteRobotName || 'AI Tools'
+const siteRobotName = authStore.globalConfig?.siteRobotName || '欢迎来到Pockyt AI shop！'
 
 const appMenuHeaderTips = computed(() => authStore.globalConfig.appMenuHeaderTips)
 const appMenuHeaderBgUrl = computed(() => authStore.globalConfig.appMenuHeaderBgUrl)
 
-
 const router = useRouter()
-const emit = defineEmits<Emit>()
 const ms = useMessage()
 const appCatStore = useAppCatStore()
 const keyword = ref('')
@@ -60,11 +58,12 @@ async function queryApps() {
 }
 
 const list = computed(() => {
-	if(keyword.value){
-		return appList.value.filter( item => item.name.includes(keyword.value))
-	}
-	if(activeCatId.value === 0) return appList.value
-	return appList.value.filter( item => item.catId === activeCatId.value)
+  if (keyword.value)
+    return appList.value.filter(item => item.name.includes(keyword.value))
+
+  if (activeCatId.value === 0)
+    return appList.value
+  return appList.value.filter(item => item.catId === activeCatId.value)
 })
 
 /* 加入取消收藏 */
@@ -82,15 +81,14 @@ async function handleCollect(app: App) {
 }
 
 async function handleRunApp(app: App) {
-	const res: any = await fetchQueryModelsListAPI()
-	const { modelMaps } = res.data
-	if(!modelMaps[1]){
-		return ms.warning('管理员未配置特定应用模型、请联系管理员配置~')
-	}
-	router.push({ path: '/chat', query: { appId: app.id } })
+  const res: any = await fetchQueryModelsListAPI()
+  const { modelMaps } = res.data
+  if (!modelMaps[1])
+    return ms.warning('管理员未配置特定应用模型、请联系管理员配置~')
+
+  router.push({ path: '/chat', query: { appId: app.id } })
   // emit('run-app', app)
 }
-
 
 async function queryCats() {
   const res: ResData = await fetchQueryAppCatsAPI()
@@ -101,18 +99,19 @@ async function queryCats() {
   catList.value = [defaultCat, ...res?.data?.rows]
 }
 
-async function queryMenu (){
-	const res: any = await fetchQueryMenuAPI({ menuPlatform: 1})
-	if(!res.success) return
-	menuList.value = res.data
+async function queryMenu() {
+  const res: any = await fetchQueryMenuAPI({ menuPlatform: 1 })
+  if (!res.success)
+    return
+  menuList.value = res.data
 }
 
-function isShowBtn(path: string){
-	return menuList.value.filter( (item: any) => item.menuPath === path).length
+function isShowBtn(path: string) {
+  return menuList.value.filter((item: any) => item.menuPath === path).length
 }
 
-function handleChangeCatId(id: number){
-	activeCatId.value = id
+function handleChangeCatId(id: number) {
+  activeCatId.value = id
 }
 
 watch(catId, (val) => {
@@ -123,110 +122,190 @@ watch(catId, (val) => {
     activeList.value = appList.value.filter((item: App) => item.catId === val)
 })
 
-function handlJumpPath(path: string){
-	router.push(path)
+function handlJumpPath(path: string) {
+  router.push(path)
 }
 
 onMounted(() => {
-	queryCats()
+  queryCats()
   queryApps()
-	queryMenu()
+  queryMenu()
 })
 </script>
 
 <template>
-	<div class="relative flex justify-center ">
-  <div class="w-full flex flex-col items-center  max-w-screen-4xl p-4 lg:p-6  " >
-				<div class="mb-2 mt-8 text-center text-3xl font-extrabold text-[#5A91FC] dark:text-[var(--primary-color-dark)] lg:text-4xl"> {{siteRobotName }} </div>
-			<div class="flex justify-center text-base text-small mb-4 mt-4 text-center text-gray-700 dark:text-gray-300 lg:text-lg"> {{ appMenuHeaderTips ||'探索无限可能，与AI一同开创智慧未来！'}}</div>
-			<div class="w-full flex justify-center my-3 " :class="isMobile ? 'space-x-1' : 'space-x-5'">
-				<n-button trong secondary type="primary" round v-if="isShowBtn('/chat')" @click="handlJumpPath('/chat')">
-					<SvgIcon icon="carbon:chat" class="text-2xl mr-2" />
-					AI 对话
-				</n-button>
-				<n-button trong secondary type="primary" round v-if="isShowBtn('/midjourney')"  @click="handlJumpPath('/midjourney')">
-					<SvgIcon icon="ph:pencil-slash-duotone" class=" text-2xl mr-2 " />
-					AI 绘画
-				</n-button>
-				<n-button trong secondary type="primary" round v-if="isShowBtn('/mind')" @click="handlJumpPath('/mind')" >
-					<SvgIcon icon="ri:mind-map" class=" text-2xl mr-2 " />
-					思维导图
-				</n-button>
-			</div>
-			<div class="mt-3 flex flex-col  justify-center w-full items-center overflow-hidden">
-					<n-input v-model:value="keyword" class="!max-w-screen-4xl" round placeholder="搜索应用名称、快速查找应用...">
-						<template #suffix>
-							<SvgIcon icon="iconamoon:search-thin" class="text-base" />
-						</template>
-					</n-input>
-			</div>
+  <div class="relative flex justify-center ">
+    <div class="w-full flex flex-col items-center p-4 lg:p-6  ">
+      <div class="mb-2 mt-8 text-center text-3xl font-extrabold text-[#0C0E0C] dark:text-[var(--primary-color-dark)] lg:text-4xl">
+        {{ siteRobotName }}
+      </div>
+      <div class="flex justify-center text-base text-small mb-4 mt-4 text-center text-gray-700 dark:text-gray-300 lg:text-lg">
+        {{ appMenuHeaderTips || '探索无限可能，与AI一同开创智慧未来！' }}
+      </div>
+      <div class="w-full flex justify-center my-3  " :class="isMobile ? 'space-x-1' : 'space-x-5'">
+        <NButton v-if="isShowBtn('/chat')" class="ai-chat " style="font-weight: bold;" @click="handlJumpPath('/chat')">
+          <Icon icon="token:chat" class="text-2xl mr-2" />
+          AI 对话
+        </NButton>
+        <NButton v-if="isShowBtn('/midjourney')" class="ai-chat" style="font-weight: bold;" @click="handlJumpPath('/midjourney')">
+          <Icon icon="mdi:art" class=" text-2xl mr-2 " />
+          AI 绘画
+        </NButton>
+        <NButton v-if="isShowBtn('/mind')" class="ai-chat" style="font-weight: bold;" @click="handlJumpPath('/mind')">
+          <Icon icon="ri:mind-map" class=" text-2xl mr-2 " />
+          思维导图
+        </NButton>
+      </div>
+      <div class="flex justify-center items-center mt-8">
+        <div class="">
+          <div class="">
+            <div class="button-wrapper">
+              <NButton
+                v-for="(item, index) in catList"
+                :key="index"
+                class=" fenlei"
+                :class="{ active: activeCatId === item.id }"
+                :type="activeCatId === item.id ? 'primary' : 'default'"
+                style="font-weight: bold;"
+                @click="handleChangeCatId(item.id)"
+              >
+                {{ item.name }}
+              </NButton>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Motion :delay="0" :y="50" :duration="350">
+        <div class=" flex flex-wrap" :class="isMobile ? 'px-4' : 'pl-0'">
+          <div class="flex flex-wrap justify-center">
+            <div v-for="item in list" :key="item.id" class="custom-card w-1/5 mt-10 p-2 m-2">
+              <div class="w-full flex items-center">
+                <span class="w-16 h-16 flex justify-center items-center rounded-md shadow-md mr-5 border border-[#00000014]">
+                  <img :src="item.coverImg" class="w-14 h-14 mb-1" alt="">
+                </span>
+                <span class="css-0 mb-2 line-clamp-1 break-all text-lg font-semibold tracking-wide text-[#333] dark:text-[#ffffff]">{{ item.name }}</span>
+              </div>
 
-			<div class="sticky left-0 mt-3 right-0 top-0 flex max-w-screen-4xl  items-center z-50  w-full bg-[#f3f4fc] dark:bg-[#101014]"  >
-				<NScrollbar  x-scrollable class="!h-[60px] " >
-					<div class="flex mt-3 items-center space-x-3 whitespace-nowrap">
-						<n-button size="small" round :type="activeCatId === item.id ? 'primary': 'default'" v-for="(item,index) in catList" :key="index" @click="handleChangeCatId(item.id)">
-							{{ item.name }}
-						</n-button>
-					</div>
-				</NScrollbar>
-			</div>
+              <p class="font-bold ml-2 text-xs mx-1 mt-1">
+                {{ item.des }}
+              </p>
 
-		<Motion :delay="0" :y="50" :duration="350">
-			<div class="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 3xl:grid-cols-6 gap-6 py-4"  :class="isMobile ? 'px-4' : ''">
-				<div v-for="item in list" :key="item.id" class="bg-white dark:bg-[#18181c] custom-card cursor-pointer space-y-2  border-[#e0e0e0] dark:border-neutral-800 p-4 pt-4 border rounded-md flex flex-col justify-center items-center hover:bg-neutral-100 dark:hover:bg-[#24272e] select-none min-h-[150px]" @click="handleRunApp(item)">
-					<div class="w-full flex items-center">
-						<span class="w-16 h-16 flex justify-center items-center rounded-md shadow-md mr-5 border border-[#00000014]">
-							<img :src="item.coverImg" class="w-14 h-14 mb-1" alt="">
-						</span>
-						<span class="css-0 mb-2 line-clamp-1 break-all text-lg font-semibold tracking-wide text-[#333] dark:text-[#ffffff]">{{ item.name }}</span>
-					</div>
-
-					<p class="line-clamp-2  break-all overflow-hidden  text-gray-400 w-full   text-xs">
-						{{ item.des }}
-					</p>
-
-					<div class="w-full flex justify-between mt-1">
-						<NButton class="join" size="tiny" ghost :disabled="item.loading" @click.stop="handleCollect(item)">
-							<template #icon>
-								<SvgIcon :icon=" isMineApp(item) ? 'iconamoon:sign-minus-bold' : 'mi:add'" class="text-base" />
-							</template>
-							{{ isMineApp(item) ? '取消收藏' : '加入个人工作台' }}
-						</NButton>
-						<SvgIcon icon="codicon:run-all" class="run-icon text-xl text-[#5A91FC]" />
-					</div>
-				</div>
-			</div>
-		</Motion>
-
+              <div class="w-full flex justify-between mt-1">
+                <NButton class="join flex items-center justify-center" size="tiny" ghost :disabled="item.loading" @click.stop="handleCollect(item)">
+                  <template #icon>
+                    <SvgIcon :icon=" isMineApp(item) ? 'iconamoon:sign-minus-bold' : 'mi:add'" class="text-base" />
+                  </template>
+                  <span class="ml-[-20px] font-bold">
+                    {{ isMineApp(item) ? '取消收藏' : '加入个人工作台' }}</span>
+                </NButton>
+                <NButton class="run-icon" size="tiny" ghost @click.stop="handleRunApp(item)">
+                  <span class="ml-[0px] font-bold text-lg">
+                    Run
+                  </span>
+                </NButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Motion>
+    </div>
   </div>
-</div>
 </template>
 
 <style lang="less">
 .custom-card{
-	transition: all .3s;
+  min-width: 280px;
+  max-width: 280px;
+	transition: all 0.3s;
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 1rem; /* 圆角 */
+  display: flex;
+  flex-direction: column;
 
 	.join{
+    margin-left:20px;
+    width: 100px;
+    height: 30px;
+    margin-top: 50px;
+    background-color: #ffffff; /* 按钮背景颜色为白色 */
+    transition: all .3s;
+    border: 2px solid black; /* 黑色边框 */
+    border-radius: 1rem; /* 圆角 */
 		opacity: 1;
-	}
-
-	&:hover{
-    border: 1px solid #5A91FC;
-    box-shadow: 0 6px 32px #04343014;
-		transform: scale(1.05);
-
-		.join{
-			opacity: 1;
+    &:hover{
+      background-color: #ffffff; /* 按钮背景颜色为白色 */
+			transform: scale(1.2);
+      border-bottom: 6px solid #000000; /* 添加加粗的底边 */
 		}
+
+  }
+	&:hover{
+    background-color: #27E093;
+    box-shadow: 0 6px 32px #04343014;
+    border-bottom: 6px solid #000000; /* 添加加粗的底边 */
 	}
 
 	.run-icon{
+    content: "Run";
+    margin-right: 20px;
+    margin-top: 50px;
+    width: 70px;
+    height: 30px;
+    background-color: #ffffff; /* 按钮背景颜色为白色 */
+    border: 2px solid black; /* 黑色边框 */
+    border-radius: 1rem; /* 圆角 */
 		opacity: 1;
 		transition: all .3s;
 
 		&:hover{
-			transform: scale(1.5);
+      background-color: #ffffff; /* 按钮背景颜色为白色 */
+			transform: scale(1.2);
+      border-bottom: 6px solid #000000; /* 添加加粗的底边 */
 		}
 	}
+}
+.ai-chat{
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 6rem; /* 圆角 */
+  color: black; /* 字体颜色 */
+  background-color: #ffffff; /* 按钮背景颜色为绿色 */
+  transition: background-color 0.3s; /* 背景色过渡效果 */
+}
+.ai-chat:hover{
+    color: #000000!important;
+    background-color: #27E093!important;
+    box-shadow: 0 6px 32px #04343014;
+		transform: scale(1.05);
+    border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+}
+
+.button-wrapper{
+    width: 600px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid #000000; /* 大按钮的边框 */
+    border-radius: 2rem; /* 圆角 */
+    background-color: #ffffff; /* 背景颜色 */
+    border-bottom: 4px solid #000000; /* 添加加粗的底边 */
+
+}
+.fenlei {
+    height: 40px; /* 按钮高度 */
+    border-radius: 2rem; /* 确保 Tab 有圆角 */
+    padding: 10px 20px;
+    flex: 1; /* 让 Tab 均分容器宽度 */
+    text-align: center; /* 文本居中 */
+}
+.fenlei.active {
+  font-weight: bold; /* 选中字体加粗 */
+  color:#000000!important; /* 选中的字体颜色 */
+  background-color: #27E093 !important; /* 按钮背景颜色为绿色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+}
+.fenlei:hover {
+    color:#000000!important;
+    background-color: #27E093!important; /* 悬停时背景色 */
+    border-bottom: 6px solid #000000; /* 添加加粗的底边 */
 }
 </style>
