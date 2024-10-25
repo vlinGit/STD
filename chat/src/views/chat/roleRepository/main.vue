@@ -204,25 +204,26 @@ function handlerSubmit() {
 <template>
   <div class="w-full flex justify-center">
     <div class="p-6 max-w-screen-4xl  px-4 w-full">
-      <div class="flex flex-col space-y-3  justify-between sm:flex-row sm:space-y-0">
-        <div class="sm:w-full md:w-[300px] sm:mb-3 2xl:w-[380px]">
-          <NInput v-model="keywords" type="text" :placeholder="`您一共收录了${mineApps.length}个应用(关键词过滤)`" @input="handleInput" />
-        </div>
-
+      <div class="flex flex-col space-y-3  justify-between sm:flex-row sm:space-y-0 sm:justify-end">
         <NSpace>
-          <NButton @click="handleCreateApp">
+          <NButton class="create" @click="handleCreateApp">
             <template #icon>
               <SvgIcon icon="gridicons:create" />
             </template>
             创建自定义应用
           </NButton>
-          <NButton type="primary" @click="router.push('/app-store')">
+          <NButton class="create" type="primary" @click="router.push('/app-store')">
             <template #icon>
               <SvgIcon icon="ri:add-line" />
             </template>
             前往广场添加应用
           </NButton>
         </NSpace>
+      </div>
+      <span class="font-bold ml-2">关键词过滤</span>
+      <div class="sm:w-full md:w-[400px] sm:mb-3 2xl:w-[1350px]">
+        <br>
+        <NInput v-model="keywords" class="search" type="text" :placeholder="`您一共收录了${mineApps.length}个应用(关键词过滤)`" @input="handleInput" />
       </div>
       <div class="mt-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
         <div v-for="item in mineApps" :key="item.id" class="card relative custom-card cursor-pointer border border-[#e0e0e0] dark:border-neutral-800 p-4 pt-2 border rounded-md flex flex-col justify-center items-center hover:bg-neutral-100 dark:hover:bg-[#24272e] select-none" @click="handleRunApp(item)">
@@ -251,16 +252,16 @@ function handlerSubmit() {
             <NSpace>
               <NPopconfirm v-if="item.appRole === 'user' && !item.public" placement="bottom" @positive-click.stop="handleDelApp(item)">
                 <template #trigger>
-                  <NButton size="tiny" ghost :loading="item.loading" @click.stop>
+                  <NButton size="medium" ghost :loading="item.loading" class="create" @click.stop>
                     <template #icon>
                       <SvgIcon icon="mdi-light:delete" class="text-base" />
                     </template>
-                    删除应用
+                    从工作台移除
                   </NButton>
                 </template>
                 确认移除创建的应用吗？
               </NPopconfirm>
-              <NButton v-if="item.appRole === 'user' && !item.public " size="tiny" ghost :loading="item.loading" @click.stop="handlerEditApp(item)">
+              <NButton v-if="item.appRole === 'user' && !item.public " class="create" size="medium" ghost :loading="item.loading" @click.stop="handlerEditApp(item)">
                 <template #icon>
                   <SvgIcon icon="mdi-light:delete" class="text-base" />
                 </template>
@@ -268,8 +269,6 @@ function handlerSubmit() {
               </NButton>
             </NSpace>
           </div>
-          <SvgIcon icon="codicon:run-all" class="run-icon text-xl text-[#5A91FC] absolute right-3 bottom-3" />
-          <SvgIcon v-if="item.status === 3" icon="icon-park-twotone:mark" class=" text-xl text-[#5A91FC] absolute right-3 top-3" />
         </div>
       </div>
     </div>
@@ -277,7 +276,7 @@ function handlerSubmit() {
 
   <!-- modal -->
   <NModal :show="visible" title="创建" style="width: 90%; max-width: 640px" :mask-closable="false" :on-after-enter="openDialog" :on-after-leave="handleCloseDialog">
-    <div class="p-5 bg-white rounded dark:bg-slate-800">
+    <div class="border-2 border-black p-5 bg-white rounded-lg dark:bg-slate-800">
       <div class="absolute top-4 left-5 cursor-pointer z-30" @click="visible = false">
         <span class="font-bold text-base">{{ title }}</span>
       </div>
@@ -299,19 +298,21 @@ function handlerSubmit() {
           <NFormItem label="应用分类" path="catId">
             <NSelect
               v-model:value="appForm.catId"
+              class="border-2 border-black rounded-md"
               clearable
-              size="small"
+              size="medium"
               label-field="name"
               placeholder="请输入您的应用分类"
               value-field="id" :options="catList"
             />
           </NFormItem>
           <NFormItem label="应用名称" path="name">
-            <NInput v-model:value="appForm.name" placeholder="请输入您的应用名称" type="name" :maxlength="30" show-name-on="click" tabindex="0" />
+            <NInput v-model:value="appForm.name" placeholder="请输入您的应用名称" class="border-2 border-black rounded-md" type="name" :maxlength="30" show-name-on="click" tabindex="0" />
           </NFormItem>
           <NFormItem label="预设指令" path="preset">
             <NInput
               v-model:value="appForm.preset"
+              class="border-2 border-black rounded-md"
               :max="255"
               :autosize="{
                 minRows: 3,
@@ -323,7 +324,8 @@ function handlerSubmit() {
           </NFormItem>
           <NFormItem label="应用描述" path="des">
             <NInput
-              v-model:value="appForm.des" :autosize="{
+              v-model:value="appForm.des"
+              class="border-2 border-black rounded-md" :autosize="{
                 minRows: 3,
                 maxRows: 10,
               }" type="textarea" placeholder="请对你的应用做以简要的描述以便于大家认识它！"
@@ -331,7 +333,8 @@ function handlerSubmit() {
           </NFormItem>
           <NFormItem label="示例内容" path="demoData">
             <NInput
-              v-model:value="appForm.demoData" :autosize="{
+              v-model:value="appForm.demoData"
+              class="border-2 border-black rounded-md" :autosize="{
                 minRows: 3,
                 maxRows: 10,
               }" type="textarea" placeholder="请填写一个示例、方便快速告诉别人如何使用、每点击回车换行一次则是新增一条示例！"
@@ -351,7 +354,7 @@ function handlerSubmit() {
             </NUpload>
           </NFormItem>
           <NFormItem label="是否共享" path="public">
-            <NSwitch v-model:value="appForm.public" :disabled="isAllowEditAppPublic" />
+            <NSwitch v-model:value="appForm.public" class="switch rounded-full" :disabled="isAllowEditAppPublic" />
             <NTooltip placement="top-start" trigger="hover">
               <template #trigger>
                 <SvgIcon icon="ri:error-warning-line" class="text-base ml-3 cursor-pointer" />
@@ -370,6 +373,7 @@ function handlerSubmit() {
               type="primary"
               :disabled="loading"
               :loading="loading"
+              class="start"
               @click="handlerSubmit"
             >
               {{ btnMsg }}
@@ -382,17 +386,63 @@ function handlerSubmit() {
 </template>
 
 <style lang="less">
+.search{
+  height: 50px;
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 1rem; /* 圆角 */
+
+}
 .card{
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 1rem; /* 圆角 */
 	transition: all .35s cubic-bezier(0.075, 0.82, 0.165, 1);
-	.run-icon{
-		display: none;
-	}
 	&:hover{
-		border: 1px solid #5A91FC;
+		border: 2px solid #000000;
+    background-color: #27E093; /* 按钮背景颜色为绿色 */
 		transform: translateY(-8px) translateX(6px);
-		.run-icon{
-			display: block;
-			}
+    border-bottom: 6px solid #000000; /* 添加加粗的底边 */
 	}
+}
+.create{
+  font-weight: bold;
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 6rem; /* 圆角 */
+  color: black; /* 字体颜色 */
+  background-color: #27E093; /* 按钮背景颜色为绿色 */
+  transition: background-color 0.3s; /* 背景色过渡效果 */
+
+}
+.create:hover{
+  background-color: #27E093!important; /* 悬停时的更深绿色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+  color:#000000!important; /* 字体颜色 */
+}
+.start{
+  margin-left:420px;
+  max-width: 150px;
+  height: 50px;
+  font-weight: bold;
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 6rem; /* 圆角 */
+  color: black; /* 字体颜色 */
+  background-color: #27E093; /* 按钮背景颜色为绿色 */
+  transition: background-color 0.3s; /* 背景色过渡效果 */
+
+}
+.start:hover{
+  background-color: #27E093!important; /* 悬停时的更深绿色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+  color:#000000!important; /* 字体颜色 */
+
+}
+.switch {
+    border:3px solid #000000; /* 边框 */
+    /* 设置开关关闭后的背景颜色 */
+    background-color: #90909094;
+}
+
+.switch .ant-switch-checked {
+    /* 设置开关打开后的背景颜色 */
+    background-color: #4CAF50!important;
 }
 </style>
