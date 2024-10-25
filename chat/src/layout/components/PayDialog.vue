@@ -227,7 +227,7 @@ function handleFinish() {
             </h4> -->
 
         <div class="mt-6 w-full text-center font-bold text-sm flex flex-col justify-between h-full" :class="[isMobile ? 'ml-0' : 'ml-0']">
-          <NButton class="pay-button" type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
+          <NButton class="mr-10 pay-button" type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
             点击前往支付
           </NButton>
         </div>
@@ -254,5 +254,24 @@ function handleFinish() {
   min-height: 400px;
   border:2px   solid #000000;
   border-radius: 2rem;
+}
+.pay-button{
+    margin-top:20px;
+    min-width: 150px;
+    min-height: 50px;
+    border:2px solid #000000; /* 按钮边框 */
+    background-color: #ffffff; /* 按钮背景颜色 */
+    border-radius: 2rem; /* 确保 Tab 有圆角 */
+    text-align: center; /* 文本居中 */
+    line-height: 50px; /* 使文字垂直居中 */
+    font-weight: bold; /* 文字加粗 */
+
+}
+.pay-button:hover{
+    font-weight: bold !important; /* 选中或悬停字体加粗 */
+    color: #000000 !important; /* 悬停字体颜色 */
+    background-color: #27E093 !important; /* 悬停背景颜色为绿色 */
+    border-bottom: 6px solid #000000 !important; /* 悬停加粗的底边 */
+
 }
 </style>
