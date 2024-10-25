@@ -212,8 +212,8 @@ onMounted(() => {
               <div />
             </div>
             <div class="flex justify-center mt-4">
-              <NButton type="primary" @click="handlePayPkg(item)">
-                进入套餐
+              <NButton class="buy" type="primary" @click="handlePayPkg(item)">
+                购买
               </NButton>
             </div>
           </div>
@@ -255,7 +255,7 @@ onMounted(() => {
   align-self: center; /* 垂直居中对齐 */
 }
 .card-item{
-  min-height: 400px;
+  min-height: 420px;
   min-width:300px;
   border:2px solid #000000;
   border-radius: 2rem; /* 圆角 */
@@ -348,6 +348,23 @@ onMounted(() => {
   align-items: center; /* 垂直居中对齐 */
   width: 100%; /* 确保占满全宽 */
   text-align: center; /* 确保文本在 flex 项目中也居中 */
+  }
+  .buy{
+    margin-top:20px;
+    min-width: 200px;
+    min-height: 30px;
+    border:2px solid #000000; /* 按钮边框 */
+    background-color: #ffffff; /* 按钮背景颜色 */
+    border-radius: 2rem; /* 确保 Tab 有圆角 */
+    text-align: center; /* 文本居中 */
+    line-height: 30px; /* 使文字垂直居中 */
+    font-weight: bold; /* 文字加粗 */
+  }
+  .buy:hover{
+    font-weight: bold !important; /* 选中或悬停字体加粗 */
+    color: #000000 !important; /* 悬停字体颜色 */
+    background-color: #27E093 !important; /* 悬停背景颜色为绿色 */
+    border-bottom: 6px solid #000000 !important; /* 悬停加粗的底边 */
   }
 </style>
 
