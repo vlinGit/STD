@@ -155,68 +155,87 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="main min-h-screen bg-center dark:bg-[#2F2E34] h-full flex flex-col overflow-hidden ">
-    <TitleBar title="会员商场" :des="tips" :class="[isMobile ? 'px-3' : 'px-24']" />
-    <div class=" flex justify-center items-center" :style="{ height: isMobile ? '60px' : '180px' }">
-      <NTabs type="segment" :style="{ width: isMobile ? '90%' : '400px' }" @update:value="updateTabs">
-        <NTabPane :name="1" tab="会员限时套餐" />
-        <NTabPane :name="-1" tab="叠加永久次卡" />
-      </NTabs>
+  <div class="">
+    <TitleBar class="title-bar" title="会员商场" :des="tips" :class="[isMobile ? 'px-3' : 'px-24']" />
+    <div class="flex justify-center items-center mt-8 text-center">
+      <NButton class="pane" :style="{ height: isMobile ? '60px' : '180px' }">
+        <NButton class="pane-1" :class="[{ active: pkgType === 1 }]" :type="pkgType === 1 ? 'primary' : 'default'" @click="updateTabs(1)">
+          会员限时套餐
+        </NButton>
+        <NButton class="pane-2" :class="[{ active: pkgType === -1 }]" :type="pkgType === -1 ? 'primary' : 'default'" @click="updateTabs(-1)">
+          叠加永久次卡
+        </NButton>
+      </NButton>
     </div>
-    <div class="flex-1 pb-10 overflow-y-auto " :class="[isMobile ? 'px-3' : 'px-28']">
+    <div class="mt-10 flex-1 pb-10 overflow-y-auto" :class="[isMobile ? 'px-3' : 'px-28']">
       <div v-if="!loading" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-6 gap-y-10 px-4 ">
-        <div v-for="item in packageList" :key="item.id" class="border dark:border-[#ffffff17] h-[580px] rounded-xl card-item flex flex-col" @click="handlePayPkg(item)">
-          <div class="w-full rounded-t-xl overflow-hidden border dark:border-[#ffffff17] relative " :style="{ height: '40%' }">
-            <img :src="item.coverImg" class="object-cover w-full h-full cover" alt="">
-            <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 -translate-y-1/2 text-lg text-[#fff] ]" />
-          </div>
-          <div class="p-5  text-lg h-[160px]  border-b dark:border-[#ffffff17] overflow-hidden relative ">
-            {{ item.des }}
-            <span class="absolute bottom-1 right-2  font-semibold text-red-500  italic">${{ item.price }}</span>
-          </div>
-          <div class="flex p-4 border-b dark:border-[#ffffff17] flex-col space-y-4">
-            <div class="flex justify-between">
-              <span>基础模型额度</span>
-              <span>{{ item.model3Count || 0 }} 积分</span>
+        <div v-for="item in packageList" :key="item.id" class="card-item w-1/4 ">
+          <div class="" :style="{ height: '40%' }">
+            <div class="" />
+            <div class="p-5 text-lg h-[160px] overflow-hidden relative text-center flex flex-col justify-between">
+              {{ item.des }}
+              <span
+                style="font-weight: bold;
+                      font-size: 42px;
+                      margin-bottom: 20px;
+                      color: white; /* 设置文字颜色为白色 */
+                      text-shadow:4px 4px 0 black,      /* 黑色边框的阴影 */
+                                   -1px -1px 0 black,    /* 左上 */
+                                   1px -1px 0 black,     /* 右上 */
+                                   -1px 1px 0 black,     /* 左下 */
+                                   1px 1px 0 black;      /* 右下 */
+                      font-family: 'DM Sans', sans-serif;margin-bottom: 40px;"
+              >${{ item.price }}</span>
             </div>
-            <div class="flex justify-between ">
-              <span>高级模型额度</span>
-              <span>{{ item.model4Count || 0 }} 积分</span>
+            <div class="flex p-4 flex-col space-y-4 text-center" style="margin-top: -60px;">
+              <h class="flex p-4 flex-col space-y-4 font-bold relative text-center">
+                <span class="line2" />  会员套餐详情
+              </h>
+              <div class="flex justify-between">
+                <span>基础模型额度</span>
+                <span>{{ item.model3Count || 0 }} 积分</span>
+              </div>
+              <div class="flex justify-between ">
+                <span>高级模型额度</span>
+                <span>{{ item.model4Count || 0 }} 积分</span>
+              </div>
+              <div class="flex justify-between ">
+                <span>MJ绘画额度</span>
+                <span>{{ item.drawMjCount || 0 }} 积分</span>
+              </div>
             </div>
-            <div class="flex justify-between ">
-              <span>MJ绘画额度</span>
-              <span>{{ item.drawMjCount || 0 }} 积分</span>
+            <div class="px-4 flex-1 flex items-center justify-between">
+              <div class="flex items-end font-bold">
+                <span>套餐有效期 </span>
+                <span class="text-lg font-bold" style="margin-left: 130px;">{{ item.days > 0 ? `${item.days} 天` : `永久` }}</span>
+              </div>
+              <div />
             </div>
-          </div>
-          <div class="px-4 flex-1 flex items-center justify-between">
-            <div class="flex items-end">
-              <span>套餐有效期 </span>
-              <span class="ml-2 text-[#3076fd] text-lg">{{ item.days > 0 ? `${item.days} 天` : `永久` }}</span>
-            </div>
-            <div class="line" />
-            <div>
-              <SvgIcon class="text-lg right-icon" icon="bi:arrow-right" />
+            <div class="flex justify-center mt-4">
+              <NButton type="primary" @click="handlePayPkg(item)">
+                进入套餐
+              </NButton>
             </div>
           </div>
         </div>
-      </div>
-      <div v-if="loading" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-6 gap-y-10 px-4">
-        <div v-for="item in 4" :key="item" class="border dark:border-[#ffffff17] h-[580px] rounded-xl card-item flex flex-col">
-          <div class="w-full rounded-t-xl overflow-hidden" :style="{ height: '40%' }">
-            <NSkeleton height="100%" width="100%" />
-          </div>
-          <div class="p-5  text-lg h-[160px]  border-b dark:border-[#ffffff17] overflow-ellipsis ">
-            <NSpace vertical>
-              <NSkeleton text :repeat="4" width="100%" :sharp="false" />
-            </NSpace>
-          </div>
-          <div class="flex p-4 border-b dark:border-[#ffffff17] flex-col space-y-4">
-            <NSpace vertical>
-              <NSkeleton text :repeat="4" width="100%" :sharp="false" />
-            </NSpace>
-          </div>
-          <div class="px-4 flex-1 flex items-center justify-between">
-            <NSkeleton text :repeat="1" width="100%" :sharp="false" />
+        <div v-if="loading" class="">
+          <div v-for="item in 4" :key="item" class="card-item w-1/4">
+            <div class="w-full rounded-t-xl overflow-hidden" :style="{ height: '40%' }">
+              <NSkeleton height="100%" width="100%" />
+            </div>
+            <div class="p-5  text-lg h-[160px]  border-b dark:border-[#ffffff17] overflow-ellipsis ">
+              <NSpace vertical>
+                <NSkeleton text :repeat="4" width="100%" :sharp="false" />
+              </NSpace>
+            </div>
+            <div class="flex p-4 border-b dark:border-[#ffffff17] flex-col space-y-4">
+              <NSpace vertical>
+                <NSkeleton text :repeat="4" width="100%" :sharp="false" />
+              </NSpace>
+            </div>
+            <div class="px-4 flex-1 flex items-center justify-between">
+              <NSkeleton text :repeat="1" width="100%" :sharp="false" />
+            </div>
           </div>
         </div>
       </div>
@@ -225,8 +244,22 @@ onMounted(() => {
 </template>
 
 <style lang="less">
+* {
+    font-family: 'DM Sans', sans-serif; /* 设置全局字体为 DM Sans */
+}
+.line2 {
+  flex: 1; /* 各自占据一部分空间 */
+  height: 2px; /* 设置线条高度 */
+  background-color: rgb(0, 0, 0); /* 设置线条颜色，可以根据需要修改 */
+  margin: 0 10px; /* 线条与文字之间的间距 */
+  align-self: center; /* 垂直居中对齐 */
+}
 .card-item{
-	transition: all .85s;
+  min-height: 400px;
+  min-width:300px;
+  border:2px solid #000000;
+  border-radius: 2rem; /* 圆角 */
+	transition: all 0.3s;
 	cursor: pointer;
 	&:hover{
 		.right-icon {
@@ -256,4 +289,65 @@ onMounted(() => {
 		transition: all .3s;
 	}
 }
+
+.pane{
+    max-width: 640px;
+    max-height: 50px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid #000000; /* 大按钮的边框 */
+    border-radius: 2rem; /* 圆角 */
+    background-color: #ffffff; /* 背景颜色 */
+    cursor: pointer
+
+}
+.pane-1 {
+    border-radius: 2rem; /* 确保 Tab 有圆角 */
+    padding: 10px 20px;
+    flex: 1; /* 让 Tab 均分容器宽度 */
+    text-align: center; /* 文本居中 */
+    font-weight: bold; /* 文字加粗 */
+}
+.pane-1.active {
+  font-weight: bold; /* 选中字体加粗 */
+  color:#000000!important; /* 选中的字体颜色 */
+  background-color: #27E093 !important; /* 按钮背景颜色为绿色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+}
+.pane-1:hover {
+    font-weight: bold !important; /* 选中或悬停字体加粗 */
+    color: #000000 !important; /* 悬停字体颜色 */
+    background-color: #27E093 !important; /* 悬停背景颜色为绿色 */
+    border-bottom: 6px solid #000000 !important; /* 悬停加粗的底边 */
+}
+.pane-2  {
+  border-radius: 2rem; /* 确保 Tab 有圆角 */
+    padding: 10px 20px;
+    flex: 1; /* 让 Tab 均分容器宽度 */
+    text-align: center; /* 文本居中 */
+    font-weight: bold; /* 文字加粗 */
+}
+.pane-2.active {
+  font-weight: bold; /* 选中字体加粗 */
+  color:#000000!important; /* 选中的字体颜色 */
+  background-color: #27E093 !important; /* 按钮背景颜色为绿色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+}
+.pane-2:hover {
+    font-weight: bold !important; /* 选中或悬停字体加粗 */
+    color: #000000 !important; /* 悬停字体颜色 */
+    background-color: #27E093 !important; /* 悬停背景颜色为绿色 */
+    border-bottom: 6px solid #000000 !important; /* 悬停加粗的底边 */
+}
+.title-bar{
+  color:#000000!important;
+  border:none;
+  margin-top: 100px ;
+  display: flex;
+  justify-content: center; /* 水平居中对齐 */
+  align-items: center; /* 垂直居中对齐 */
+  width: 100%; /* 确保占满全宽 */
+  text-align: center; /* 确保文本在 flex 项目中也居中 */
+  }
 </style>
+
