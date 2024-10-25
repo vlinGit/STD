@@ -176,103 +176,83 @@ function handleFinish() {
 </script>
 
 <template>
-  <NModal :show="visible" style="width: 90%; max-width: 500px" :on-after-enter="handleOpenDialog" :on-after-leave="handleCloseDialog">
-    <div class="p-4 bg-white rounded dark:bg-slate-800">
+  <NModal :show="visible" style="width: 90%; max-width: 550px;" :on-after-enter="handleOpenDialog" :on-after-leave="handleCloseDialog">
+    <div class="p-4 bg-white rounded dark:bg-slate-800 pay">
       <div class="flex justify-between" @click="useGlobal.updatePayDialog(false)">
         <div class="flex text-xl font-bold mb-[20px] bg-currentflex items-center ">
-          <NIcon size="25" color="#0e7a0d">
+          <NIcon size="0" color="">
             <PaperPlaneOutline />
           </NIcon>
-          <span class="ml-[8px]">商品支付</span>
+          <span class="mt-8 ml-[40px]">商品支付</span>
         </div>
-        <NIcon size="20" color="#0e7a0d" class="cursor-pointer">
+        <NIcon size="20" color="black" class="mt-10 mr-4 cursor-pointer">
           <CloseOutline />
         </NIcon>
       </div>
-      <div class="p-4 ">
-        <div><span class="whitespace-nowrap font-bold">需要支付：</span> <i class="text-xl text-[red] font-bold">{{ `$${orderInfo.pkgInfo?.price}` }}</i></div>
-        <div class="mt-2 flex">
-          <span class="whitespace-nowrap font-bold">套餐名称：</span><span class="ml-2"> {{ orderInfo.pkgInfo?.name }}</span>
+      <div class="">
+        <div>
+          <span class="ml-6 font-bold p-4 flex flex-col items-center">支付金额</span><br>
+          <span
+            class="mt-[-40px] flex flex-col items-center"
+            style="font-weight: bold;
+                      font-size: 42px;
+                      margin-bottom: 20px;
+                      color: white; /* 设置文字颜色为白色 */
+                      text-shadow:4px 4px 0 black,      /* 黑色边框的阴影 */
+                                   -1px -1px 0 black,    /* 左上 */
+                                   1px -1px 0 black,     /* 右上 */
+                                   -1px 1px 0 black,     /* 左下 */
+                                   1px 1px 0 black;      /* 右下 */
+                      font-family: 'DM Sans', sans-serif;margin-bottom: 40px;"
+          >{{ `$${orderInfo.pkgInfo?.price}` }}</span>
         </div>
-        <div class="mt-2 flex">
-          <span class="whitespace-nowrap font-bold">套餐描述：</span><span class="ml-2"> {{ orderInfo.pkgInfo?.des }} </span>
+        <div class="mt-[-20px] w-full text-center font-bold text-sm flex flex-col justify-between h-full">
+          <span>请在
+            <span class="w-[60px] inline-block text-[#27E093] text-left"><NCountdown ref="countdownRef" :active="active" :duration="300 * 1000" :on-finish="handleFinish" />
+            </span>
+            时间内完成支付！
+          </span>
         </div>
-        <!-- <div class="flex mt-3">
-          <span class="whitespace-nowrap font-bold">套餐详情：</span>
-          <div class="flex flex-col space-y-2 pl-2 w-full ">
-            <div class="flex justify-between w-[300px] ">
-              <span>基础模型额度</span>
-              <span>100 次</span>
-            </div>
-            <div class="flex justify-between w-[300px] ">
-              <span>基础模型额度</span>
-              <span>20 次</span>
-            </div>
-            <div class="flex justify-between w-[300px] ">
-              <span>MJ绘画额度</span>
-              <span>20 次</span>
-            </div>
-          </div>
-        </div> -->
+      </div>
+      <div class="mt-8 justify-between ml-8 mt-2 flex">
+        <span class="whitespace-nowrap font-bold">套餐名称：</span><span class="text-right mr-10"> {{ orderInfo.pkgInfo?.name }}</span>
+      </div>
+      <div class="justify-between ml-8 mt-2 flex">
+        <span class="whitespace-nowrap font-bold">套餐描述：</span><span class="text-right mr-10"> {{ orderInfo.pkgInfo?.des }} </span>
+      </div>
 
-        <div class="flex justify-center" :class="[isMobile ? 'flex-col' : 'flex-row', isRedirectPay ? 'flex-row-reverse' : '']">
-          <!-- <div> -->
-            <!-- <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm">
-              请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！
-            </div> -->
-            <!-- <div v-if="payPlatform != 'pockyt'" class="flex items-center justify-center my-3 relative "> -->
-              <!-- qrCodeloading -->
-              <!-- <NSpin v-if="qrCodeloading && !isRedirectPay" size="large" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              <NSkeleton v-if="qrCodeloading" :width="240" :height="240" :sharp="false" size="medium" /> -->
-
-              <!-- epay -->
-              <!-- <QRCode v-if="payPlatform === 'epay' && !qrCodeloading && !redirectloading && !isRedirectPay" :value="url_qrcode" :size="240" />
-              <img v-if="payType === 'wxpay' && !qrCodeloading && !isRedirectPay" :src="wxpay" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 bg-[#fff]">
-              <img v-if="payType === 'alipay' && !qrCodeloading && !isRedirectPay" :src="alipay" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 bg-[#fff]"> -->
-
-              <!-- wechat -->
-              <!-- <QRCode v-if="payPlatform === 'wechat' && !qrCodeloading" :value="url_qrcode" :size="240" /> -->
-
-              <!-- <div v-if="isRedirectPay" class="flex flex-col" :class="[isRedirectPay && isMobile ? 'ml-0' : 'ml-20']">
-                <span class="mb-10 mt-5 text-base">当前站长开通了跳转支付</span>
-
-                <NButton v-if="isRedirectPay" type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
-                  点击前往支付
-                </NButton>
-              </div> -->
-
-              <!-- hupi -->
-              <!-- <iframe v-if="payPlatform === 'hupi' && !redirectloading" class="w-[280px] h-[280px] scale-90" :src="url_qrcode" frameborder="0" />
-            </div> -->
-            <!-- <span v-if="!isRedirectPay" class="flex items-center justify-center text-lg ">
-              {{ `打开${plat}扫码支付` }}
-            </span> -->
-          <!-- </div> -->
-          <div class=" flex flex-col" :class="[isMobile ? 'w-full ' : ' ml-10 w-[200] ']">
-            <!-- <h4 class="mb-10 font-bold text-lg">
+      <div class=" flex flex-col" :class="[isMobile ? 'w-full ' : ' ml-10 w-[200] ']">
+        <!-- <h4 class="mb-10 font-bold text-lg">
               支付方式
             </h4> -->
-            <div style="white-space: nowrap" class="mt-6 w-full text-center font-bold text-sm flex flex-col justify-between h-full" :class="[isMobile ? 'mb-2' : 'mb-10']">
-              <span>请在 <span class="w-[60px] inline-block text-[red] text-left"><NCountdown ref="countdownRef" :active="active" :duration="300 * 1000" :on-finish="handleFinish" /></span> 时间内完成支付！</span>
 
-              <div class="flex flex-col mt-8" :class="[isMobile ? 'ml-0' : 'ml-0']">
-                <NButton type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
-                  点击前往支付
-                </NButton>
-              </div>
-            </div>
-            <NRadioGroup v-model:value="payType" name="radiogroup" class="flex">
-              <NSpace :vertical="!isMobile" justify="center" :size="isMobile ? 10 : 35" class="w-full">
-                <NRadio v-for="pay in payTypes" :key="pay.value" :value="pay.value">
-                  <div class="flex items-center">
-                    <img class="h-4 object-contain mr-2" :src="pay.icon" alt=""> {{ pay.label }}
-                  </div>
-                </NRadio>
-              </NSpace>
-            </NRadioGroup>
-          </div>
+        <div class="mt-6 w-full text-center font-bold text-sm flex flex-col justify-between h-full" :class="[isMobile ? 'ml-0' : 'ml-0']">
+          <NButton class="pay-button" type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
+            点击前往支付
+          </NButton>
         </div>
+        <NRadioGroup v-model:value="payType" name="radiogroup" class="flex">
+          <NSpace :vertical="!isMobile" justify="center" :size="isMobile ? 10 : 35" class="w-full">
+            <NRadio v-for="pay in payTypes" :key="pay.value" :value="pay.value">
+              <div class="flex items-center">
+                <img class="h-4 object-contain mr-2" :src="pay.icon" alt=""> {{ pay.label }}
+              </div>
+            </NRadio>
+          </NSpace>
+        </NRadioGroup>
       </div>
     </div>
   </NModal>
 </template>
+
+<style lang="scss" scoped>
+* {
+    font-family: 'DM Sans', sans-serif; /* 设置全局字体为 DM Sans */
+}
+.pay {
+  min-width: 400px;
+  min-height: 400px;
+  border:2px   solid #000000;
+  border-radius: 2rem;
+}
+</style>
