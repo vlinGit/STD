@@ -2,70 +2,75 @@
 import {
   NButton,
   NImage,
-  NInput,
-  NInputNumber,
-  NSelect,
   NSpace,
-  NSwitch,
   NTag,
   NTooltip,
   useDialog,
   useMessage,
-  NScrollbar,
-} from 'naive-ui';
-import { onMounted, reactive, ref, toRefs, watch, computed } from 'vue';
-import axios from 'axios';
-import { fetchDownloadImg } from '@/api';
-import type { ResData } from '@/api/types';
-import failImg from '@/assets/fail.png';
-import drawSvg from '@/assets/icons/draw.svg';
-import zoomSvg from '@/assets/icons/zoom.svg';
-import { useAppStore, useAuthStore } from '@/store';
-import { fetchDrawTaskAPI, fetchTranslateAPI } from '@/api/mjDraw';
-import { SvgIcon } from '@/components/common';
-import Loading from '@/components/base/Loading.vue';
+} from 'naive-ui'
+import { computed, ref } from 'vue'
+import axios from 'axios'
+import { fetchDownloadImg } from '@/api'
+import type { ResData } from '@/api/types'
+import failImg from '@/assets/fail.png'
+import drawSvg from '@/assets/icons/draw.svg'
+import zoomSvg from '@/assets/icons/zoom.svg'
+import { useAppStore, useAuthStore } from '@/store'
+import { fetchDrawTaskAPI } from '@/api/mjDraw'
+import { SvgIcon } from '@/components/common'
+import Loading from '@/components/base/Loading.vue'
 
 interface Emits {
-  (e: 'usePrompt', val: any): void;
-  (e: 'queryData'): void;
+  (e: 'usePrompt', val: any): void
+  (e: 'queryData'): void
 }
 
 interface Props {
-  drawItemInfo: any;
+  drawItemInfo: any
 }
 
-const emit = defineEmits<Emits>();
-const appStore = useAppStore();
-const authStore = useAuthStore();
-const theme = computed(() => appStore.theme);
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const appStore = useAppStore()
+const authStore = useAuthStore()
+const theme = computed(() => appStore.theme)
 const loadingTextColor = computed(() =>
-  theme.value === 'dark' ? '#fff' : '#000'
-);
-const props = defineProps<Props>();
-const dialog = useDialog();
-const ms = useMessage();
-const downloadUrl = `${import.meta.env.VITE_GLOB_API_URL}/midjourney/download`;
-const refreshLoading = ref(false);
+  theme.value === 'dark' ? '#fff' : '#000',
+)
+const dialog = useDialog()
+const ms = useMessage()
+const downloadUrl = `${import.meta.env.VITE_GLOB_API_URL}/midjourney/download`
+const refreshLoading = ref(false)
 
 const statusType: any = computed(() => {
-  const { status } = props.drawItemInfo;
-  if (status === 1) return '';
-  if (status === 2) return 'info';
-  if (status === 3) return 'primary';
-  if (status === 4) return 'error';
-  if (status === 5) return 'error';
-});
+  const { status } = props.drawItemInfo
+  if (status === 1)
+    return ''
+  if (status === 2)
+    return 'info'
+  if (status === 3)
+    return 'primary'
+  if (status === 4)
+    return 'error'
+  if (status === 5)
+    return 'error'
+})
 const statusMsg = computed(() => {
-  const { status } = props.drawItemInfo;
-  if (status === 1) return '等待中';
-  if (status === 2) return '绘制中';
-  if (status === 3) return '成功';
-  if (status === 4) return '失败';
-  if (status === 5) return '超时';
-});
+  const { status } = props.drawItemInfo
+  if (status === 1)
+    return '等待中'
+  if (status === 2)
+    return '绘制中'
+  if (status === 3)
+    return '成功'
+  if (status === 4)
+    return '失败'
+  if (status === 5)
+    return '超时'
+})
 
 function usePrompt() {
-  emit('usePrompt');
+  emit('usePrompt')
 }
 
 /* 下载图片 */
@@ -76,27 +81,27 @@ async function handleDownloadImg(item: any) {
     positiveText: '下载',
     negativeText: '取消',
     onPositiveClick: async () => {
-      d.loading = true;
+      d.loading = true
       return new Promise(async (resolve) => {
-        const { fileInfo } = item;
-        const { filename, cosUrl } = fileInfo;
+        const { fileInfo } = item
+        const { filename, cosUrl } = fileInfo
         const response = await axios.post(
           downloadUrl,
           { url: cosUrl },
-          { responseType: 'blob' }
-        );
+          { responseType: 'blob' },
+        )
         const blob = new Blob([response.data], {
           type: response.headers['content-type'],
-        });
-        const urlObject = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = urlObject;
-        link.download = filename;
-        link.click();
-        resolve(true);
-      });
+        })
+        const urlObject = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = urlObject
+        link.download = filename
+        link.click()
+        resolve(true)
+      })
     },
-  });
+  })
 }
 
 /* 删除图片 */
@@ -107,85 +112,90 @@ async function handleDeleteDraw(item: any) {
     positiveText: '删除',
     negativeText: '取消',
     onPositiveClick: async () => {
-      const { id } = item;
-      const res: ResData = await fetchDownloadImg({ id });
-      if (!res.success) return ms.error(res.message);
-      ms.success('删除绘制记录成功！');
-      emit('queryData');
+      const { id } = item
+      const res: ResData = await fetchDownloadImg({ id })
+      if (!res.success)
+        return ms.error(res.message)
+      ms.success('删除绘制记录成功！')
+      emit('queryData')
     },
-  });
+  })
 }
 
 /* 提交放大绘制任务 */
 async function handleUpscale(item: any, orderId: number) {
-  const { drawId } = item;
-  await fetchDrawTaskAPI({ drawId: drawId, action: 'UPSCALE', orderId });
-  ms.success('提交放大绘制任务成功、请等待绘制结束！');
-  if (authStore.token) {
-    await refreshUserInfo();
-  }
-  emit('queryData');
+  const { drawId } = item
+  await fetchDrawTaskAPI({ drawId, action: 'UPSCALE', orderId })
+  ms.success('提交放大绘制任务成功、请等待绘制结束！')
+  if (authStore.token)
+    await refreshUserInfo()
+
+  emit('queryData')
 }
 
 /* 提交重新生成任务 */
 async function handleReGenerate(item: any, orderId: number) {
-  const { drawId } = item;
-  await fetchDrawTaskAPI({ drawId: drawId, action: 'REGENERATE', orderId });
-  ms.success('提交重新生成绘制任务成功、请等待绘制结束！');
-  if (authStore.token) {
-    await refreshUserInfo();
-  }
-  emit('queryData');
+  const { drawId } = item
+  await fetchDrawTaskAPI({ drawId, action: 'REGENERATE', orderId })
+  ms.success('提交重新生成绘制任务成功、请等待绘制结束！')
+  if (authStore.token)
+    await refreshUserInfo()
+
+  emit('queryData')
 }
 
 /* 提交变体任务 */
 async function handleVariation(item: any, orderId: number) {
-  const { drawId } = item;
-  await fetchDrawTaskAPI({ drawId: drawId, action: 'VARIATION', orderId });
-  ms.success('提交图片变换绘制任务成功、请等待绘制结束！');
-  if (authStore.token) {
-    await refreshUserInfo();
-  }
-  emit('queryData');
+  const { drawId } = item
+  await fetchDrawTaskAPI({ drawId, action: 'VARIATION', orderId })
+  ms.success('提交图片变换绘制任务成功、请等待绘制结束！')
+  if (authStore.token)
+    await refreshUserInfo()
+
+  emit('queryData')
 }
 
 async function refreshUserInfo() {
-  refreshLoading.value = true;
+  refreshLoading.value = true
   try {
-    await authStore.getUserInfo();
-    refreshLoading.value = false;
-  } catch (error) {
-    refreshLoading.value = false;
+    await authStore.getUserInfo()
+    refreshLoading.value = false
+  }
+  catch (error) {
+    refreshLoading.value = false
   }
 }
 
 const calcTips = computed(() => {
-  const { progress, status } = props.drawItemInfo;
-  if (status === 1) return '正在排队中...';
-  if (status === 2 && !progress) return '正在绘制中...';
-  if (status === 2 && progress === 100) return '正在存储图片中...';
-});
+  const { progress, status } = props.drawItemInfo
+  if (status === 1)
+    return '正在排队中...'
+  if (status === 2 && !progress)
+    return '正在绘制中...'
+  if (status === 2 && progress === 100)
+    return '正在存储图片中...'
+})
 
 /* 提交对单张图片调整任务 */
 async function handleVary(item: any, orderId: number) {
-  const { drawId } = item;
-  await fetchDrawTaskAPI({ drawId: drawId, action: 'VARIATION', orderId });
-  ms.success('提交图片调整绘制任务成功、请等待绘制结束！');
-  if (authStore.token) {
-    await refreshUserInfo();
-  }
-  emit('queryData');
+  const { drawId } = item
+  await fetchDrawTaskAPI({ drawId, action: 'VARIATION', orderId })
+  ms.success('提交图片调整绘制任务成功、请等待绘制结束！')
+  if (authStore.token)
+    await refreshUserInfo()
+
+  emit('queryData')
 }
 
 /* 提交对单张图片缩放任务 */
 async function handleZoom(item: any, orderId: number) {
-  const { drawId } = item;
-  await fetchDrawTaskAPI({ drawId: drawId, action: 'UPSCALE', orderId });
-  ms.success('提交图片调整绘制任务成功、请等待绘制结束！');
-  if (authStore.token) {
-    await refreshUserInfo();
-  }
-  emit('queryData');
+  const { drawId } = item
+  await fetchDrawTaskAPI({ drawId, action: 'UPSCALE', orderId })
+  ms.success('提交图片调整绘制任务成功、请等待绘制结束！')
+  if (authStore.token)
+    await refreshUserInfo()
+
+  emit('queryData')
 }
 
 function handleRegion(file) {}
@@ -193,9 +203,9 @@ function handleRegion(file) {}
 
 <template>
   <div
-    class="relative overflow-hidden rounded-md border p-4 transition-all hover:shadow dark:border-neutral-700"
+    class="border-2 border-black ronded-lg relative overflow-hidden rounded-md border p-4 transition-all hover:shadow dark:border-neutral-700"
   >
-    <div class="flex items-center justify-between">
+    <div class=" flex items-center justify-between">
       <span>
         <NTag size="small" :type="statusType">
           {{ statusMsg }}
@@ -209,7 +219,7 @@ function handleRegion(file) {}
           trigger="hover"
         >
           <template #trigger>
-            <NButton size="tiny" ghost @click="usePrompt">
+            <NButton class="create" size="tiny" ghost @click="usePrompt">
               <template #icon>
                 <SvgIcon icon="ri:brush-line" class="text-base" />
               </template>
@@ -221,13 +231,13 @@ function handleRegion(file) {}
           </div>
         </NTooltip>
 
-        <NButton size="tiny" ghost @click="handleDownloadImg(drawItemInfo)">
+        <NButton class="create" size="tiny" ghost @click="handleDownloadImg(drawItemInfo)">
           <template #icon>
             <SvgIcon icon="mingcute:file-download-line" class="text-base" />
           </template>
           下载
         </NButton>
-        <NButton size="tiny" ghost @click="handleDeleteDraw(drawItemInfo)">
+        <NButton class="create" size="tiny" ghost @click="handleDeleteDraw(drawItemInfo)">
           <template #icon>
             <SvgIcon icon="ri:delete-bin-line" class="text-base" />
           </template>
@@ -252,7 +262,7 @@ function handleRegion(file) {}
         v-if="[4, 5, 6].includes(drawItemInfo.status)"
         class="flex flex-col h-full w-full items-center justify-center overflow-hidden rounded-md"
       >
-        <img class="w-[75px]" :src="failImg" />
+        <img class="w-[75px]" :src="failImg">
         <span class="mt-3 text-base">绘制失败</span>
         <span class="mt-1">已退还余额至您的账户！</span>
       </div>
@@ -271,12 +281,12 @@ function handleRegion(file) {}
     <div class="-mx-4 -mb-4 bg-[#fafafc] px-4 py-2 dark:bg-[#262629]">
       <div
         v-if="
-          (drawItemInfo.action === 'IMAGINE' ||
-            drawItemInfo.action === 'VARIATION' ||
-            drawItemInfo.action === 'ZOOM' ||
-            drawItemInfo.action === 'OUTPAINT' ||
-            drawItemInfo.action === 'REROLL') &&
-          drawItemInfo.status === 3
+          (drawItemInfo.action === 'IMAGINE'
+            || drawItemInfo.action === 'VARIATION'
+            || drawItemInfo.action === 'ZOOM'
+            || drawItemInfo.action === 'OUTPAINT'
+            || drawItemInfo.action === 'REROLL')
+            && drawItemInfo.status === 3
         "
         class="w-full"
       >
@@ -294,21 +304,22 @@ function handleRegion(file) {}
           </span>
           <div class="flex-1">
             <div class="flex items-center justify-around">
-              <NButton size="tiny" @click="handleUpscale(drawItemInfo, 1)">
+              <NButton class="create" size="tiny" @click="handleUpscale(drawItemInfo, 1)">
                 U1
               </NButton>
-              <NButton size="tiny" @click="handleUpscale(drawItemInfo, 2)">
+              <NButton class="create" size="tiny" @click="handleUpscale(drawItemInfo, 2)">
                 U2
               </NButton>
-              <NButton size="tiny" @click="handleUpscale(drawItemInfo, 3)">
+              <NButton class="create" size="tiny" @click="handleUpscale(drawItemInfo, 3)">
                 U3
               </NButton>
-              <NButton size="tiny" @click="handleUpscale(drawItemInfo, 4)">
+              <NButton class="create" size="tiny" @click="handleUpscale(drawItemInfo, 4)">
                 U4
               </NButton>
               <NTooltip placement="top" trigger="hover">
                 <template #trigger>
                   <NButton
+                    class="create"
                     size="tiny"
                     @click="handleReGenerate(drawItemInfo, 5)"
                   >
@@ -325,12 +336,12 @@ function handleRegion(file) {}
       <!-- 套图 新生成 变体图 重新生成 三种类型 -->
       <div
         v-if="
-          (drawItemInfo.action === 'IMAGINE' ||
-            drawItemInfo.action === 'VARIATION' ||
-            drawItemInfo.action === 'ZOOM' ||
-            drawItemInfo.action === 'OUTPAINT' ||
-            drawItemInfo.action === 'REROLL') &&
-          drawItemInfo.status === 3
+          (drawItemInfo.action === 'IMAGINE'
+            || drawItemInfo.action === 'VARIATION'
+            || drawItemInfo.action === 'ZOOM'
+            || drawItemInfo.action === 'OUTPAINT'
+            || drawItemInfo.action === 'REROLL')
+            && drawItemInfo.status === 3
         "
         class="w-full"
       >
@@ -351,19 +362,21 @@ function handleRegion(file) {}
           </span>
           <div class="flex-1">
             <div class="flex items-center justify-around">
-              <NButton size="tiny" @click="handleVariation(drawItemInfo, 1)">
+              <NButton class="create" size="tiny" @click="handleVariation(drawItemInfo, 1)">
                 V1
               </NButton>
-              <NButton size="tiny" @click="handleVariation(drawItemInfo, 2)">
+              <NButton class="create" size="tiny" @click="handleVariation(drawItemInfo, 2)">
                 V2
               </NButton>
-              <NButton size="tiny" @click="handleVariation(drawItemInfo, 3)">
+              <NButton class="create" size="tiny" @click="handleVariation(drawItemInfo, 3)">
                 V3
               </NButton>
-              <NButton size="tiny" @click="handleVariation(drawItemInfo, 4)">
+              <NButton class="create" size="tiny" @click="handleVariation(drawItemInfo, 4)">
                 V4
               </NButton>
-              <NButton size="tiny" style="opacity: 0"> V5 </NButton>
+              <NButton class="create" size="tiny" style="opacity: 0">
+                V5
+              </NButton>
             </div>
           </div>
         </div>
@@ -394,9 +407,9 @@ function handleRegion(file) {}
       <!-- 新图绘制中 -->
       <div
         v-if="
-          drawItemInfo.action === 'IMAGINE' &&
-          !drawItemInfo.orderId &&
-          drawItemInfo.status === 'UPSCALE'
+          drawItemInfo.action === 'IMAGINE'
+            && !drawItemInfo.orderId
+            && drawItemInfo.status === 'UPSCALE'
         "
         class="w-full mb-2 flex items-center justify-between"
       >
@@ -421,9 +434,9 @@ function handleRegion(file) {}
       <!-- 2 -->
       <div
         v-if="
-          (drawItemInfo.action === 'UPSCALE' ||
-            drawItemInfo.action === 'ACTION') &&
-          drawItemInfo.status === 3
+          (drawItemInfo.action === 'UPSCALE'
+            || drawItemInfo.action === 'ACTION')
+            && drawItemInfo.status === 3
         "
       >
         <div class="mb-2 flex flex-1 items-center justify-between">
@@ -445,7 +458,7 @@ function handleRegion(file) {}
                   <template #trigger>
                     <NButton size="tiny" @click="handleZoom(drawItemInfo, 1)">
                       <template #icon>
-                        <img :src="zoomSvg" class="w-4" alt="" />
+                        <img :src="zoomSvg" class="w-4" alt="">
                       </template>
                       U(Subtle)
                     </NButton>
@@ -457,7 +470,7 @@ function handleRegion(file) {}
                   <template #trigger>
                     <NButton size="tiny" @click="handleZoom(drawItemInfo, 2)">
                       <template #icon>
-                        <img :src="zoomSvg" class="w-4" alt="" />
+                        <img :src="zoomSvg" class="w-4" alt="">
                       </template>
                       U(Creative)
                     </NButton>
@@ -471,9 +484,9 @@ function handleRegion(file) {}
       </div>
       <div
         v-if="
-          (drawItemInfo.action === 'UPSCALE' ||
-            drawItemInfo.action === 'ACTION') &&
-          drawItemInfo.status === 3
+          (drawItemInfo.action === 'UPSCALE'
+            || drawItemInfo.action === 'ACTION')
+            && drawItemInfo.status === 3
         "
         class="flex w-full"
       >
@@ -496,7 +509,7 @@ function handleRegion(file) {}
                   <template #trigger>
                     <NButton size="tiny" @click="handleVary(drawItemInfo, 1)">
                       <template #icon>
-                        <img :src="drawSvg" class="w-4" alt="" />
+                        <img :src="drawSvg" class="w-4" alt="">
                       </template>
                       V(Strong)
                     </NButton>
@@ -508,7 +521,7 @@ function handleRegion(file) {}
                   <template #trigger>
                     <NButton size="tiny" @click="handleVary(drawItemInfo, 2)">
                       <template #icon>
-                        <img :src="drawSvg" class="w-4" alt="" />
+                        <img :src="drawSvg" class="w-4" alt="">
                       </template>
                       V(Subtle)
                     </NButton>
@@ -528,4 +541,21 @@ function handleRegion(file) {}
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+* {
+    font-family: 'DM Sans', sans-serif; /* 设置全局字体为 DM Sans */
+}
+.create{
+  font-weight: bold;
+  border: 2px solid black; /* 黑色边框 */
+  border-radius: 6rem; /* 圆角 */
+  color: black; /* 字体颜色 */
+  background-color: #27E093; /* 按钮背景颜色为绿色 */
+  transition: background-color 0.3s; /* 背景色过渡效果 */
+}
+.create:hover{
+  background-color: #27E093!important; /* 悬停时的更深绿色 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+  color:#000000!important; /* 字体颜色 */
+}
+</style>
