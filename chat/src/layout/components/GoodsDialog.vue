@@ -8,7 +8,6 @@ import { fetchOrderBuyAPI } from '@/api/order'
 import { fetchGetJsapiTicketAPI } from '@/api/user'
 
 import type { ResData } from '@/api/types'
-import preferentialIcon from '@/assets/images/preferential.png'
 import { useAuthStore, useGlobalStoreWithOut } from '@/store'
 defineProps<Props>()
 declare let WeixinJSBridge: any
@@ -39,7 +38,7 @@ const payPlatform = computed(() => {
 
   if (Number(payEpayStatus) === 1)
     return 'epay'
-  return 'pockyt'
+  return null
 })
 
 const payChannel = computed(() => {
@@ -56,7 +55,7 @@ const payChannel = computed(() => {
   if (payPlatform.value === 'hupi')
     return ['wxpay']
 
-  return ['pockyt']
+  return []
 })
 
 interface Props {
@@ -136,23 +135,23 @@ async function handleBuyGoods(pkg: Pkg) {
     return
 
   // 如果是微信环境判断有没有开启微信支付,开启了则直接调用jsapi支付即可
-//   if (isWxEnv.value && payPlatform.value === 'wechat' && Number(authStore.globalConfig.payWechatStatus) === 1) {
-//     if (typeof WeixinJSBridge == 'undefined') {
-//       if (document.addEventListener) {
-//         document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
-//       }
-//       else if (document.attachEvent) {
-//         document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
-//         document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
-//       }
-//     }
-//     else {
-//       const res: ResData = await fetchOrderBuyAPI({ goodsId: pkg.id, payType: 'jsapi' })
-//       const { success, data } = res
-//       success && onBridgeReady(data)
-//     }
-//     return
-//   }
+  if (isWxEnv.value && payPlatform.value === 'wechat' && Number(authStore.globalConfig.payWechatStatus) === 1) {
+    if (typeof WeixinJSBridge == 'undefined') {
+      if (document.addEventListener) {
+        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
+      }
+      else if (document.attachEvent) {
+        document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
+        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
+      }
+    }
+    else {
+      const res: ResData = await fetchOrderBuyAPI({ goodsId: pkg.id, payType: 'jsapi' })
+      const { success, data } = res
+      success && onBridgeReady(data)
+    }
+    return
+  }
 
   /* 其他场景打开支付窗口 */
   useGlobalStore.updateOrderInfo({ pkgInfo: pkg })
@@ -221,8 +220,8 @@ function handleSuccess(pkg: Pkg) {
     negativeText: '我再想想',
     positiveText: '确认购买',
     onPositiveClick: () => {
-    //   if (!payChannel.value.length)
-        // message.warning('管理员还未开启支付！')
+      if (!payChannel.value.length)
+        message.warning('管理员还未开启支付！')
 
       handleBuyGoods(pkg)
     },
@@ -232,42 +231,51 @@ function handleSuccess(pkg: Pkg) {
 
 <template>
   <NModal :show="visible" :style="{ maxWidth: `${packageList.length > 4 ? 1200 : packageList.length * 250}px`, minWidth: isSmallMd ? '100%' : '1000px' }" :on-after-enter="openDialog" :on-after-leave="handleCloseDialog">
-    <div class="p-4 bg-white rounded dark:bg-slate-800 max-h-4/5">
-      <div class=" flex cursor-pointer justify-between ">
-        <span class="text-xl">选购商品</span>
-        <NIcon size="20" color="#0e7a0d" @click="useGlobalStore.updateGoodsDialog(false)">
+    <div class="p-4 bg-white rounded  max-h-4/5">
+      <div class="flex justify-between items-center cursor-pointer">
+        <span class="justify-center font-bold text-xl">会员商场</span>
+        <NIcon class="flex justify-end mr-8" size="20" color="#000000" @click="useGlobalStore.updateGoodsDialog(false)">
           <CloseOutline />
         </NIcon>
       </div>
       <div v-if="!loading" class="p-4">
         <NGrid :x-gap="15" :y-gap="15" :cols="isSmallMd ? 1 : packageList.length > 4 ? 4 : packageList.length" class="mt-3">
-          <NGridItem v-for="(item, index) in packageList" :key="index">
-            <NCard size="small" embedded>
-              <template #header>
-                <div class="relative">
-                  <img v-if="item.extraReward === 1" :src="preferentialIcon" class="w-8 absolute -right-4 -top-3">
-                </div>
-              </template>
-              <template #cover>
-                <img :src="item.coverImg" class="h-[130px] object-cover">
-              </template>
-              <div>
-                <p>{{ item.des }}</p>
-                <div class="flex justify-between items-end min-h-28">
-                  <span class="text-sm font-bold mr-1 w-[120px]">基础模型额度</span>
+          <NGridItem
+            v-for="(item, index) in packageList"
+            :key="index"
+            class="border-2 border-black rounded-md background-color-[#FFFFFF]"
+          >
+            <NCard class="" size="medium" embedded>
+              <div class="">
+                <p class="text-center font-bold">
+                  {{ item.des }}
+                </p>
+                <span
+                  class="flex justify-center"
+                  style="font-weight: bold;
+                      font-size: 42px;
+                      color: white; /* 设置文字颜色为白色 */
+                      text-shadow:4px 4px 0 black,      /* 黑色边框的阴影 */
+                                   -1px -1px 0 black,    /* 左上 */
+                                   1px -1px 0 black,     /* 右上 */
+                                   -1px 1px 0 black,     /* 左下 */
+                                   1px 1px 0 black;      /* 右下 */
+                      font-family: 'DM Sans', sans-serif;margin-bottom: 40px;"
+                >${{ item.price }}</span>
+                <div class="flex justify-between items-end min-h-28 mb-2">
+                  <span class="text-sm mr-1 w-[120px]">基础模型额度</span>
                   <span class="font-bold">{{ item.model3Count }}</span>
                 </div>
-                <div class="flex justify-between items-end min-h-28">
-                  <span class="text-sm font-bold mr-1 w-[120px]">高级模型额度</span>
+                <div class="flex justify-between items-end min-h-28 mb-2">
+                  <span class="text-sm mr-1 w-[120px]">高级模型额度</span>
                   <span class="font-bold">{{ item.model4Count }}</span>
                 </div>
-                <div class="flex justify-between items-end min-h-28">
-                  <span class="text-sm font-bold mr-1 w-[120px]">MJ绘画额度</span>
+                <div class="flex justify-between items-end min-h-28 mb-2">
+                  <span class="text-sm mr-1 w-[120px]">MJ绘画额度</span>
                   <span class="font-bold">{{ item.drawMjCount }}</span>
                 </div>
-                <div class="flex justify-between items-end mt-5">
-                  <i class="text-xl text-[red] font-bold">{{ `$${item.price}` }}</i>
-                  <NButton type="primary" dashed size="small" @click="handleSuccess(item)">
+                <div class="flex justify-center items-end mt-8">
+                  <NButton class="buy" size="small" @click="handleSuccess(item)">
                     购买套餐
                   </NButton>
                 </div>
@@ -289,3 +297,24 @@ function handleSuccess(pkg: Pkg) {
     </div>
   </NModal>
 </template>
+
+<style lang="less">
+* {
+    font-family: 'DM Sans', sans-serif; /* 设置全局字体为 DM Sans */
+}
+.buy{
+    min-width: 250px; /* 按钮宽度为 100% */
+    min-height: 30px;
+    border:2px solid #000000!important; /* 按钮边框 */
+    background-color: #ffffff; /* 按钮背景颜色 */
+    border-radius: 4rem!important; /* 确保 Tab 有圆角 */
+    text-align: center; /* 文本居中 */
+    font-weight: bold; /* 文字加粗 */
+  }
+  .buy:hover{
+    font-weight: bold !important; /* 选中或悬停字体加粗 */
+    color: #000000 !important; /* 悬停字体颜色 */
+    background-color: #27E093 !important; /* 悬停背景颜色为绿色 */
+    border-bottom: 6px solid #000000 !important; /* 悬停加粗的底边 */
+  }
+</style>
