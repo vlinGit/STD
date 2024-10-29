@@ -26,7 +26,7 @@ export function createLocalStorage (options?: {
 		}
 
 		const json = crypto ? enCrypto(storageData) : JSON.stringify(storageData)
-		window.sessionStorage.setItem(key, json)
+		window.localStorage.setItem(key, json)
 	}
 
 	function get (key: string) {
@@ -68,4 +68,4 @@ export function createLocalStorage (options?: {
 
 export const ls = createLocalStorage()
 
-export const ss = createLocalStorage({ expire: null, crypto: false })
+export const ss = createLocalStorage({ expire: 1, crypto: false })
