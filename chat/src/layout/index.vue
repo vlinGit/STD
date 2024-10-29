@@ -11,7 +11,6 @@ import {
 import { NAvatar, NIcon, NScrollbar, NTooltip, useMessage } from 'naive-ui'
 import { PersonAddOutline, PersonRemoveOutline } from '@vicons/ionicons5'
 import { useRoute, useRouter } from 'vue-router'
-import Logo from './Logo.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import defaultAvatar from '@/assets/avatar.png'
 import macTablebar from '@/components/base/macTablebar.vue'
