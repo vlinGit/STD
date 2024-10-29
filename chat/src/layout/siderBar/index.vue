@@ -179,34 +179,18 @@ watch(
 </script>
 
 <template>
-  <div
-    class="flex min-w-[70px] bg-[#e8eaf1] pb-2 dark:bg-[#25272d] dark:border-[#3a3a40] border-#efeff5-800"
-    :class="getMobileLayoutClass"
-    :style="mobileSafeArea"
-  >
+  <div class="flex min-w-[70px] bg-[#e8eaf1] pb-2 dark:bg-[#25272d] dark:border-[#3a3a40] border-#efeff5-800"
+    :class="getMobileLayoutClass" :style="mobileSafeArea">
     <macTablebar v-if="env === 'electron'" />
     <div class="px-2 w-full ele-drag">
       <Logo />
     </div>
-    <main
-      ref="track"
-      class="flex-1 flex-grow-1 mb-5 overflow-auto"
-      :class="[getIconMobileLayoutClass]"
-    >
+    <main ref="track" class="flex-1 flex-grow-1 mb-5 overflow-auto" :class="[getIconMobileLayoutClass]">
       <NScrollbar :size="1">
         <div class="flex h-full flex-col items-center space-y-3">
-          <div
-            v-for="item in menuList"
-            :key="item.menuName"
-            class="flex justify-center flex-col items-center"
-            :class="isMobile ? 'mt-0' : 'mt-2'"
-            @click="handleClickMenu(item)"
-          >
-            <NTooltip
-              v-if="!isMobile"
-              trigger="hover"
-              placement="right"
-            >
+          <div v-for="item in menuList" :key="item.menuName" class="flex justify-center flex-col items-center"
+            :class="isMobile ? 'mt-0' : 'mt-2'" @click="handleClickMenu(item)">
+            <NTooltip v-if="!isMobile" trigger="hover" placement="right">
               <template #trigger>
                 <div
                   class="h-10 w-10 cursor-pointer bg-white dark:bg-[#34373c] rounded-lg duration-300 flex justify-center items-center btnhover"
@@ -214,17 +198,14 @@ watch(
                     isActive(item)
                       ? 'borderRadis shadow-[#3076fd] btns'
                       : 'border-transparent',
-                  ]"
-                >
-                  <SvgIcon
-                    :icon="item.menuIcon"
-                    class="text-2xl transition-all"
-                    :class="[
+                  ]">
+                  <div class="icon-wrapper">
+                    <SvgIcon :icon="item.menuIcon" class="text-2xl transition-all" :class="[
                       isActive(item)
                         ? 'text-[#3076fd] dark:text-[#3076fd]'
                         : '',
-                    ]"
-                  />
+                    ]" />
+                  </div>
                 </div>
               </template>
               {{ item.menuTipText }}
@@ -253,55 +234,32 @@ watch(
     <!-- <SvgIcon icon="icon-park-twotone:personal-collection" /> -->
     <!-- h-[140px] -->
     <div class="flex flex-col justify-between items-center">
-      <NTooltip
-        v-if="!isMobile && signInStatus"
-        trigger="hover"
-        placement="right"
-      >
+      <NTooltip v-if="!isMobile && signInStatus" trigger="hover" placement="right">
         <template #trigger>
-          <SvgIcon
-            class="text-xl cursor-pointer mb-5"
-            icon="streamline-emojis:wrapped-gift-1"
-            style="color: red"
-            @click="handleSignIn"
-          />
+          <SvgIcon class="text-xl cursor-pointer mb-5" icon="streamline-emojis:wrapped-gift-1" style="color: red"
+            @click="handleSignIn" />
         </template>
         签到奖励
       </NTooltip>
 
       <NTooltip v-if="!isMobile" trigger="hover" placement="right">
         <template #trigger>
-          <SvgIcon
-            class="text-xl cursor-pointer mb-5"
-            :icon="darkMode ? 'noto-v1:last-quarter-moon-face' : 'twemoji:sun'"
-            @click="checkMode"
-          />
+          <SvgIcon class="text-xl cursor-pointer mb-5"
+            :icon="darkMode ? 'noto-v1:last-quarter-moon-face' : 'twemoji:sun'" @click="checkMode" />
         </template>
         主题切换
       </NTooltip>
 
       <NTooltip v-if="isLogin" trigger="hover" placement="right">
         <template #trigger>
-          <NAvatar
-            :size="50"
-            :src="avatar"
-            round
-            bordered
-            :fallback-src="defaultAvatar"
-            class="cursor-pointer"
-            @click="toPath('UserCenter')"
-          />
+          <NAvatar :size="50" :src="avatar" round bordered :fallback-src="defaultAvatar" class="cursor-pointer"
+            @click="toPath('UserCenter')" />
         </template>
         个人中心
       </NTooltip>
 
-      <HoverButton
-        v-if="!isLogin"
-        tooltip="登录账户"
-        :placement="isMobile ? 'bottom' : 'right'"
-        :class="isMobile ? 'mb-0' : 'mb-5'"
-        @click="toggleLogin"
-      >
+      <HoverButton v-if="!isLogin" tooltip="登录账户" :placement="isMobile ? 'bottom' : 'right'"
+        :class="isMobile ? 'mb-0' : 'mb-5'" @click="toggleLogin">
         <NIcon size="20" color="#555">
           <component :is="logInIcon" />
         </NIcon>
@@ -316,6 +274,7 @@ watch(
   overflow: hidden;
   width: calc(100% - 5px);
 }
+
 .sidebar:hover {
   width: 100%;
   overflow: overlay;
@@ -324,6 +283,7 @@ watch(
 .overlay {
   overflow: hidden;
 }
+
 .overlay:hover {
   width: 100%;
   overflow: overlay;
@@ -336,13 +296,36 @@ watch(
 .btns {
   box-shadow: 0 5px 16px #0636e6;
 }
-.btnhover:hover{
-    box-shadow: 0 5px 16px #0636e6;
-    transform: scale(1.1);
-    color: #0636e6;
+
+.btnhover:hover {
+  box-shadow: 0 5px 16px #0636e6;
+  transform: scale(1.1);
+  color: #0636e6;
 }
 
 .borderRadis {
   border-radius: 0.75rem;
+}
+
+.icon-wrapper:hover {
+  background-color: #27E093;
+  /* 鼠标滑过时背景变色 */
+  padding: 12px;
+  /* 增加内边距，让下方视觉上变粗 */
+  filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 1));
+  /* 添加不透明的黑色阴影 */
+}
+
+.icon-wrapper {
+  display: inline-block;
+  /* 使外层容器适应内容 */
+  border: 2.5px solid black;
+  /* 黑色边框，保持宽度 */
+  border-radius: 14px;
+  /* 圆角 */
+  padding: 8px;
+  /* 增加内边距来扩大外边框的大小 */
+  transition: background-color 0.3s, padding 0.3s;
+  /* 添加过渡效果 */
 }
 </style>
