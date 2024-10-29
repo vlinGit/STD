@@ -984,13 +984,6 @@ const activeTab = ref('working') // 默认选项
     border: 2px dashed #27E093;
   }
 }
-::v-deep .green-switch .switch-checked {
-  background-color: #27E093; /* 被选中时的背景色 */
-}
-
-::v-deep .green-switch .switch-unchecked {
-  background-color: lightgray; /* 未选中时的背景色 */
-}
 .create{
   font-weight: bold;
   border: 2px solid black; /* 黑色边框 */
