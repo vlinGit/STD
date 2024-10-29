@@ -1000,11 +1000,7 @@ onUnmounted(() => {
                 @click="toggleUsingContext"
               >
                 <span
-                  class=""
-                  :class="{
-                    'text-black': usingContext,
-                    'text-black': !usingContext,
-                  }"
+                  class="text-black"
                 ><SvgIcon
                   class="text-lg"
                   style="width: 1em; height: 1em"
