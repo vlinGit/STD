@@ -193,7 +193,7 @@ watch(
             <NTooltip v-if="!isMobile" trigger="hover" placement="right">
               <template #trigger>
                 <div
-                  class="h-10 w-10 cursor-pointer bg-white dark:bg-[#34373c] rounded-lg duration-300 flex justify-center items-center btnhover"
+                  class="wt-8 h-10 w-10 cursor-pointer bg-white dark:bg-[#34373c] rounded-lg duration-300 flex justify-center items-center btnhover"
                   :class="[
                     isActive(item)
                       ? 'borderRadis shadow-[#3076fd] btns'
@@ -202,7 +202,7 @@ watch(
                   <div class="icon-wrapper">
                     <SvgIcon :icon="item.menuIcon" class="text-2xl transition-all" :class="[
                       isActive(item)
-                        ? 'text-[#3076fd] dark:text-[#3076fd]'
+                        ? 'text-[#000000]'
                         : '',
                     ]" />
                   </div>
@@ -242,13 +242,13 @@ watch(
         签到奖励
       </NTooltip>
 
-      <NTooltip v-if="!isMobile" trigger="hover" placement="right">
+      <!-- NTooltip v-if="!isMobile" trigger="hover" placement="right">
         <template #trigger>
           <SvgIcon class="text-xl cursor-pointer mb-5"
             :icon="darkMode ? 'noto-v1:last-quarter-moon-face' : 'twemoji:sun'" @click="checkMode" />
         </template>
         主题切换
-      </NTooltip>
+      </NTooltip -->
 
       <NTooltip v-if="isLogin" trigger="hover" placement="right">
         <template #trigger>
@@ -294,13 +294,13 @@ watch(
 }
 
 .btns {
-  box-shadow: 0 5px 16px #0636e6;
+  box-shadow: 0 5px 16px #27E093;
 }
 
 .btnhover:hover {
-  box-shadow: 0 5px 16px #0636e6;
+  box-shadow: 0 5px 16px #27E093;
   transform: scale(1.1);
-  color: #0636e6;
+  color: #27E093;
 }
 
 .borderRadis {
@@ -308,6 +308,7 @@ watch(
 }
 
 .icon-wrapper:hover {
+  color: black;
   background-color: #27E093;
   /* 鼠标滑过时背景变色 */
   padding: 12px;
