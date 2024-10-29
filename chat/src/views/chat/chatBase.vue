@@ -1002,8 +1002,8 @@ onUnmounted(() => {
                 <span
                   class=""
                   :class="{
-                    'text-[#000000]': usingContext,
-                    'text-[#000000]': !usingContext,
+                    'text-black': usingContext,
+                    'text-black': !usingContext,
                   }"
                 ><SvgIcon
                   class="text-lg"
@@ -1080,11 +1080,7 @@ onUnmounted(() => {
                 <span class="text-base text-slate-500 dark:text-slate-400">
                   <SvgIcon
                     icon="zondicons:network"
-                    class="cursor-pointer mb-0.5 "
-                    :class="{
-                      'text-[#000000]': !usingNetwork,
-                      'text-[#000000]': usingNetwork,
-                    }"
+                    class="cursor-pointer mb-0.5  text-[#000000]"
                   />
                 </span>
               </button>
