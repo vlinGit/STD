@@ -5,7 +5,7 @@ interface StorageData<T = any> {
 	expire: number | null
 }
 
-export function createLocalStorage (options?: {
+export function createLocalStorage(options?: {
 	expire?: number | null
 	crypto?: boolean
 }) {
@@ -19,7 +19,7 @@ export function createLocalStorage (options?: {
 		options
 	)
 
-	function set<T = any> (key: string, data: T) {
+	function set<T = any>(key: string, data: T) {
 		const storageData: StorageData<T> = {
 			data,
 			expire: expire !== null ? new Date().getTime() + expire * 1000 : null
@@ -29,7 +29,7 @@ export function createLocalStorage (options?: {
 		window.localStorage.setItem(key, json)
 	}
 
-	function get (key: string) {
+	function get(key: string) {
 		const json = window.sessionStorage.getItem(key)
 		if (json) {
 			let storageData: StorageData | null = null
@@ -50,11 +50,11 @@ export function createLocalStorage (options?: {
 		}
 	}
 
-	function remove (key: string) {
+	function remove(key: string) {
 		window.sessionStorage.removeItem(key)
 	}
 
-	function clear () {
+	function clear() {
 		window.sessionStorage.clear()
 	}
 
@@ -68,4 +68,4 @@ export function createLocalStorage (options?: {
 
 export const ls = createLocalStorage()
 
-export const ss = createLocalStorage({ expire: 1, crypto: false })
+export const ss = createLocalStorage({ expire: 15, crypto: false })

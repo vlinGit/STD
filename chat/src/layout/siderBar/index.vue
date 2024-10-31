@@ -188,9 +188,18 @@ watch(
     <main ref="track" class="flex-1 flex-grow-1 mb-5 overflow-auto" :class="[getIconMobileLayoutClass]">
       <NScrollbar :size="1">
         <div class="flex h-full flex-col items-center space-y-3">
-          <div v-for="item in menuList" :key="item.menuName" class="mt-8 flex justify-center flex-col items-center"
-            :class="isMobile ? 'mt-0' : 'mt-2'" @click="handleClickMenu(item)">
-            <NTooltip v-if="!isMobile" trigger="hover" placement="right">
+          <div
+            v-for="item in menuList"
+            :key="item.menuName"
+            class="flex justify-center flex-col items-center"
+            :class="isMobile ? 'mt-0' : 'mt-2'"
+            @click="handleClickMenu(item)"
+          >
+            <NTooltip
+              v-if="!isMobile"
+              trigger="hover"
+              placement="right"
+            >
               <template #trigger>
                 <div
                   class="wt-8 h-10 w-10 cursor-pointer bg-white dark:bg-[#34373c] rounded-lg duration-300 flex justify-center items-center btnhover"
