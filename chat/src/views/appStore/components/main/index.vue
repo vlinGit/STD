@@ -157,22 +157,18 @@ onMounted(() => {
         </NButton>
       </div>
       <div class="flex justify-center items-center mt-8">
-        <div class="">
-          <div class="">
-            <div class="button-wrapper">
-              <NButton
-                v-for="(item, index) in catList"
-                :key="index"
-                class=" fenlei"
-                :class="{ active: activeCatId === item.id }"
-                :type="activeCatId === item.id ? 'primary' : 'default'"
-                style="font-weight: bold;"
-                @click="handleChangeCatId(item.id)"
-              >
-                {{ item.name }}
-              </NButton>
-            </div>
-          </div>
+        <div class="button-wrapper">
+          <el-button
+            v-for="(item, index) in catList"
+            :key="index"
+            class=" fenlei"
+            :class="{ active: activeCatId === item.id }"
+            style="font-weight: bold;"
+            type="success"
+            @click="handleChangeCatId(item.id)"
+          >
+            {{ item.name }}
+          </el-button>
         </div>
       </div>
       <Motion :delay="0" :y="50" :duration="350">
@@ -186,7 +182,7 @@ onMounted(() => {
                 <span class="css-0 mb-2 line-clamp-1 break-all text-lg font-semibold tracking-wide text-[#333] dark:text-[#ffffff]">{{ item.name }}</span>
               </div>
 
-              <p class="font-bold ml-2 text-xs mx-1 mt-1">
+              <p class="h-[100px] font-bold ml-2 text-xs mx-1 mt-1">
                 {{ item.des }}
               </p>
 
@@ -288,20 +284,27 @@ onMounted(() => {
     border-radius: 2rem; /* 圆角 */
     background-color: #ffffff; /* 背景颜色 */
     border-bottom: 4px solid #000000; /* 添加加粗的底边 */
+    
 
 }
 .fenlei {
+    display: flex;
     height: 40px; /* 按钮高度 */
     border-radius: 2rem; /* 确保 Tab 有圆角 */
     padding: 10px 20px;
     flex: 1; /* 让 Tab 均分容器宽度 */
     text-align: center; /* 文本居中 */
+    cursor: pointer; /* 鼠标指针 */
+    outline: none !important; /* 去掉按钮的轮廓 */
+    align-items: center;
+    justify-content: center;
 }
 .fenlei.active {
   font-weight: bold; /* 选中字体加粗 */
   color:#000000!important; /* 选中的字体颜色 */
   background-color: #27E093 !important; /* 按钮背景颜色为绿色 */
   border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+  outline: none !important; /* 去掉按钮的轮廓 */
 }
 .fenlei:hover {
     color:#000000!important;

@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { NSkeleton, NSpace, NTabPane, NTabs, useMessage } from 'naive-ui'
+import { NSkeleton, NSpace, useMessage } from 'naive-ui'
 import { computed, onMounted, ref } from 'vue'
 import { TitleBar } from '@/components/base'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchGetPackageAPI } from '@/api/crami'
 import { fetchOrderBuyAPI } from '@/api/order'
-import { SvgIcon } from '@/components/common'
 import type { ResData } from '@/api/types'
 import { useAuthStore, useGlobalStoreWithOut } from '@/store'
 const authStore = useAuthStore()
@@ -94,7 +93,7 @@ function updateTabs(val: number) {
 
 async function handlePayPkg(pkg: Pkg) {
   if (!payChannel.value.length)
-  handleBuyGoods(pkg)
+    handleBuyGoods(pkg)
 }
 
 async function handleBuyGoods(pkg: Pkg) {
@@ -212,7 +211,7 @@ onMounted(() => {
               <div />
             </div>
             <div class="flex justify-center mt-4">
-              <NButton class="buy" type="primary" @click="handlePayPkg(item)">
+              <NButton class="buy" @click="handlePayPkg(item)">
                 购买
               </NButton>
             </div>
@@ -264,7 +263,7 @@ onMounted(() => {
 	&:hover{
 		.right-icon {
 			transform: scale(1.5);
-			color: #3076fd;
+			color: #27E093;
 		}
 		.cover{
 			transform: scale(1.2);
@@ -284,7 +283,7 @@ onMounted(() => {
 	.line{
 		height: 2px;
 		margin-left: 50px;
-		background-color: #3076fd;
+		background-color: #27E093;
 		width: 0;
 		transition: all .3s;
 	}
@@ -367,4 +366,3 @@ onMounted(() => {
     border-bottom: 6px solid #000000 !important; /* 悬停加粗的底边 */
   }
 </style>
-

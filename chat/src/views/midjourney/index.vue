@@ -762,7 +762,7 @@ const activeTab = ref('working') // 默认选项
               </NTooltip>
             </span>
           </div>
-          <div class="mt-3 space-y-4 items-center text-[#000000]">
+          <div class="mt-3 space-y-4 items-center text-black">
             <div class="flex justify-between">
               <SvgIcon
                 icon="ic:twotone-hourglass-top"
@@ -914,12 +914,22 @@ const activeTab = ref('working') // 默认选项
 
           <div class="mt-8 space-y-2 p-4">
             <div class="font-bold flex justify-start work-tab">
-              <NButton :class="{ 'active-button': activeTab === 'working' }" :disabled="activeTab === 'working'" @click="activeTab = 'working'">
+              <el-button
+                class="active-button"
+                :class="{ active: activeTab === 'working' }"
+                :disabled="activeTab === 'working'"
+                @click="activeTab = 'working'"
+              >
                 工作中的内容
-              </NButton>
-              <NButton :class="{ 'active-button': activeTab === 'myDrawings' }" :disabled="activeTab === 'myDrawings'" @click="activeTab = 'myDrawings'">
+              </el-button>
+              <el-button
+                class="active-button"
+                :class="{ active: activeTab === 'myDrawings' }"
+                :disabled="activeTab === 'myDrawings'"
+                @click="activeTab = 'myDrawings'"
+              >
                 我的绘图
-              </NButton>
+              </el-button>
             </div>
 
             <div v-if="activeTab === 'working'" class="mt-8">
@@ -984,13 +994,7 @@ const activeTab = ref('working') // 默认选项
     border: 2px dashed #27E093;
   }
 }
-::v-deep .green-switch .switch-checked {
-  background-color: #27E093; /* 被选中时的背景色 */
-}
 
-::v-deep .green-switch .switch-unchecked {
-  background-color: lightgray; /* 未选中时的背景色 */
-}
 .create{
   font-weight: bold;
   border: 2px solid black; /* 黑色边框 */
@@ -1014,22 +1018,27 @@ const activeTab = ref('working') // 默认选项
   transition: background-color 0.3s; /* 背景色过渡效果 */
 }
 .active-button{
+    min-height: 30px;
+    max-width: 140px;
     font-weight: bold;
     border-radius: 2rem; /* 确保 Tab 有圆角 */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     flex: 1; /* 让 Tab 均分容器宽度 */
     text-align: center; /* 文本居中 */
-    border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+    align-items: center;
+    justify-content: center;
+
 }
-.n-button:disabled.active-button {
+.active-button.active {
   background-color: #27E093; /* 保持选中按钮的背景色不变 */
   color: black; /* 保持文字颜色不变 */
   border-color: black; /* 保持边框颜色不变 */
   opacity: 1; /* 确保按钮不透明 */
 }
-.n-button:hover {
+.active-button:hover {
   outline: none!important; /* 去掉默认的焦点外边框 */
   box-shadow: none!important; /* 去掉默认的阴影效果 */
+  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
 }
 </style>
