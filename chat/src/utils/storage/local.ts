@@ -14,19 +14,19 @@ export function createLocalStorage(options?: {
 	const { expire, crypto } = Object.assign(
 		{
 			expire: DEFAULT_CACHE_TIME,
-			crypto: true
+			crypto: true,
 		},
-		options
+		options,
 	)
 
 	function set<T = any>(key: string, data: T) {
 		const storageData: StorageData<T> = {
 			data,
-			expire: expire !== null ? new Date().getTime() + expire * 1000 : null
+			expire: expire !== null ? new Date().getTime() + expire * 1000 : null,
 		}
 
 		const json = crypto ? enCrypto(storageData) : JSON.stringify(storageData)
-		window.localStorage.setItem(key, json)
+		window.sessionStorage.setItem(key, json)
 	}
 
 	function get(key: string) {
@@ -36,13 +36,15 @@ export function createLocalStorage(options?: {
 
 			try {
 				storageData = crypto ? deCrypto(json) : JSON.parse(json)
-			} catch {
+			}
+			catch {
 				// Prevent failure
 			}
 
 			if (storageData) {
 				const { data, expire } = storageData
-				if (expire === null || expire >= Date.now()) return data
+				if (expire === null || expire >= Date.now())
+					return data
 			}
 
 			remove(key)
@@ -62,10 +64,10 @@ export function createLocalStorage(options?: {
 		set,
 		get,
 		remove,
-		clear
+		clear,
 	}
 }
 
 export const ls = createLocalStorage()
 
-export const ss = createLocalStorage({ expire: 15, crypto: false })
+export const ss = createLocalStorage({ expire: null, crypto: false })
