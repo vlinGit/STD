@@ -21,10 +21,10 @@ const boxData = ref<ChatboxItem[]>([])
 async function queryChatBox() {
   const res: any = await fetchGetChatBoxList()
   if (res?.data && res?.data.length)
-	  boxData.value = res?.data
+    boxData.value = res?.data
 
   else
-	  boxData.value = defaultChatBox
+    boxData.value = defaultChatBox
 }
 
 onMounted(() => {
@@ -65,7 +65,10 @@ const { isMobile } = useBasicLayout()
         <div v-for="item in boxData" :key="item.id" class="space-y-2 grid-item individual-border">
           <h2 class="text-md text-center flex flex-col items-start">
             <div class="flex items-end" />
-            <p class=" break-all overflow-hidden font-bold" style="font-size: 24px; font-family: 'DM Sans', sans-serif;margin-left: 20px;">
+            <p
+              class=" break-all overflow-hidden font-bold"
+              style="font-size: 24px; font-family: 'DM Sans', sans-serif;margin-left: 20px;"
+            >
               {{ item.name }}
             </p>
           </h2>
@@ -95,55 +98,132 @@ const { isMobile } = useBasicLayout()
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* 在小屏幕上显示两列 */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    /* 在中等屏幕上显示三列 */
+  }
+}
+
 .grid-item {
-  border: 2px solid #000000; /* 设置边框颜色 */
-  border-radius: 8px; /* 设置圆角 */
-  padding: 10px; /* 设置内边距 */
-  background-color: #ffffff; /* 设置背景颜色 */
-  transition: background-color 0.3s; /* 添加过渡效果 */
+  border: 2px solid #000000;
+  /* 设置边框颜色 */
+  border-radius: 8px;
+  /* 设置圆角 */
+  padding: 0px;
+  /* 设置内边距 */
+  background-color: #ffffff;
+  /* 设置背景颜色 */
+  transition: background-color 0.3s;
+  /* 添加过渡效果 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
 .grid-item:hover {
-  background-color: #27E093; /* 鼠标悬停时背景颜色变化 */
-  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
-  filter: none; /* 确保图标在悬停时不受影响 */
+  background-color: #27E093;
+  /* 鼠标悬停时背景颜色变化 */
+  border-bottom: 6px solid #000000;
+  /* 添加加粗的底边 */
+  filter: none;
+  /* 确保图标在悬停时不受影响 */
 }
+
 .grid-item:hover .icon {
-  filter: none; /* 确保图标在悬停时不受影响 */
+  filter: none;
+  /* 确保图标在悬停时不受影响 */
 }
+
 .title-margin {
-  margin-top: 100px; /* 你可以根据需求调整这个值 */
+  margin-top: 100px;
+  /* 你可以根据需求调整这个值 */
 }
+
 .icon {
-  width: 40px; /* 设置图标宽度 */
-  height: 40px; /* 设置图标高度 */
-  border: 2px solid #000000; /* 设置边框颜色 */
-  border-radius: 8px; /* 设置圆角 */
-  filter: none; /* 确保图标在悬停时不受影响 */
+  width: 40px;
+  /* 设置图标宽度 */
+  height: 40px;
+  /* 设置图标高度 */
+  border: 2px solid #000000;
+  /* 设置边框颜色 */
+  border-radius: 8px;
+  /* 设置圆角 */
+  filter: none;
+  /* 确保图标在悬停时不受影响 */
 }
 
 .icon:hover {
-  background-color: #ffffff; /* 设置按钮背景颜色 */
+  background-color: #ffffff;
+  /* 设置按钮背景颜色 */
 }
+
 .runbutton {
-  background-color: #ffffff; /* 设置按钮背景颜色 */
-  border: 2px solid #000000; /* 设置边框颜色 */
-  border-radius: 20px; /* 设置圆角 */
-  width: 66px;
+  background-color: #ffffff;
+  /* 设置按钮背景颜色 */
+  border: 2px solid #000000;
+  /* 设置边框颜色 */
+  border-radius: 20px;
+  /* 设置圆角 */
+  width: 120px;
   height: 40px;
-  position: relative; /* 使按钮可以使用绝对定位 */
+  position: relative;
+  /* 使按钮可以使用绝对定位 */
+  margin-top: 10px;
 }
+
 .runbutton::after {
-  content: "RUN"; /* 按钮后面显示的文本 */
-  position: absolute; /* 绝对定位 */
-  top: 50%; /* 垂直居中 */
-  left: 50%; /* 水平居中 */
-  transform: translate(-50%, -50%); /* 精确居中对齐 */
-  font-size: 16px; /* 字体大小可根据需要调整 */
-  color: #000; /* 字体颜色 */
-  font-weight: bold; /* 加粗 */
+  content: "RUN";
+  /* 按钮后面显示的文本 */
+  position: absolute;
+  /* 绝对定位 */
+  top: 50%;
+  /* 垂直居中 */
+  left: 50%;
+  /* 水平居中 */
+  transform: translate(-50%, -50%);
+  /* 精确居中对齐 */
+  font-size: 16px;
+  /* 字体大小可根据需要调整 */
+  color: #000;
+  /* 字体颜色 */
+  font-weight: bold;
+  /* 加粗 */
 }
+
 .runbutton:hover {
-  background-color: #ffffff; /* 鼠标悬停时按钮背景颜色变化 */
-  border-bottom: 6px solid #000000; /* 添加加粗的底边 */
+  background-color: #ffffff;
+  /* 鼠标悬停时按钮背景颜色变化 */
+  border-bottom: 6px solid #000000;
+  /* 添加加粗的底边 */
+}
+
+/* 新增：调整字体大小和边距 */
+@media (max-width: 767px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  .grid-item {
+    padding: 5px;
+  }
+
+  .runbutton {
+    width: 100px;
+    height: 30px;
+    font-size: 14px;
+  }
 }
 </style>

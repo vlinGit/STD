@@ -8,7 +8,7 @@ import {
 	fetchGetInfo,
 	fetchLoginAPI,
 	fetchRegisterAPI,
-	fetchTokenAPI
+	fetchTokenAPI,
 } from '@/api'
 import { fetchQueryConfigAPI } from '@/api/config'
 import { fetchGetBalanceQueryAPI } from '@/api/balance'
@@ -17,7 +17,7 @@ import { getUrlValue } from '@/utils/functions/urlParams'
 import {
 	generateCodeChallenge,
 	generateCodeVerifier,
-	parseJwt
+	parseJwt,
 } from '@/utils/functions/auth'
 
 export const useAuthStore = defineStore('auth-store', {
@@ -28,48 +28,52 @@ export const useAuthStore = defineStore('auth-store', {
 		userInfo: {},
 		userBalance: {},
 		globalConfig: {} as GlobalConfig,
-		loadInit: false
+		loadInit: false,
 	}),
 
 	getters: {
-		isLogin: (state: AuthState) => !!state.token
+		isLogin: (state: AuthState) => !!state.token,
 	},
 
 	actions: {
-		async getUserInfo (): Promise<T> {
+		async getUserInfo(): Promise<T> {
 			try {
-				if (!this.loadInit) await this.getglobalConfig()
+				if (!this.loadInit)
+					await this.getglobalConfig()
 
 				const res = await fetchGetInfo()
-				if (!res) return Promise.resolve(res)
+				if (!res)
+					return Promise.resolve(res)
 				const { data } = res
 				const { userInfo, userBalance } = data
 				this.userInfo = { ...userInfo }
 				this.userBalance = { ...userBalance }
 				return Promise.resolve(data)
-			} catch (error) {
+			}
+			catch (error) {
 				return Promise.reject(error)
 			}
 		},
 
-		updateUserBanance (userBalance: UserBalance) {
+		updateUserBanance(userBalance: UserBalance) {
 			this.userBalance = userBalance
 		},
 
-		async getUserBalance () {
+		async getUserBalance() {
 			const res: ResData = await fetchGetBalanceQueryAPI()
 			const { success, data } = res
-			if (success) this.userBalance = data
+			if (success)
+				this.userBalance = data
 		},
 
-		async getglobalConfig (domain = '') {
+		async getglobalConfig(domain = '') {
 			const res = await fetchQueryConfigAPI({ domain })
 			this.globalConfig = res.data
 			this.globalConfigLoading = false
 			this.loadInit = true
 		},
 
-		login () {
+		login() {
 			const loginCode = getUrlValue('code')
 			if (!loginCode) {
 				// 跳转授权登录
@@ -83,47 +87,47 @@ export const useAuthStore = defineStore('auth-store', {
 					VITE_AUTH_CLIENT_ID,
 					VITE_AUTH_REDIRECT_URI,
 					VITE_AUTH_CODE_CHALLENGE_METHOD,
-					VITE_AUTH_STATE
+					VITE_AUTH_STATE,
 				} = import.meta.env
 				const loginUri = `${VITE_AUTH_URL}?client_id=${VITE_AUTH_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-					VITE_AUTH_REDIRECT_URI
+					VITE_AUTH_REDIRECT_URI,
 				)}&code_challenge=${codeChallenge}&code_challenge_method=${VITE_AUTH_CODE_CHALLENGE_METHOD}&prompt=Welcome+back%21&response_type=code&scope=openid+profile&state=${VITE_AUTH_STATE}`
 				window.location.replace(loginUri)
-			} else {
+			}
+			else {
 				// 直接登录
 				// this.setToken(loginCode)
 			}
 		},
 
-		async fetchLogin (params, registerParams) {
-			const res = await fetchLoginAPI(params).catch(async err => {
+		async fetchLogin(params, registerParams) {
+			const res = await fetchLoginAPI(params).catch(async (err) => {
 				if (err.code === 403) {
 					console.log('new user')
 					await this.register(registerParams)
 					this.fetchLogin(params, registerParams)
 				}
 			})
-			if (res.data) {
+			if (res.data)
 				this.setToken(res.data)
-			}
 		},
 
-		async code2token (code) {
+		async code2token(code) {
 			const {
 				VITE_AUTH_CLIENT_ID,
 				VITE_AUTH_REDIRECT_URI,
-				VITE_AUTH_CODE_CHALLENGE_METHOD
+				VITE_AUTH_CODE_CHALLENGE_METHOD,
 			} = import.meta.env
 			const codeVerifier = localStorage.getItem('codeVerifier')
 			const codeChallenge = localStorage.getItem('codeChallenge')
 			const params = {
 				grant_type: 'authorization_code',
-				code: code,
+				code,
 				redirect_uri: VITE_AUTH_REDIRECT_URI,
 				client_id: VITE_AUTH_CLIENT_ID,
 				code_verifier: codeVerifier,
 				code_challenge: codeChallenge,
-				code_challenge_method: VITE_AUTH_CODE_CHALLENGE_METHOD
+				code_challenge_method: VITE_AUTH_CODE_CHALLENGE_METHOD,
 			}
 			const res = await fetchTokenAPI(params)
 			console.log('res==', res)
@@ -137,33 +141,33 @@ export const useAuthStore = defineStore('auth-store', {
 				this.fetchLogin(
 					{
 						username,
-						password
+						password,
 					},
 					{
-						username: username,
-						password: password,
-						email: payload.email
-					}
+						username,
+						password,
+						email: payload.email,
+					},
 				)
 			}
 		},
-		async register (params) {
+		async register(params) {
 			const res = await fetchRegisterAPI(params)
 			this.setToken(res.data)
 			this.getUserInfo()
 		},
 
-		setToken (token: string) {
+		setToken(token: string) {
 			this.token = token
 			setToken(token)
 		},
 
-		removeToken () {
+		removeToken() {
 			this.token = undefined
 			removeToken()
 		},
 
-		setLoginDialog (bool: boolean) {
+		setLoginDialog(bool: boolean) {
 			console.log('to login')
 			// this.loginDialog = bool
 			if (bool) {
@@ -173,7 +177,7 @@ export const useAuthStore = defineStore('auth-store', {
 			}
 		},
 
-		logOut () {
+		logOut() {
 			this.token = undefined
 			removeToken()
 			this.userInfo = {}
@@ -183,16 +187,16 @@ export const useAuthStore = defineStore('auth-store', {
 			chatStore.clearChat()
 		},
 
-		updatePasswordSuccess () {
+		updatePasswordSuccess() {
 			this.token = undefined
 			removeToken()
 			this.userInfo = {}
 			this.userBalance = {}
 			// this.loginDialog = true
-		}
-	}
+		},
+	},
 })
 
-export function useAuthStoreWithout () {
+export function useAuthStoreWithout() {
 	return useAuthStore(store)
 }

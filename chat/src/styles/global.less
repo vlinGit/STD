@@ -5,7 +5,8 @@ body,
 }
 
 * {
-	font-family: consolas, Menlo, "PingFang SC", "Microsoft YaHei", sans-serif;
+	font-family: 'DM Sans', sans-serif;
+	/* 设置全局字体为 DM Sans */
 }
 
 body {
@@ -16,6 +17,7 @@ body {
 img {
 	transition: transform 0.3s;
 }
+
 img:hover {
 	transform: scale(1.1);
 }
@@ -37,9 +39,10 @@ img:hover {
 		left: -2px;
 	}
 }
+
 ::selection {
-	color: #fff;
-	background: #798aae;
+	color: #000000;
+	background: #ffffff;
 }
 
 .ele-drag {
@@ -52,11 +55,13 @@ img:hover {
 	width: 3px;
 	height: 3px;
 }
+
 // 滑块部分
 ::-webkit-scrollbar-thumb {
 	border-radius: 1em;
 	background-color: rgba(50, 50, 50, 0.3);
 }
+
 // 辊道部分
 ::-webkit-scrollbar-track {
 	border-radius: 1em;
