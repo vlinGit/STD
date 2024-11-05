@@ -61,8 +61,8 @@ const { isMobile } = useBasicLayout()
       点击以下模型，快速与我对话
     </h2>
     <div class="w-full md:min-w-[450px] mt-9 ">
-      <div class="grid  grid-cols-4 gap-4">
-        <div v-for="item in boxData" :key="item.id" class="space-y-2 grid-item individual-border">
+      <div class=" grid  gap-4">
+        <div v-for="item in boxData" :key="item.id" class="flex space-y-2 grid-item individual-border">
           <h2 class="text-md text-center flex flex-col items-start">
             <div class="flex items-end" />
             <p
@@ -73,16 +73,16 @@ const { isMobile } = useBasicLayout()
             </p>
           </h2>
           <div v-for="box in item.childList" :key="box.id" class="space-y-e">
-            <div class="py-3 flex flex-col flex items-start rounded " :class="[isMobile ? 'px-2' : 'px-5']">
+            <div class="py-3 flex flex-col items-start rounded " :class="[isMobile ? 'px-2' : 'px-5']">
               <div class="text-left" :style="{ letterSpacing: '-0.5px', fontFamily: 'DM Sans, sans-serif' }">
                 {{ box.title }}
               </div>
               <p class="mt-1 text-sm text-neutral-600" style="font-family: 'DM Sans', sans-serif;">
                 powered by pockyt AI shop
               </p>
-              <div class="flex items-center mt-6 ">
+              <div class="flex mt-6 justify-end">
                 <img v-if="item.icon" class="icon" :src="item.icon" alt="图标">
-                <button class=" runbutton ml-36" @click.stop="handleClick(box)" />
+                <button class="runbutton" @click.stop="handleClick(box)" />
               </div>
             </div>
           </div>
@@ -94,22 +94,30 @@ const { isMobile } = useBasicLayout()
 </template>
 
 <style scoped>
+.flex {
+  width: 100%; /* 保持宽度适应 */
+  justify-content: space-between; /* 图标和按钮两侧对齐 */
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }
 
-@media (max-width: 767px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    /* 在小屏幕上显示两列 */
+@media (max-width: 1200px) {
+ .grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-    /* 在中等屏幕上显示三列 */
+@media (max-width: 992px) {
+ .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+ .grid {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
@@ -118,8 +126,6 @@ const { isMobile } = useBasicLayout()
   /* 设置边框颜色 */
   border-radius: 8px;
   /* 设置圆角 */
-  padding: 0px;
-  /* 设置内边距 */
   background-color: #ffffff;
   /* 设置背景颜色 */
   transition: background-color 0.3s;
@@ -127,6 +133,8 @@ const { isMobile } = useBasicLayout()
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 60%;
+  min-height: 60%;
 }
 
 .grid-item:hover {
@@ -150,15 +158,10 @@ const { isMobile } = useBasicLayout()
 
 .icon {
   width: 40px;
-  /* 设置图标宽度 */
   height: 40px;
-  /* 设置图标高度 */
   border: 2px solid #000000;
-  /* 设置边框颜色 */
   border-radius: 8px;
-  /* 设置圆角 */
   filter: none;
-  /* 确保图标在悬停时不受影响 */
 }
 
 .icon:hover {
@@ -168,16 +171,35 @@ const { isMobile } = useBasicLayout()
 
 .runbutton {
   background-color: #ffffff;
-  /* 设置按钮背景颜色 */
   border: 2px solid #000000;
-  /* 设置边框颜色 */
   border-radius: 20px;
-  /* 设置圆角 */
-  width: 120px;
-  height: 40px;
+  min-width: 60px;
+  min-height: 40px;
+  justify-content: end; /* 确保子元素在水平方向上分布 */
   position: relative;
-  /* 使按钮可以使用绝对定位 */
-  margin-top: 10px;
+  margin-left: auto;
+}
+@media (max-width: 1200px) {
+ .runbutton {
+    width: 80%;
+    height: auto;
+  }
+}
+
+@media (max-width: 992px) {
+ .runbutton {
+  width: 60%;
+  height: auto;
+  margin-left:90px;
+  }
+}
+
+@media (max-width: 768px) {
+ .runbutton {
+  width: 50%;
+  height: auto;
+  margin-left:60px;
+  }
 }
 
 .runbutton::after {
