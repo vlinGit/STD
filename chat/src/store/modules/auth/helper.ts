@@ -1,17 +1,30 @@
 import { ss } from '@/utils/storage'
 
 const LOCAL_NAME = 'SECRET_TOKEN'
+const ID_TOKEN_NAME = 'SECRET_ID_TOKEN'
 
-export function getToken() {
+export function getToken () {
 	return ss.get(LOCAL_NAME)
 }
 
-export function setToken(token: string) {
+export function setToken (token: string) {
 	return ss.set(LOCAL_NAME, token)
 }
 
-export function removeToken() {
+export function removeToken () {
 	return ss.remove(LOCAL_NAME)
+}
+
+export function getIdToken () {
+	return window.sessionStorage.getItem(ID_TOKEN_NAME)
+}
+
+export function setIdToken (token: string) {
+	return window.sessionStorage.setItem(ID_TOKEN_NAME, token)
+}
+
+export function removeIdToken () {
+	return window.sessionStorage.removeItem(ID_TOKEN_NAME)
 }
 
 export interface UserBalance {
