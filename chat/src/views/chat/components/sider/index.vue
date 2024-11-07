@@ -231,7 +231,7 @@ watch(
                 class="mr-2"
                 style="font-size:20px;"
               />
-              选购您的方案
+              {{ $t('chat.shopPlan') }}
             </div>
           </div>
           <div class="p-4 border-t dark:border-t-neutral-800 flex flex-col">
@@ -243,7 +243,7 @@ watch(
                 icon="material-symbols:account-balance-wallet-outline"
                 class="ml-0 mr-2 text-base"
                 style="font-size:20px;"
-              />普通额度： {{ `${userBalance.sumModel3Count || 0} 积分` }}
+              />{{ $t('chat.standardLimit' )}}： {{ `${userBalance.sumModel3Count || 0} ${$t('chat.points')}` }}
             </div>
             <div
               v-if="activeModelKeyDeductType === 1"
@@ -254,7 +254,7 @@ watch(
                 class="ml-0 mr-2 text-base"
                 style="font-size:20px;"
               />
-              我已使用：
+              {{ $t('chat.used') }}：
               <NNumberAnimation
                 ref="model3AnimationInstRef"
                 :from="oldUse3Token"
@@ -271,7 +271,7 @@ watch(
                 class="ml-0 mr-2 text-base"
                 style="font-size:20px;"
               />
-              模型费用： {{ `${activeModelKeyPrice || 0}积分 / 次对话` }}
+              {{ $t('chat.modelCost') }}： {{ `${activeModelKeyPrice || 0} ${$t('chat.pointsPerConversation')}` }}
             </div>
 
             <div
@@ -281,7 +281,7 @@ watch(
               <SvgIcon
                 icon="ic:twotone-hourglass-top"
                 class="ml-2 mr-2 text-base"
-              />我已使用：
+              />{{ $t('chat.used') }}：
               <NNumberAnimation
                 ref="model4AnimationInstRef"
                 :from="oldUse4Token"
@@ -296,7 +296,7 @@ watch(
               <SvgIcon
                 icon="material-symbols:account-balance-wallet-outline"
                 class="ml-2 mr-2 text-base"
-              />高级额度： {{ `${userBalance.sumModel4Count || 0} 积分` }}
+              />{{ $t('chat.advancedQuota') }}： {{ `${userBalance.sumModel4Count || 0} ${$t('chat.points')}` }}
             </div>
             <div
               v-if="activeModelKeyDeductType === 2"
@@ -305,7 +305,7 @@ watch(
               <SvgIcon
                 icon="mingcute:bill-line"
                 class="ml-4 mr-4 text-base"
-              />模型费用： {{ `${activeModelKeyPrice || 0}积分 / 次对话` }}
+              />{{ $t('chat.modelCost') }} {{ `${activeModelKeyPrice || 0} ${$t(chat.pointsPerConversation)}` }}
             </div>
 
             <div class="flex justify-between my-3">
@@ -314,14 +314,14 @@ watch(
                 @click="useGlobalStore.updateNoticeDialog(true)"
               >
                 <SvgIcon icon="mdi:notice-board" class="ml-2 mr-2 text-sm" />
-                <span class="mr-2">公告栏</span>
+                <span class="mr-2">{{ $t('chat.noticeBoard') }}</span>
               </NButton>
               <NButton class="green-button" @click="handleOpenRole">
                 <SvgIcon
                   icon="ri:emoji-sticker-line"
                   class="ml-2 mr-2 text-sm"
                 />
-                <span class="mr-3">工作台</span>
+                <span class="mr-3">{{ $t('chat.workbench') }}</span>
               </NButton>
             </div>
             <!-- <div class="flex justify-betweenx">

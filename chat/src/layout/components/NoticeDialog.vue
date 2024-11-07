@@ -93,10 +93,10 @@ function handleReminder() {
         </template>
         <div class="flex justify-end py-3 px-5">
           <NButton type="text" @click="handleReminder">
-            今日不再提示
+            {{ $t('chat.dontRemindMeToday') }}
           </NButton>
           <NButton type="primary" class="primary-button" @click="useGlobalStore.updateNoticeDialog(false)">
-            我已知晓
+            {{ $t('chat.understood') }}
           </NButton>
         </div>
       </NCard>

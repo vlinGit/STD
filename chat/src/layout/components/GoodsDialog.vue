@@ -233,7 +233,7 @@ function handleSuccess(pkg: Pkg) {
   <NModal :show="visible" :style="{ maxWidth: `${packageList.length > 4 ? 1200 : packageList.length * 250}px`, minWidth: isSmallMd ? '100%' : '1000px' }" :on-after-enter="openDialog" :on-after-leave="handleCloseDialog">
     <div class="p-4 bg-white rounded  max-h-4/5">
       <div class="flex justify-between items-center cursor-pointer">
-        <span class="justify-center font-bold text-xl">会员商场</span>
+        <span class="justify-center font-bold text-xl">{{ $t('chat.membersPackage') }}</span>
         <NIcon class="flex justify-end mr-8" size="20" color="#000000" @click="useGlobalStore.updateGoodsDialog(false)">
           <CloseOutline />
         </NIcon>
@@ -247,7 +247,16 @@ function handleSuccess(pkg: Pkg) {
           >
             <NCard class="" size="medium" embedded>
               <div class="">
-                <p class="text-center font-bold">
+                <p class="text-center font-bold" v-if="item.des.includes('会员套餐详情')">
+                  {{ $t('chat.standardMembership') }}
+                </p>
+                <p class="text-center font-bold" v-else-if="item.des.includes('高级模型补充包详情')">
+                  {{ $t('chat.premiumMembership') }}
+                </p>
+                <p class="text-center font-bold" v-else-if="item.des.includes('绘画模型补充包详情')">
+                  {{ $t('chat.paintMembership') }}
+                </p>
+                <p class="text-center font-bold" v-else>
                   {{ item.des }}
                 </p>
                 <span
@@ -263,20 +272,20 @@ function handleSuccess(pkg: Pkg) {
                       font-family: 'DM Sans', sans-serif;margin-bottom: 40px;"
                 >${{ item.price }}</span>
                 <div class="flex justify-between items-end min-h-28 mb-2">
-                  <span class="text-sm mr-1 w-[120px]">基础模型额度</span>
+                  <span class="text-sm mr-1 w-[120px]">{{ $t('chat.basicModelQuota') }}</span>
                   <span class="font-bold">{{ item.model3Count }}</span>
                 </div>
                 <div class="flex justify-between items-end min-h-28 mb-2">
-                  <span class="text-sm mr-1 w-[120px]">高级模型额度</span>
+                  <span class="text-sm mr-1 w-[120px]">{{ $t('chat.advancedModelQuota') }}</span>
                   <span class="font-bold">{{ item.model4Count }}</span>
                 </div>
                 <div class="flex justify-between items-end min-h-28 mb-2">
-                  <span class="text-sm mr-1 w-[120px]">MJ绘画额度</span>
+                  <span class="text-sm mr-1 w-[120px]">{{ $t('chat.mjPaintingQuota') }}</span>
                   <span class="font-bold">{{ item.drawMjCount }}</span>
                 </div>
                 <div class="flex justify-center items-end mt-8">
                   <NButton class="buy" size="small" @click="handleSuccess(item)">
-                    购买套餐
+                    {{ $t('chat.buyPackage') }}
                   </NButton>
                 </div>
               </div>

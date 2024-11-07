@@ -89,10 +89,10 @@ onMounted(() => {
         </div>
       </template>
       <template v-else>
-        <ListItem v-if="stickyList.length" :key="1000 + customKeyId" title="置顶" :data-sources="stickyList" @select="handleSelect" @delete="handleDelete" />
-        <ListItem v-if="appList.length" :key="2000 + customKeyId" title="应用分类组" :data-sources="appList" @select="handleSelect" @delete="handleDelete" />
-        <ListItem v-if="todayList.length" :key="3000 + customKeyId" title="今天" :data-sources="todayList" @select="handleSelect" @delete="handleDelete" />
-        <ListItem v-if="otherList.length" :key="4000 + customKeyId" title="其他" :data-sources="otherList" @select="handleSelect" @delete="handleDelete" />
+        <ListItem v-if="stickyList.length" :key="1000 + customKeyId" :title="$t(chat.pin)" :data-sources="stickyList" @select="handleSelect" @delete="handleDelete" />
+        <ListItem v-if="appList.length" :key="2000 + customKeyId" :title="$t('chat.appList')" :data-sources="appList" @select="handleSelect" @delete="handleDelete" />
+        <ListItem v-if="todayList.length" :key="3000 + customKeyId" :title="$t('chat.today')" :data-sources="todayList" @select="handleSelect" @delete="handleDelete" />
+        <ListItem v-if="otherList.length" :key="4000 + customKeyId" :title="$t('chat.other')" :data-sources="otherList" @select="handleSelect" @delete="handleDelete" />
       </template>
     </div>
   </NScrollbar>

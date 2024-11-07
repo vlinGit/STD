@@ -1,3 +1,5 @@
+import { app } from "electron";
+
 export default {
 	common: {
 		add: "添加",
@@ -28,6 +30,7 @@ export default {
 		failed: "操作失败",
 		verify: "验证",
 		unauthorizedTips: "未经授权，请先进行验证。",
+		keywordFilter: "关键词过滤",
 	},
 	chat: {
 		newChatButton: "新建聊天",
@@ -52,6 +55,32 @@ export default {
 		preview: "预览",
 		showRawText: "显示原文",
 		searchHistoryPlaceholder: "搜索历史对话",
+		appList: "应用分类组",
+		today: "今天",
+		other: "其他",
+		pin: "置顶",
+		shopPlan: "选购您的方案",
+		standardLimit: "普通额度",
+		used: "我已使用",
+		points: "积分",
+		modelCost: "模型费用",
+		pointsPerConversation: "积分 / 次对话",
+		advancedQuota: "高级额度",
+		noticeBoard: "公告栏",
+		workbench: "工作台",
+		membersPackage: "会员商场",
+		standardMembership: "会员套餐详情",
+		premiumMembership: "高级模型补充包详情",
+		paintMembership: "绘画模型补充包详情",
+		basicModelQuota: "基础模型额度",
+		advancedModelQuota: "高级模型额度",
+		mjPaintingQuota: "MJ绘画额度",
+		buyPackage: "购买套餐",
+		dontRemindMeToday: " 今日不再提示",
+		understood: "我已知晓",
+		workbenchTitle: "我的自定义工作台",
+		createCustomApp: "创建自定义应用",
+		marketplaceAddApp: "前往广场添加应用",
 	},
 	setting: {
 		setting: "设置",

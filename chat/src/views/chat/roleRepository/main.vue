@@ -6,7 +6,7 @@ import { NButton, NForm, NFormItem, NIcon, NInput, NModal, NPopconfirm, NSelect,
 import { useRouter } from 'vue-router'
 import { CloseOutline } from '@vicons/ionicons5'
 import { SvgIcon } from '@/components/common'
-import { useAppCatStore } from '@/store'
+import { useAppCatStore, useAppStore } from '@/store'
 import type { MineApp } from '@/store/modules/appStore/helper'
 import { fetchCollectAppAPI, fetchCustomAppAPI, fetchDelMineAppAPI, fetchQueryAppCatsAPI } from '@/api/appStore'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
@@ -14,6 +14,7 @@ import type { ResData } from '@/api/types'
 import { fetchQueryModelsListAPI } from '@/api/models'
 
 const appCatStore = useAppCatStore()
+const appStore = useAppStore()
 const keywords = ref('')
 const loading = ref(false)
 const visible = ref(false)
@@ -199,6 +200,13 @@ function handlerSubmit() {
     }
   })
 }
+
+function filterPlaceholder() {
+  if (appStore.getLanguage() === 'en-US')
+    return `Filtered a total of ${mineApps.value.length} applications (keyword filter)`
+
+  return `您一共收录了 ${mineApps.value.length} 个应用(关键词过滤)`
+}
 </script>
 
 <template>
@@ -210,20 +218,20 @@ function handlerSubmit() {
             <template #icon>
               <SvgIcon icon="gridicons:create" />
             </template>
-            创建自定义应用
+            {{ $t('chat.createCustomApp')}}
           </NButton>
           <NButton class="create" type="primary" @click="router.push('/app-store')">
             <template #icon>
               <SvgIcon icon="ri:add-line" />
             </template>
-            前往广场添加应用
+            {{ $t('chat.marketplaceAddApp') }}
           </NButton>
         </NSpace>
       </div>
-      <span class="font-bold ml-2">关键词过滤</span>
+      <span class="font-bold ml-2">{{ $t('common.keywordFilter') }}</span>
       <div class="sm:w-full md:w-[400px] sm:mb-3 2xl:w-[1350px]">
         <br>
-        <NInput v-model="keywords" class="search" type="text" :placeholder="`您一共收录了${mineApps.length}个应用(关键词过滤)`" @input="handleInput" />
+        <NInput v-model="keywords" class="search" type="text" :placeholder="filterPlaceholder()" @input="handleInput" />
       </div>
       <div class="mt-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
         <div v-for="item in mineApps" :key="item.id" class="card relative custom-card cursor-pointer border border-[#e0e0e0] dark:border-neutral-800 p-4 pt-2 border rounded-md flex flex-col justify-center items-center hover:bg-neutral-100 dark:hover:bg-[#24272e] select-none" @click="handleRunApp(item)">

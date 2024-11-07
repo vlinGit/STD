@@ -60,20 +60,6 @@ const themeOptions: {
     icon: 'noto-v1:last-quarter-moon-face',
   },
 ]
-const curLang = ref("中文")
-const langOptions: {
-  label: string,
-  key: Language
-}[] = ref([
-  {
-    label: "中文",
-    key: "zh-CN"
-  },
-  {
-    label: "English",
-    key: "en-US"
-  }
-])
 
 const modelName = computed(() => {
   if (!chatStore.activeConfig)
@@ -93,6 +79,22 @@ const currentChatHistory = computed(() => chatStore.getChatByGroupInfo())
 
 const { isMobile } = useBasicLayout()
 const theme = computed(() => appStore.theme)
+
+const curLang = ref(appStore.getLanguage() == 'zh-CN' ? '中文' : 'English')
+const langOptions: {
+  label: string,
+  key: Language
+}[] = ref([
+  {
+    label: "中文",
+    key: "zh-CN"
+  },
+  {
+    label: "English",
+    key: "en-US"
+  }
+])
+
 
 function handleUpdateCollapsed() {
   appStore.setSiderCollapsed(!collapsed.value)
