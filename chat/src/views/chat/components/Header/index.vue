@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, nextTick, ref } from 'vue'
-import { NTooltip, useMessage } from 'naive-ui'
+import { NTooltip, NDropdown, useMessage } from 'naive-ui'
 import { useUsingContext } from '../../hooks/useUsingContext'
 import { SvgIcon } from '@/components/common'
 import {
@@ -10,6 +10,7 @@ import {
   useGlobalStoreWithOut,
 } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
+import type { Language } from '@/store/modules/app/helper'
 
 import type { Theme } from '@/store/modules/app/helper'
 
@@ -59,6 +60,20 @@ const themeOptions: {
     icon: 'noto-v1:last-quarter-moon-face',
   },
 ]
+const curLang = ref("中文")
+const langOptions: {
+  label: string,
+  key: Language
+}[] = ref([
+  {
+    label: "中文",
+    key: "zh-CN"
+  },
+  {
+    label: "English",
+    key: "en-US"
+  }
+])
 
 const modelName = computed(() => {
   if (!chatStore.activeConfig)
@@ -115,6 +130,11 @@ function handleSignIn() {
     return
   }
   useGlobalStore.updateSignInDialog(true)
+}
+
+function handleLang(key: string, value: string) {
+  curLang.value = value.label
+  appStore.setLanguage(key)
 }
 </script>
 
@@ -183,7 +203,14 @@ function handleSignIn() {
                 </div>
               </div>
             </NPopover> -->
-
+            <NDropdown trigger="click" :options="langOptions" @select="handleLang">
+              <button
+                class="flex h-8 w-20 items-center justify-center rounded-xl border-2 border-black text-lg transition-all hover:bg-green-500 dark:border-neutral-700 dark:hover:bg-[#27E093]">
+                  <span class="text-base langStyle">
+                    {{ curLang }}
+                  </span>
+              </button>
+            </NDropdown>
             <NTooltip v-if="isMobile" trigger="hover" :disabled="isMobile">
               <template #trigger>
                 <button
@@ -278,5 +305,8 @@ function handleSignIn() {
 .over-hidden {
   width: 100%;
   overflow: hidden;
+}
+.langStyle{
+  font-size: 0.6em;
 }
 </style>

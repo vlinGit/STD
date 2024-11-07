@@ -189,7 +189,7 @@ watch(
                   ref="searchRef"
                   v-model="groupKeyWord"
                   type="text"
-                  placeholder="搜索历史对话"
+                  :placeholder="$t('chat.searchHistoryPlaceholder')"
                   class="search"
                   @blur="handleBlurInput"
                   @input="handleInputGroupSearch"
