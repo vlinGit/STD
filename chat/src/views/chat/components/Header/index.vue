@@ -240,7 +240,7 @@ function handleLang(key: string, value: string) {
                   </span>
                 </button>
               </template>
-              导出本页为图片
+              {{ $t('chat.exportPageAsPicture') }}
             </NTooltip>
             <NTooltip trigger="hover" :disabled="isMobile">
               <template #trigger>
@@ -251,7 +251,7 @@ function handleLang(key: string, value: string) {
                   <span class="text-base" style="color: #000000;"><SvgIcon icon="material-symbols:delete-outline" /></span>
                 </button>
               </template>
-              删除本页内容
+              {{ $t('chat.deletePageContent') }}
             </NTooltip>
             <NTooltip trigger="hover" :disabled="isMobile">
               <template #trigger>
@@ -262,7 +262,7 @@ function handleLang(key: string, value: string) {
                   <span class="text-base" style="color: #000000;"><SvgIcon icon="material-symbols:keyboard-arrow-down" /></span>
                 </button>
               </template>
-              滚动到底部
+              {{ $t('chat.scrollToBottom') }}
             </NTooltip>
           </div>
         </div>

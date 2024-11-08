@@ -27,6 +27,10 @@ export default {
 		verify: "Verify",
 		unauthorizedTips: "Unauthorized, please verify first.",
 		keywordFilter: "Keyword filter",
+		close: "Close",
+		enable: "Enable",
+		send: "Send",
+		cancel: "Cancel",
 	},
 	chat: {
 		newChatButton: "New Chat",
@@ -79,6 +83,32 @@ export default {
 		workbenchTitle: "My custom workbench",
 		createCustomApp: "Create custom app",
 		marketplaceAddApp: "Go to the marketplace to add apps",
+		exportPageAsPicture: "Export page as picture",
+		deletePageContent: "Delete page content",
+		scrollToBottom: "Scroll to bottom",
+		sampleTemplate: "Sample template",
+		contextState: "Context state",
+		internet: "Internet access",
+		changeModelSuccess:
+			"Modification of the current conversation group custom model configuration was successful!",
+		modelSettingTitle: "Model personalization",
+		modelSettingSelection: "Model selection",
+		modelSettingPresets: "Custom character presets",
+		modelSettingPresetInput:
+			"Customize the head preset, preset an identity for your AI, and for more interesting characters, please go to the 'Application Square'...",
+		modelSettingAdvanced: "Advanced configuration",
+		modelSettingAdvancedInfo:
+			"(If you don’t understand, no modification is required)",
+		modelSettingReset: "Reset",
+		modelSettingRandomness: "Topic randomness",
+		modelSettingRandomnessInfo:
+			"Higher values ​​will make the output of the same problem more random each time.",
+		modelSettingToken: "Number of reply tokens",
+		modelSettingTokenInfo:
+			"Number of single replies, but it will also consume more credits",
+		modelSettingContext: "Number of associated contexts",
+		modelSettingContextInfo:
+			"Number of single replies, but it will also consume more credits",
 	},
 	setting: {
 		setting: "Setting",

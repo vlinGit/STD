@@ -78,7 +78,7 @@ export const useAuthStore = defineStore("auth-store", {
 
 		login() {
 			const loginCode = getUrlValue("code");
-			if (!loginCode && false) {
+			if (!loginCode) {
 				// 跳转授权登录
 				const codeVerifier = generateCodeVerifier();
 				const codeChallenge = generateCodeChallenge(codeVerifier);
@@ -177,7 +177,7 @@ export const useAuthStore = defineStore("auth-store", {
 		setLoginDialog(bool: boolean) {
 			console.log("to login");
 			// this.loginDialog = bool
-			if (bool) {
+			if (!bool) {
 				// 去登录
 				this.login();
 				// this.loginWithOIDC()

@@ -1,5 +1,3 @@
-import { app } from "electron";
-
 export default {
 	common: {
 		add: "添加",
@@ -8,7 +6,7 @@ export default {
 		editSuccess: "编辑成功",
 		delete: "删除",
 		deleteSuccess: "删除成功",
-		// save: '保存',
+		save: "保存",
 		update: "修改",
 		saveSuccess: "保存成功",
 		updateUserSuccess: "修改用户信息成功",
@@ -31,6 +29,10 @@ export default {
 		verify: "验证",
 		unauthorizedTips: "未经授权，请先进行验证。",
 		keywordFilter: "关键词过滤",
+		close: "关闭",
+		enable: "开启",
+		send: "发送",
+		cancel: "取消",
 	},
 	chat: {
 		newChatButton: "新建聊天",
@@ -81,6 +83,27 @@ export default {
 		workbenchTitle: "我的自定义工作台",
 		createCustomApp: "创建自定义应用",
 		marketplaceAddApp: "前往广场添加应用",
+		exportPageAsPicture: "导出本页为图片",
+		deletePageContent: "删除本页内容",
+		scrollToBottom: "滚动到底部",
+		sampleTemplate: "示例模板",
+		contextState: "上下文状态",
+		internet: "联网访问",
+		changeModelSuccess: "修改当前对话组自定义模型配置成功！",
+		modelSettingTitle: "模型个性化",
+		modelSettingSelection: "模型选用",
+		modelSettingPresets: "自定义角色预设",
+		modelSettingPresetInput:
+			"自定义头部预设、给你的AI预设一个身份、更多有趣的角色请前往「应用广场」...",
+		modelSettingAdvanced: "高级配置",
+		modelSettingAdvancedInfo: "（不了解不需要修改）",
+		modelSettingReset: "重置",
+		modelSettingRandomness: "话题随机性",
+		modelSettingRandomnessInfo: "较高的数值会使同问题每次输出的结果更随机",
+		modelSettingToken: "回复Token数",
+		modelSettingTokenInfo: "单条回复数，但也会消耗更多的额度",
+		modelSettingContext: "关联上下文数量",
+		modelSettingInfo: "单条回复数，但也会消耗更多的额度",
 	},
 	setting: {
 		setting: "设置",

@@ -40,7 +40,7 @@ function useDemo(prompt: string) {
     </div>
 
     <div class="flex flex-col mt-16">
-      <span class="font-bold text-[#27E093] mb-3">示例模板</span>
+      <span class="font-bold text-[#27E093] mb-3">{{ $t('chat.sampleTemplate') }}</span>
       <div class="flex-1 pl-2 pr-5 py-1">
         <div
           v-for="(item, index) in appInfo.demoData"

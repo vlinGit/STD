@@ -3,7 +3,7 @@ import { NCountdown, NIcon, NImage, NModal, NSkeleton, NSpin, useMessage, NInput
 import { ref, onMounted, computed, watch, h } from 'vue'
 import { CloseOutline, SettingsOutline } from '@vicons/ionicons5'
 import { fetchQueryModelsListAPI } from '@/api/models'
-import { useAuthStore, useGlobalStoreWithOut, useChatStore } from '@/store'
+import { useAuthStore, useGlobalStoreWithOut, useChatStore, useAppStore } from '@/store'
 import { fetchUpdateGroupAPI } from '@/api/group'
 
 defineProps<Props>()
@@ -13,6 +13,7 @@ interface ModelType {
 }
 
 const useGlobalStore = useGlobalStoreWithOut()
+const appStore = useAppStore()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
 const loading = ref(false)
@@ -182,7 +183,12 @@ async function handleUpdateConfig() {
 		loading.value = true
 		await fetchUpdateGroupAPI(params)
 		loading.value = false
-		message.success('修改当前对话组自定义模型配置成功！')
+
+		if (appStore.getLanguage() == "en-US"){
+			message.success('Modify the custom model configuration of the current conversation group successfully!')
+		} else {
+			message.success('修改当前对话组自定义模型配置成功！')
+		}
 		await chatStore.queryMyGroup()
 		useGlobalStore.updateModelDialog(false)
 	} catch (error) {
@@ -227,11 +233,11 @@ function handleCloseDialog() {
 					<SettingsOutline />
 				</NIcon>
 
-				<span class="ml-[8px] mt-1 text-lg">模型个性化</span>
+				<span class="ml-[8px] mt-1 text-lg">{{ $t('chat.modelSettingTitle')}}</span>
 			</div>
 
 			<div class="flex justify-between items-center mt-6 pb-4">
-				<span class="font-bold">模型选用</span>
+				<span class="font-bold">{{ $t('chat.modelSettingSelection') }}</span>
 				<div style="max-width:70%">
 					<n-cascader class="w-full" v-model:value="model" placeholder="请选用当前聊天组所需的模型！" expand-trigger="click"
 						:options="options" check-strategy="child" :show-path="true" :filterable="false" />
@@ -239,8 +245,8 @@ function handleCloseDialog() {
 			</div>
 
 			<div>
-				<div class="pb-1">自定义角色预设</div>
-				<n-input v-model:value="systemMessage" type="textarea" :disabled="disabled" placeholder="自定义头部预设、给你的AI预设一个身份、更多有趣的角色请前往「应用广场」..." />
+				<div class="pb-1">{{ $t('chat.modelSettingPresets') }}</div>
+				<n-input v-model:value="systemMessage" type="textarea" :disabled="disabled" :placeholder="$t('chat.modelSettingPresetInput')" />
 			</div>
 
 			<div class="mt-5 bg-[#fafbfc] px-2 py-2 dark:bg-[#243147]">
@@ -248,21 +254,21 @@ function handleCloseDialog() {
 					<n-collapse-item name="1">
 						<template #header>
 							<div>
-								高级配置
-								<span class="text-xs text-neutral-500">（不了解不需要修改）</span>
+								{{$t('chat.modelSettingAdvanced')}}
+								<span class="text-xs text-neutral-500">{{ $t('chat.modelSettingAdvancedInfo') }}</span>
 							</div>
 						</template>
 						<template #header-extra>
 							<div @click.stop="handleReset">
 								<NButton text type="error" v-if="showResetBtn">
-									重置
+									{{ $t('chat.modelSettingReset') }}
 								</NButton>
 							</div>
 						</template>
 						<div class="mt-2">
 							<div>
 								<div class=" w-full flex justify-between">
-									<span class="w-[150px]">话题随机性</span>
+									<span class="w-[150px]">{{ $t('chat.modelSettingRandomness') }}</span>
 									<div class="flex w-[200px] items-center">
 										<n-slider v-model:value="topN" :step="0.1" :max="maxTemperature" />
 										<span class="w-[55px] text-right">
@@ -270,11 +276,11 @@ function handleCloseDialog() {
 										</span>
 									</div>
 								</div>
-								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">较高的数值会使同问题每次输出的结果更随机</div>
+								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">{{$t('chat.modelSettingRandomnessInfo')}}</div>
 							</div>
 							<div class="mt-4">
 								<div class=" w-full flex justify-between">
-									<span class="w-[150px]">回复Token数</span>
+									<span class="w-[150px]">{{ $t('chat.modelSettingToken') }}</span>
 									<div class="flex w-[200px] items-center">
 										<n-slider v-model:value="maxResponseTokens" :step="100" :max="maxModelTokens" />
 										<span class="w-[55px] text-right">
@@ -282,11 +288,11 @@ function handleCloseDialog() {
 										</span>
 									</div>
 								</div>
-								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">单条回复数，但也会消耗更多的额度</div>
+								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">{{ $t('chat.modelSettingTokenInfo') }}</div>
 							</div>
 							<div class="mt-4">
 								<div class=" w-full flex justify-between">
-									<span class="w-[150px]">关联上下文数量</span>
+									<span class="w-[150px]">{{ $t('chat.modelSettingContext') }}</span>
 									<div class="flex w-[200px] items-center">
 										<n-slider v-model:value="rounds" :step="1" :max="maxRounds" />
 										<span class="w-[55px] text-right">
@@ -294,7 +300,7 @@ function handleCloseDialog() {
 										</span>
 									</div>
 								</div>
-								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">单条回复数，但也会消耗更多的额度</div>
+								<div class="mt-2 text-xs text-slate-500 dark:text-slate-400">{{ $t('chat.modelSettingContextInfo') }}</div>
 							</div>
 						</div>
 					</n-collapse-item>
@@ -302,10 +308,10 @@ function handleCloseDialog() {
 			</div>
 			<div class="mt-4 flex items-center justify-end space-x-4">
 				<NButton @click="useGlobalStore.updateModelDialog(false)">
-					取消
+					{{$t('common.cancel')}}
 				</NButton>
 				<NButton type="primary" @click="handleUpdateConfig" :loading="loading">
-					保存
+					{{$t('common.save')}}
 				</NButton>
 			</div>
 		</div>

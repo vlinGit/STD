@@ -1008,7 +1008,7 @@ onUnmounted(() => {
                 /></span>
               </button>
             </template>
-            上下文状态
+            {{ $t('chat.contextState') }}
           </NTooltip>
           <NPopover
             v-if="chatStore.chatPreList?.length"
@@ -1081,7 +1081,7 @@ onUnmounted(() => {
                 </span>
               </button>
             </template>
-            {{ usingNetwork ? '关闭' : '开启' }}联网访问
+            {{ usingNetwork ? $t('common.close') : $t('common.enable') }} {{ $t('chat.internet') }}
           </NTooltip>
           <button
             v-show="isMobile"
@@ -1286,7 +1286,7 @@ onUnmounted(() => {
                         <SvgIcon v-else icon="wpf:sent" />
                       </span>
                     </template>
-                    发送
+                    {{ $t('common.send') }}
                   </NButton>
                 </div>
               </div>
