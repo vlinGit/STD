@@ -55,7 +55,7 @@ async function handleAppId(appId: string) {
 function checkRoute() {
   if (isLogin.value)
     return
-  authStore.setLoginDialog(true)
+  // authStore.setLoginDialog(true)
 }
 
 

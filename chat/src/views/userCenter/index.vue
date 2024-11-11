@@ -6,7 +6,7 @@ import Wallet from './components/wallet.vue'
 import Detail from './components/detail.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { TitleBar } from '@/components/base'
-import { useAuthStore, useGlobalStoreWithOut } from '@/store'
+import { useAuthStore, useGlobalStoreWithOut, useAppStore } from '@/store'
 import defaultAvatar from '@/assets/avatar.png'
 import { fetchSyncVisitorDataAPI, fetchVisitorCountAPI } from '@/api/balance'
 import { fetchUpdateInfoAPI } from '@/api/index'
@@ -15,6 +15,7 @@ import type { ResData } from '@/api/types'
 
 const useGlobalStore = useGlobalStoreWithOut()
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const router = useRouter()
 const visitorCount = ref(0)
 
@@ -29,7 +30,7 @@ const email = computed(() => authStore.userInfo.email || '')
 const isBindWx = computed(() => authStore.userInfo.isBindWx)
 const avatar = ref(authStore.userInfo.avatar ?? defaultAvatar)
 const username = ref(authStore.userInfo.username ?? '未登录')
-const sign = ref(authStore.userInfo.sign ?? '我是一台基于深度学习和自然语言处理技术的 AI 机器人，旨在为用户提供高效、精准、个性化的智能服务。')
+const sign = ref(authStore.userInfo.sign ?? (appStore.getLanguage() == 'en-US'? 'I am an AI robot based on deep learning and natural language processing technology, designed to provide users with efficient, accurate, and personalized intelligent services. ': '我是一台基于深度学习和自然语言处理技术的 AI 机器人，旨在为用户提供高效、精准、个性化的智能服务。'))
 
 const btnDisabled = ref(false)
 
@@ -90,7 +91,7 @@ setTimeout(() => {
         <div class="text-2xl text-primary self-start mb-14 flex justify-between w-full">
           <span>Profile</span>
           <NButton tertiary type="error" @click="logOut">
-            退出登录
+            {{ $t('common.logout') }}
           </NButton>
         </div>
         <NAvatar
@@ -106,36 +107,36 @@ setTimeout(() => {
 
         <div class="  self-start mt-16">
           <div class="text-xl text-primary">
-            我在本站的使用记录
+            {{ $t('setting.usageRecord') }}
           </div>
           <div class="flex items-center space-x-4 pl-3 mt-3">
-            <span class="flex-shrink-0 w-[100px] text-keft text-primary">基础模型积分:</span>
+            <span class="flex-shrink-0 w-[100px] text-keft text-primary">{{ $t('setting.basicModelPoints') }}:</span>
             <div class="w-[230px]">
-              {{ userBalance.useModel3Count || "0" }} 积分
+              {{ userBalance.useModel3Count || "0" }} {{ $t('chat.points') }}
             </div>
           </div>
           <div class="flex items-center space-x-4 pl-3 mt-3">
-            <span class="flex-shrink-0 w-[100px] text-keft text-primary">高级模型积分:</span>
+            <span class="flex-shrink-0 w-[100px] text-keft text-primary">{{ $t('setting.advancedModelPoints') }}:</span>
             <div class="w-[230px]">
-              {{ userBalance.useModel4Count || "0" }} 积分
+              {{ userBalance.useModel4Count || "0" }} {{ $t('chat.points') }}
             </div>
           </div>
           <div class="flex items-center space-x-4 pl-3 mt-3">
-            <span class="flex-shrink-0 w-[100px] text-keft text-primary">基础模型使用:</span>
+            <span class="flex-shrink-0 w-[100px] text-keft text-primary">{{ $t('setting.basicModelUse') }}:</span>
             <div class="w-[230px]">
               {{ userBalance.useModel3Token || "0" }} Token
             </div>
           </div>
           <div class="flex items-center space-x-4 pl-3 mt-3">
-            <span class="flex-shrink-0 w-[100px] text-keft text-primary">高级模型使用:</span>
+            <span class="flex-shrink-0 w-[100px] text-keft text-primary">{{ $t('setting.advancedModelUse') }}:</span>
             <div class="w-[230px]">
               {{ userBalance.useModel4Token || "0" }} Token
             </div>
           </div>
           <div class="flex items-center space-x-4 pl-3 mt-3">
-            <span class="flex-shrink-0 w-[100px] text-keft text-primary">绘画使用积分:</span>
+            <span class="flex-shrink-0 w-[100px] text-keft text-primary">{{ $t('setting.paintingModelUse') }}:</span>
             <div class="w-[230px]">
-              {{ userBalance.useDrawMjToken || "0" }} 积分
+              {{ userBalance.useDrawMjToken || "0" }} {{ $t('chat.points') }}
             </div>
           </div>
 
@@ -160,18 +161,18 @@ setTimeout(() => {
         </div>
       </div>
       <div v-if="userBalance.expirationTime" class="flex text-[red]  pt-8 text-base font-bold">
-        <span>会员过期时间：</span>
+        <span>{{ $t('setting.membershipExpire') }}</span>
         <span>{{ userBalance.expirationTime }}</span>
       </div>
     </NLayoutSider>
 
     <div class="flex flex-col " :class="[isMobile ? 'w-full' : 'flex-1']" :style="{ padding: isMobile ? '10px' : '0 28px 0 28px' }">
-      <TitleBar title="个人中心" des="编辑个人信息、查看更多详情" :padding="isMobile ? 1 : 1" />
+      <TitleBar :title="$t('setting.personalCenter')" :des="$t('setting.personalCenterInfo')" :padding="isMobile ? 1 : 1" />
       <NTabs type="line" animated class="mt-5 flex-1  ">
-        <NTabPane v-if="isSmallLg" name="detail" tab="我的详情">
+        <NTabPane v-if="isSmallLg" name="detail" :tab="$t('setting.details')">
           <Detail />
         </NTabPane>
-        <NTabPane name="account" tab="我的钱包">
+        <NTabPane name="account" :tab="$t('setting.wallet')">
           <Wallet />
         </NTabPane>
         <!-- NTabPane name="baseInfo" tab="基础信息">

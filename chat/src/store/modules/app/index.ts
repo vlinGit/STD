@@ -26,6 +26,7 @@ export const useAppStore = defineStore("app-store", {
 		},
 
 		getLanguage() {
+			console.log(this.language);
 			return this.language;
 		},
 

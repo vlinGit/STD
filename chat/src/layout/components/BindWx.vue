@@ -89,13 +89,13 @@ function handleCloseDialog() {
         <NIcon size="25" color="#0e7a0d">
           <PaperPlaneOutline />
         </NIcon>
-        <span class="ml-[8px]">绑定微信账户</span>
+        <span class="ml-[8px]">{{ $t('setting.bindWechatAccount') }}</span>
       </div>
 
       <div>
         <div style="white-space: nowrap" class=" w-full text-center font-bold text-sm py-5">
           <p>
-            请在 <span class="w-[55px] inline-block text-[red] text-left"><NCountdown ref="countdownRef" :active="activeCount" :duration="120 * 1000" :on-finish="handleTimeDown" /></span> 时间内完成绑定
+            {{$t('setting.please')}} <span class="w-[55px] inline-block text-[red] text-left"><NCountdown ref="countdownRef" :active="activeCount" :duration="120 * 1000" :on-finish="handleTimeDown" /></span> {{ $t('setting.pleaseExtra') }}
           </p>
         </div>
         <div class="my-2 flex justify-center relative">
@@ -110,7 +110,7 @@ function handleCloseDialog() {
         </div>
 
         <span class="flex items-center justify-center text-base py-5">
-          打开微信扫码绑定账户
+          {{ $t('setting.bindWechatInfo') }}
         </span>
       </div>
     </div>
