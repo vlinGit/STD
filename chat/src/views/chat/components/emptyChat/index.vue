@@ -25,12 +25,12 @@ async function handleAddNewGroup() {
   <div class=" w-full h-full flex justify-center items-center flex-col">
     <SvgIcon icon="token:chat" class="mb-4 inline-block text-6xl" style="color: #27E093;font-size: 6rem;" />
     <h1 class="mb-4 text-2xl font-bold mt-1">
-      开始使用Pockyt AI
+      {{ $t('chat.emptyChatTitle') }}
     </h1>
     <p class="mb-6 text-base text-slate-500">
-      点击下方按钮，免费开启试用
+      {{ $t('chat.emptyChatInfo') }}
     </p>
-    <NButton class="button" :loading="loading" @click="handleAddNewGroup" />
+    <NButton class="button" :loading="loading" @click="handleAddNewGroup">{{ $t('chat.emptyChatButton') }}</NButton>
   </div>
 </template>
 
@@ -39,8 +39,9 @@ async function handleAddNewGroup() {
   background-color: #ffffff; /* 设置按钮背景颜色 */
   border: 2px solid #000000; /* 设置边框颜色 */
   border-radius: 40px; /* 设置圆角 */
-  width: 100px;
+  width: fit-content;
   height: 50px;
+  font-weight: bold !important;
 }
 .button:hover {
   background-color: #27E093; /* 设置按钮悬停背景颜色 */
@@ -49,6 +50,5 @@ async function handleAddNewGroup() {
 .button:after {
   font-size: 16px; /* 设置字体大小 */
   font-weight: bold; /* 设置文本为加粗 */
-  content: "新对话"!important; /* 设置按钮文字 */
 }
 </style>

@@ -35,6 +35,9 @@ export default {
 		cancel: "Cancel",
 		logout: "Logout",
 		login: "Login",
+		days: "days",
+		buy: "buy",
+		permanent: "permanent",
 	},
 	chat: {
 		newChatButton: "New Chat",
@@ -113,6 +116,30 @@ export default {
 		modelSettingContext: "Number of associated contexts",
 		modelSettingContextInfo:
 			"Number of single replies, but it will also consume more credits",
+		emptyChatTitle: "Get started with Pockyt AI ",
+		emptyChatInfo: "Click the button below to start your free trial ",
+		emptyChatButton: "New conversation",
+		dallEPainting: "DALL-E Painting",
+		dallEInfo:
+			"Drawing based on DALL-E, faster, synchronization waits until the end, and you can see the result in my drawing! ",
+		changePrompt: "Change prompt",
+		promptExampleTitle: "Prompt example",
+		promptExampleInfo:
+			"Super realistic future world, real photos, Unreal Engine",
+		paintingPlaceholder:
+			"Please enter the image description information you want to generate. You can refer to the sample text above. We will convert it into an English painting. Please know!",
+		generatePicture: "Generate picture",
+		parameterSettings: "Parameter settings",
+		imageSize: "Image size",
+		pictureQuality: "Picture quality",
+		modifierRef: "Modifier reference ",
+		modifierRefInfo:
+			"You can refer to or choose the following types of modifiers to enrich your input text and try to generate more diverse images. For more modifiers, please refer to the Prompt Guide or Free Input to explore more unknown abilities in large model painting.",
+		imageType: "Image type",
+		publicBuild: "Public build",
+		myBuild: "My build",
+		paintingLoading:
+			"----------- Being generated. The larger the number of pictures, the longer it will take. It is expected to take 25S -----------",
 	},
 	setting: {
 		setting: "Setting",
@@ -184,5 +211,16 @@ export default {
 		importRepeatContent: "Content is repeatedly skipped: {msg}",
 		onlineImportWarning: "Note: Please check the JSON file source!",
 		downloadError: "Please check the network status and JSON file validity",
+	},
+	member: {
+		title: "Member store",
+		desc: "Enjoy exploring, welcome to our online store, thank you for choosing us, and let us start a pleasant shopping journey together!",
+		limitedPackages: "Limited time package for members",
+		permanentPackages: "Stack permanent secondary cards",
+		packageTitle: "Membership package details",
+		baseModelQuota: "Basic model quota",
+		advancedModelQuota: "Advanced model quota",
+		mjPaintingQuota: "MJ painting quota",
+		packageValid: "Package is valid for",
 	},
 };

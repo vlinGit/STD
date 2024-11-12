@@ -37,6 +37,9 @@ export default {
 		cancel: "取消",
 		logout: "退出登录",
 		login: "点击登入",
+		days: "天",
+		buy: "购买",
+		permanent: "永久",
 	},
 	chat: {
 		newChatButton: "新建聊天",
@@ -108,6 +111,29 @@ export default {
 		modelSettingTokenInfo: "单条回复数，但也会消耗更多的额度",
 		modelSettingContext: "关联上下文数量",
 		modelSettingInfo: "单条回复数，但也会消耗更多的额度",
+		emptyChatTitle: "开始使用Pockyt AI",
+		emptyChatInfo: " 点击下方按钮，免费开启试用",
+		emptyChatButton: "新对话",
+		dallEPainting: "DALL-E绘画",
+		dallEInfo:
+			"基于DALL-E的绘画、速度较快、同步等待到结束后在我的绘画中可以看到结果！",
+		changePrompt: "换提示",
+		promptExampleTitle: "Prompt示例",
+		promptExampleInfo: "超级逼真的未来世界，真实照片，虚幻引擎",
+		paintingPlaceholder:
+			"请输入您想要生成的图片描述信息、可以参考上面的示例文字、我们将会对其转为英文绘画、请知悉！",
+		generatePicture: "生成图片",
+		parameterSettings: "参数设置",
+		imageSize: "图片尺寸",
+		pictureQuality: "图片质量",
+		modifierRef: "修饰词参考",
+		modifierRefInfo:
+			"您可参考或选用下列各类修饰词丰富您的输入文本，尝试生成更加多样的图像，更多修饰词可参考 Prompt指南 或 自由输入 探索大模型作画更多未知能力",
+		imageType: "图像类型",
+		publicBuild: "公共生成",
+		myBuild: "我的生成",
+		paintingLoading:
+			" ----------- 正在生成中、图片越大数量越多所需时间越多、预计25S -----------",
 	},
 	setting: {
 		setting: "设置",
@@ -183,5 +209,16 @@ export default {
 		importRepeatContent: "内容重复跳过：{msg}",
 		onlineImportWarning: "注意：请检查 JSON 文件来源！",
 		downloadError: "请检查网络状态与 JSON 文件有效性",
+	},
+	member: {
+		title: "会员商场",
+		desc: "尽情探索，欢迎光临我们的在线商店、感谢您选择我们、让我们一同开启愉悦的购物之旅！",
+		limitedPackages: "会员限时套餐",
+		permanentPackages: "叠加永久次卡",
+		packageTitle: "会员套餐详情",
+		baseModelQuota: "基础模型额度",
+		advancedModelQuota: "高级模型额度",
+		mjPaintingQuota: "MJ绘画额度",
+		packageValid: "套餐有效期",
 	},
 };

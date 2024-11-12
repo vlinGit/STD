@@ -36,6 +36,12 @@ const exampleList = [
   '兔子，可爱，高质量，高品质',
 ]
 
+const exampleListEn = [
+  'Super realistic future world, real photos, Unreal Engine',
+  'Handsome guy, two-dimensional, cyberpunk style, exquisite face',
+  'Rabbit, cute, high quality, high quality',
+]
+
 const imageSizeList = [
   { label: '1024x1024', value: '1024x1024' },
   { label: '1024x1792', value: '1024x1792' },
@@ -45,6 +51,11 @@ const imageSizeList = [
 const qualityList = [
   { label: '标准(2积分)', value: 'standard' },
   { label: '优质(4积分)', value: 'hd' },
+]
+
+const qualityListEn = [
+{ label: 'Standard (2 points)', value: 'standard' },
+{ label: 'Premium (4 points)', value: 'hd' },
 ]
 
 // const imageNumList = [
@@ -60,7 +71,7 @@ const qualityList = [
 // ]
 
 const promptList = ['古风', '二次元', '写实照片', '油画', '水彩画', '油墨画', '黑白雕版画', '雕塑', '3D模型', '手绘草图', '炭笔画', '极简线条画', '电影质感', '机械感']
-
+const promptListEn = ['Antique', '2D', 'Realistic photo', 'Oil painting', 'Watercolor', 'Ink painting', 'Black and white engraving', 'Sculpture', '3D model', 'Hand-drawn sketch', 'Charcoal drawing', 'Minimalist line drawing', 'Film quality', 'Mechanical feel']
 const form = ref({
   prompt: '',
   n: 1,
@@ -160,19 +171,19 @@ onMounted(() => {
 <template>
   <!-- <div class="main  h-full overflow-auto bg-custom-background-image bg-repeat-y bg-cover bg-center dark:bg-[#24272e]" :class="isMobile ? ['px-0'] : ['px-10']" :style="{ backgroundImage: !darkMode ? `url('https://seek.yesongit.com/_nuxt/bg.0b4507a9.png')` : '' }"> -->
   <div class="main min-h-screen bg-center dark:bg-[#2F2E34]" :class="[!darkMode ? 'lightBg' : 'darkBg', isMobile ? 'px-3' : 'px-10']">
-    <TitleBar title="DALL-E绘画" des="基于DALL-E的绘画、速度较快、同步等待到结束后在我的绘画中可以看到结果！" :padding="isMobile ? 2 : 20" />
+    <TitleBar :title="$t('chat.dallEPainting')" :des="$t('chat.dallEInfo')" :padding="isMobile ? 2 : 20" />
     <div :class="isMobile ? ['px-2'] : ['px-20']">
       <!-- <NAlert :show-icon="false" type="success" class="mt-5">
         <span class="text-[#67c23a]">每生成一张图片需要扣除您的两个基础绘画积分、我们建议您输入转为英文！</span>
       </NAlert> -->
       <div class="flex my-5 items-center">
         <b class="flex items-center border border-black rounded-md p-1 text-sm" @click="updateEx">
-          <Icon icon="mynaui:refresh-alt" class="mr-2" />  <!-- 使用 Iconify 图标 -->换提示</b>
+          <Icon icon="mynaui:refresh-alt" class="mr-2" />  <!-- 使用 Iconify 图标 -->{{ $t('chat.changePrompt') }}</b>
         <p class="mx-2 text-[#707384] select-none flex-shrink-0">
-          Prompt示例：
+         {{ $t('chat.promptExampleTitle') }}：
         </p>
         <p class=" text-[#707384]">
-          {{ exampleList[index] }}
+          {{ appStore.getLanguage() == 'en-US' ? exampleListEn[index] : exampleList[index] }}
         </p>
       </div>
 
@@ -181,7 +192,7 @@ onMounted(() => {
           v-model:value="form.prompt"
           :disabled="loading"
           clearable
-          placeholder="请输入您想要生成的图片描述信息、可以参考上面的示例文字、我们将会对其转为英文绘画、请知悉！"
+          :placeholder="$t('chat.paintingPlaceholder')"
           style="width: 100%; height: 150px; border: 2px solid black; border-radius: 8px;"
         >
           <template #suffix>
@@ -198,17 +209,17 @@ onMounted(() => {
                   <ImagesOutline />
                 </NIcon>
               </template>
-              生成图片
+              {{ $t('chat.generatePicture') }}
             </NButton>
           </template>
         </ninput>
       </NInputGroup>
       <div class="mt-5 py-4 bg-[#EBF7F1] dark:bg-[#2c2c32] rounded-lg" :class="isMobile ? 'px-0' : 'px-4'">
         <h4 class="text-base mb-2 font-bold">
-          参数设置
+          {{ $t('chat.parameterSettings') }}
         </h4>
         <div class="flex items-center">
-          <span class="mr-2 inline-block w-20 flex-shrink-0 font-bold">图片尺寸:</span>
+          <span class="mr-2 inline-block w-20 flex-shrink-0 font-bold">{{ $t('chat.imageSize') }}:</span>
           <div>
             <span
               v-for="item in imageSizeList" :key="item.value"
@@ -227,10 +238,10 @@ onMounted(() => {
           </div>
         </div>
         <div class="flex items-center">
-          <span class="mr-2 inline-block w-20 flex-shrink-0 font-bold">图片质量:</span>
+          <span class="mr-2 inline-block w-20 flex-shrink-0 font-bold">{{ $t('chat.pictureQuality') }}:</span>
           <div>
             <span
-              v-for="item in qualityList" :key="item.value"
+              v-for="item in (appStore.getLanguage() == 'en-US' ? qualityListEn: qualityList)" :key="item.value"
               class="rounded-lg border-2 border-black ml-2 select-none cursor-pointer inline-block mb-2"
               :class="[
                 form.quality === item.value ? 'bg-[#27E093]' : 'bg-white',
@@ -253,29 +264,29 @@ onMounted(() => {
         </div> -->
         <div class="flex mt-5">
           <h4 class="text-base mr-2  w-20 flex-shrink-0 font-bold">
-            修饰词参考
+            {{ $t('chat.modifierRef') }}
           </h4>
           <br> <!-- 添加换行符 -->
           <p class="flex-1">
-            您可参考或选用下列各类修饰词丰富您的输入文本，尝试生成更加多样的图像，更多修饰词可参考 Prompt指南 或 自由输入 探索大模型作画更多未知能力
+            {{ $t('chat.modifierRefInfo') }}
           </p>
         </div>
         <div class="flex mt-5 ">
           <h4 class="text-base mr-2  w-20 flex-shrink-0 font-bold">
-            图像类型
+            {{ $t('chat.imageType') }}
           </h4>
           <div>
-            <span v-for="(item, i) in promptList" :key="item" class="cursor-pointer prompt" @click="form.prompt += form.prompt ? `，${item}` : item">{{ `${item} ${i + 1 === promptList.length ? '' : '、'}` }}</span>
+            <span v-for="(item, i) in (appStore.getLanguage() == 'en-US' ? promptListEn : promptList)" :key="item" class="cursor-pointer prompt" @click="form.prompt += form.prompt ? `，${item}` : item">{{ `${item} ${i + 1 === promptList.length ? '' : '、'}` }}</span>
           </div>
         </div>
       </div>
       <div v-if="loading" class="mt-8 pb-10">
         <div class="flex justify-center">
-          ----------- 正在生成中、图片越大数量越多所需时间越多、预计25S -----------
+          {{ $t('chat.paintingLoading') }}
         </div>
         <div class="flex flex-wrap mt-8">
           <div v-for="i in form.n" :key="i" class="w-44 h-44 border rounded-md relative  ml-4 mt-4">
-            <Loading :text-color="loadingTextColor" :words="['图', '片', '绘', '制', '中']" />
+            <Loading :text-color="loadingTextColor" :words="appStore.getLanguage() == 'en-US' ? ['picture', 'piece', 'painting', 'making', '中'] : ['图', '片', '绘', '制', '中']" />
           </div>
           <!-- <img v-for="i in 5" :key="i" class="w-40 rounded ml-4 mt-4" src="https://public-1300678944.cos.ap-shanghai.myqcloud.com/blog/16816463869037208e40df8ceb5ff.gif"> -->
         </div>
@@ -289,7 +300,7 @@ onMounted(() => {
             class="tab" :class="[activeTab === tab ? 'active' : '']"
             @click="updateTabs(tab)"
           >
-            {{ tab === 'all' ? '公共生成' : '我的生成' }}
+            {{ (appStore.getLanguage() == 'en-US' ? (tab === 'all' ? 'Public build' : 'My build') : (tab === 'all' ? '公共生成' : '我的生成' ))}}
           </span>
         </div>
 
@@ -308,8 +319,8 @@ onMounted(() => {
 
 <style>
 .create-image{
-  padding: 0; /* 移除内边距 */
-  width: 120px; /* 设置固定宽度 */
+  padding: 10px; /* 移除内边距 */
+  width: fit-content; /* 设置固定宽度 */
   height: 50px; /* 设置固定高度 */
   border: 2px solid black; /* 黑色边框 */
   border-radius: 6rem; /* 圆角 */

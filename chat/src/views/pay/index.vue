@@ -6,8 +6,9 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchGetPackageAPI } from '@/api/crami'
 import { fetchOrderBuyAPI } from '@/api/order'
 import type { ResData } from '@/api/types'
-import { useAuthStore, useGlobalStoreWithOut } from '@/store'
+import { useAuthStore, useGlobalStoreWithOut, useAppStore } from '@/store'
 const authStore = useAuthStore()
+const appStore = useAppStore()  
 const { isMobile } = useBasicLayout()
 const message = useMessage()
 const useGlobalStore = useGlobalStoreWithOut()
@@ -83,7 +84,9 @@ async function queryPkg() {
 }
 
 const tips = computed(() => {
-  return isMobile.value ? '尽情探索，欢迎光临我们的在线商店！' : '尽情探索，欢迎光临我们的在线商店、感谢您选择我们、让我们一同开启愉悦的购物之旅！'
+  const mobile = appStore.getLanguage() === 'en-US' ? 'Have fun exploring and welcome to our online store!' : '尽情探索，欢迎光临我们的在线商店！'
+  const desktop = appStore.getLanguage() === 'en-US' ? 'Enjoy exploring, welcome to our online store, thank you for choosing us, and let us start a pleasant shopping journey together!' : '尽情探索，欢迎光临我们的在线商店、感谢您选择我们、让我们一同开启愉悦的购物之旅！'
+  return isMobile.value ? mobile : desktop
 })
 
 function updateTabs(val: number) {
@@ -155,14 +158,14 @@ onMounted(() => {
 
 <template>
   <div class="">
-    <TitleBar class="title-bar" title="会员商场" :des="tips" :class="[isMobile ? 'px-3' : 'px-24']" />
+    <TitleBar class="title-bar" :title="$t('member.title')" :des="tips" :class="[isMobile ? 'px-3' : 'px-24']" />
     <div class="flex justify-center items-center mt-8 text-center">
-      <NButton class="pane" :style="{ height: isMobile ? '60px' : '180px' }">
+      <NButton class="pane">
         <NButton class="pane-1" :class="[{ active: pkgType === 1 }]" :type="pkgType === 1 ? 'primary' : 'default'" @click="updateTabs(1)">
-          会员限时套餐
+          {{ $t('member.limitedPackages') }}
         </NButton>
         <NButton class="pane-2" :class="[{ active: pkgType === -1 }]" :type="pkgType === -1 ? 'primary' : 'default'" @click="updateTabs(-1)">
-          叠加永久次卡
+          {{ $t('member.permanentPackages') }}
         </NButton>
       </NButton>
     </div>
@@ -188,31 +191,31 @@ onMounted(() => {
             </div>
             <div class="flex p-4 flex-col space-y-4 text-center" style="margin-top: -60px;">
               <h class="flex p-4 flex-col space-y-4 font-bold relative text-center">
-                <span class="line2" />  会员套餐详情
+                <span class="line2" />  {{ $t('member.packageTitle') }}
               </h>
               <div class="flex justify-between">
-                <span>基础模型额度</span>
-                <span>{{ item.model3Count || 0 }} 积分</span>
+                <span>{{ $t('member.baseModelQuota') }}</span>
+                <span>{{ item.model3Count || 0 }} {{ $t('chat.points') }}</span>
               </div>
               <div class="flex justify-between ">
-                <span>高级模型额度</span>
-                <span>{{ item.model4Count || 0 }} 积分</span>
+                <span>{{ $t('member.advancedModelQuota') }}</span>
+                <span>{{ item.model4Count || 0 }} {{ $t('chat.points') }}</span>
               </div>
               <div class="flex justify-between ">
-                <span>MJ绘画额度</span>
-                <span>{{ item.drawMjCount || 0 }} 积分</span>
+                <span>{{ $t('member.mjPaintingMQuota') }}</span>
+                <span>{{ item.drawMjCount || 0 }} {{ $t('chat.points') }}</span>
               </div>
             </div>
             <div class="px-4 flex-1 flex items-center justify-between">
               <div class="flex items-end font-bold">
-                <span>套餐有效期 </span>
-                <span class="text-lg font-bold" style="margin-left: 130px;">{{ item.days > 0 ? `${item.days} 天` : `永久` }}</span>
+                <span>{{ $t('member.packageValid') }} </span>
+                <span class="text-lg font-bold" style="margin-left: 130px;">{{ item.days > 0 ? `${item.days} ${$t('common.days')}` : $t('common.permanent') }}</span>
               </div>
               <div />
             </div>
             <div class="flex justify-center mt-4">
               <NButton class="buy" @click="handlePayPkg(item)">
-                购买
+                {{ $t('common.buy') }}
               </NButton>
             </div>
           </div>
@@ -291,7 +294,7 @@ onMounted(() => {
 
 .pane{
     max-width: 640px;
-    max-height: 50px;
+    height: fit-content;
     display: flex;
     justify-content: center;
     border: 2px solid #000000; /* 大按钮的边框 */
@@ -358,6 +361,7 @@ onMounted(() => {
     text-align: center; /* 文本居中 */
     line-height: 30px; /* 使文字垂直居中 */
     font-weight: bold; /* 文字加粗 */
+    text-transform: capitalize;
   }
   .buy:hover{
     font-weight: bold !important; /* 选中或悬停字体加粗 */
