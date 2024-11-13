@@ -177,7 +177,7 @@ export const useAuthStore = defineStore("auth-store", {
 		setLoginDialog(bool: boolean) {
 			console.log("to login");
 			// this.loginDialog = bool
-			if (bool) {
+			if (!bool) {
 				// 去登录
 				this.login();
 				// this.loginWithOIDC()

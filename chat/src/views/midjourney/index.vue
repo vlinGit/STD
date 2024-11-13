@@ -107,17 +107,17 @@ const sizeList = [
 ]
 
 const styleOptions = [
-  { label: '默认风格', value: 0 },
-  { label: '表现力风格', value: 'expressive' },
-  { label: '可爱风格', value: 'cute' },
-  { label: '景观风格', value: 'scenic' },
+  { label: appStore.getLanguage() == 'en-US' ? 'Default style' : '默认风格', value: 0 },
+  { label: appStore.getLanguage() == 'en-US' ? 'Expressive style' : '表现力风格', value: 'expressive' },
+  { label: appStore.getLanguage() == 'en-US' ? 'Cute style' : '可爱风格', value: 'cute' },
+  { label: appStore.getLanguage() == 'en-US' ? 'Landscape style' : '景观风格', value: 'scenic' },
 ]
 
 const qualityOptions = [
-  { label: '普通', value: '.25' },
-  { label: '一般', value: '.5' },
-  { label: '高清', value: '1' },
-  { label: '超高清', value: '2' },
+  { label: appStore.getLanguage() == 'en-US' ? 'Usually' : '普通', value: '.25' },
+  { label: appStore.getLanguage() == 'en-US' ? 'Generally' : '一般', value: '.5' },
+  { label: appStore.getLanguage() == 'en-US' ? 'HD' : '高清', value: '1' },
+  { label: appStore.getLanguage() == 'en-US' ? 'Ultra high resolution' : '超高清', value: '2' },
 ]
 
 const versionOptions = computed(() => {
@@ -477,7 +477,7 @@ const activeTab = ref('working') // 默认选项
       >
         <div class="mt-4 text-sm flex items-center">
           <div class="text-sm mr-1">
-            图片尺寸
+            {{ $t('midJourney.imageSize') }}
           </div>
 
           <div data-tool-target="tooltip-default">
@@ -485,7 +485,7 @@ const activeTab = ref('working') // 默认选项
               <template #trigger>
                 <SvgIcon icon="ri:error-warning-line" class="text-base" />
               </template>
-              参数释义：生成图片尺寸比例
+              {{ $t('midJourney.imageToolTip') }}
             </NTooltip>
           </div>
         </div>
@@ -522,7 +522,7 @@ const activeTab = ref('working') // 默认选项
         <!-- 模型 -->
         <div class="mt-4 text-sm flex items-center">
           <div class="mr-1">
-            模型选择
+            {{ $t('midJourney.carryingParameters') }}
           </div>
           <div data-tool-target="tooltip-default">
             <NTooltip placement="right-end" trigger="hover">
@@ -530,8 +530,8 @@ const activeTab = ref('working') // 默认选项
                 <SvgIcon icon="ri:error-warning-line" class="text-base" />
               </template>
               <div style="width: 240px">
-                <p>MJ: 偏真实通用模型</p>
-                <p>NIJI: 偏动漫风格、适用于二次元模型</p>
+                <p>{{ $t('midJourney.modelSelection1ToolTip') }}</p>
+                <p>{{ $t('midJourney.modelSelection2ToolTip') }}</p>
               </div>
             </NTooltip>
           </div>
@@ -566,7 +566,7 @@ const activeTab = ref('working') // 默认选项
         </ul>
         <div class="mt-4">
           <div class="mt-2 flex justify-between items-center space-x-2 text-xs">
-            <span class="w-[65px] block text-sm">版本</span>
+            <span class="w-[65px] block text-sm">{{ $t('midJourney.version') }}</span>
             <span class="flex-1">
               <NSelect
                 v-model:value="version"
@@ -580,7 +580,7 @@ const activeTab = ref('working') // 默认选项
             v-if="model === 'NIJI'"
             class="mt-2 flex justify-between items-center space-x-2 text-xs"
           >
-            <span class="w-[65px] block text-sm">风格</span>
+            <span class="w-[65px] block text-sm">{{ $t('midJourney.style') }}</span>
             <span class="flex-1">
               <NSelect
                 v-model:value="style"
@@ -602,7 +602,7 @@ const activeTab = ref('working') // 默认选项
             </NTooltip>
           </div> -->
           <div class="mt-3 flex justify-between items-center space-x-2 text-xs">
-            <span class="w-[65px] block text-sm">品质</span>
+            <span class="w-[65px] block text-sm">{{ $t('midJourney.quality') }}</span>
             <span class="flex-1">
               <NSelect
                 v-model:value="quality"
@@ -613,7 +613,7 @@ const activeTab = ref('working') // 默认选项
             </span>
           </div>
           <div class="mt-3 flex justify-between items-center space-x-2 text-xs">
-            <span class="w-[65px] block text-sm">混乱</span>
+            <span class="w-[65px] block text-sm">{{ $t('midJourney.confusion') }}</span>
             <span class="flex-1">
               <NInputNumber
                 v-model:value="chaos"
@@ -628,9 +628,9 @@ const activeTab = ref('working') // 默认选项
                 <SvgIcon icon="ri:error-warning-line" class="text-base ml-2" />
               </template>
               <div style="width: 270px">
-                <p>取值范围：0-100、 --chaos 或 --c</p>
-                <p>混乱级别，可以理解为让AI天马行空的空间</p>
-                <p>值越小越可靠、默认0最为精准</p>
+                <p>{{ $t('midJourney.confusionToolTip1') }}</p>
+                <p>{{ $t('midJourney.confusionToolTip2') }}</p>
+                <p>{{ $t('midJourney.confusionToolTip3') }}</p>
               </div>
             </NTooltip>
           </div>
@@ -639,7 +639,7 @@ const activeTab = ref('working') // 默认选项
             v-if="model === 'MJ'"
             class="mt-3 flex justify-between items-center space-x-2 text-xs"
           >
-            <span class="w-[65px] block text-sm">风格化</span>
+            <span class="w-[65px] block text-sm">{{ $t('midJourney.stylized') }}</span>
             <span class="flex-1">
               <NInputNumber
                 v-model:value="stylize"
@@ -654,15 +654,15 @@ const activeTab = ref('working') // 默认选项
                 <SvgIcon icon="ri:error-warning-line" class="text-base ml-2" />
               </template>
               <div style="width: 270px">
-                <p>风格化：--stylize 或 --s，范围 1-1000</p>
-                <p>参数释义：数值越高，画面表现也会更具丰富性和艺术性</p>
+                <p>{{ $t('midJourney.stylizedToolTip1') }}</p>
+                <p>{{ $t('midJourney.stylizedToolTip2') }}</p>
               </div>
             </NTooltip>
           </div>
 
           <!-- <div class="block text-sm mt-2 flex items-center">设定</div> -->
           <div class="mt-3 flex justify-between items-center space-x-2 text-xs">
-            <span class="w-[65px] block text-sm">携带参数</span>
+            <span class="w-[65px] block text-sm">{{ $t('midJourney.carryingParameters') }}</span>
             <span class="flex-1">
               <NSwitch
                 v-model:value="carryOptions"
@@ -677,9 +677,9 @@ const activeTab = ref('working') // 默认选项
                 <SvgIcon icon="ri:error-warning-line" class="text-base ml-2" />
               </template>
               <div style="width: 240px">
-                <p>是否自动携带参数</p>
-                <p>打开：携带上述我们配置的参数</p>
-                <p>关闭：使用指令中的我们自定义的参数</p>
+                <p>{{ $t('midJourney.carryingParameterToolTip1') }}</p>
+                <p>{{ $t('midJourney.carryingParameterToolTip2') }}</p>
+                <p>{{ $t('midJourney.carryingParameterToolTip3') }}</p>
               </div>
             </NTooltip>
           </div>
@@ -687,7 +687,7 @@ const activeTab = ref('working') // 默认选项
 
         <div class="mt-5">
           <div class="block text-base">
-            以图生图
+            {{ $t('midJourney.drawPicturesFromPictures') }}
           </div>
           <div class="ant-spin-nested-loading css-4fssqp mt-5">
             <div class="ant-spin-container">
@@ -714,9 +714,9 @@ const activeTab = ref('working') // 默认选项
                         class="mx-auto py-2 w-11"
                         src="data:image/png;base64,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"
                       >
-                      <p class="mt-3">点击或拖拽一个图片到这里作为输入</p>
+                      <p class="mt-3">{{ $t('midJourney.imageInput') }}</p>
                       <p class="text-center dark:text-[#ffffff73]">
-                        支持PNG和JPG格式
+                        {{ $t('midJourney.fileFormats') }}
                       </p>
                     </div>
                   </div>
@@ -735,13 +735,15 @@ const activeTab = ref('working') // 默认选项
         </div>
         <div class="mt-5">
           <div class="block flex justify-between items-center">
-            <SvgIcon
-              icon="material-symbols:account-balance-wallet-outline"
-              class=""
-              style="font-size:20px;"
-            />
-            <span class="ml-[-55px] text-base py-1 ">钱包余额<b class="ml-1 ml-4text-[#00000]">({{ sumDrawMjCount || 0 }}
-              积分)</b></span>
+            <span class="flex items-center" style="gap: 20px">
+              <SvgIcon
+                icon="material-symbols:account-balance-wallet-outline"
+                class=""
+                style="font-size:20px;"
+              />
+              <span class="balanceInfo text-base py-1 ">{{ $t('midJourney.walletBalance') }}<b class="ml-1 ml-4text-[#00000]">({{ sumDrawMjCount || 0 }}
+                {{ $t('chat.points') }})</b></span>
+            </span>
             <span class="flex items-center">
               <NButton
                 style="color: #000000;font-weight:bold;"
@@ -750,7 +752,7 @@ const activeTab = ref('working') // 默认选项
                 type="primary"
                 :loading="refreshLoading"
                 @click="refreshUserInfo"
-              >刷新</NButton>
+              >{{ $t('midJourney.refresh') }}</NButton>
               <NTooltip placement="right-end" trigger="hover">
                 <template #trigger>
                   <SvgIcon
@@ -758,37 +760,43 @@ const activeTab = ref('working') // 默认选项
                     class="text-base ml-2"
                   />
                 </template>
-                绘画账户信息
+                {{ $t('midJourney.refreshToolTip') }}
               </NTooltip>
             </span>
           </div>
           <div class="mt-3 space-y-4 items-center text-black">
             <div class="flex justify-between">
-              <SvgIcon
-                icon="ic:twotone-hourglass-top"
-                class=""
-                style="font-size:20px;"
-              />
-              <span class="ml-[-100px] block text-sm">绘画单次消耗：</span>
-              <span class="text-sm pr-2"> 4积分 </span>
+              <span class="flex items-center" style="gap: 20px">
+                <SvgIcon
+                  icon="ic:twotone-hourglass-top"
+                  class=""
+                  style="font-size:20px;"
+                />
+                <span class="balanceInfo block text-sm"> {{ $t('midJourney.singlePaintingConsumption') }}： </span>
+              </span>
+              <span class="text-sm pr-2"> 4 {{ $t('chat.points') }} </span>
             </div>
             <div class="flex justify-between">
-              <SvgIcon
-                icon="mingcute:bill-line"
-                class=""
-                style="font-size:20px;"
-              />
-              <span class="ml-[-88px] block text-sm">图生图单次消耗：</span>
-              <span class="text-sm pr-2"> 4积分 </span>
+              <span class="flex items-center" style="gap: 20px">
+                <SvgIcon
+                  icon="mingcute:bill-line"
+                  class=""
+                  style="font-size:20px;"
+                />
+                <span class="balanceInfo block text-sm"> {{ $t('midJourney.singleConsumptionImageToImage') }} ：</span>
+              </span>
+              <span class="text-sm pr-2"> 4 {{ $t('chat.points') }} </span>
             </div>
             <div class="flex justify-between">
-              <SvgIcon
-                icon="material-symbols:account-balance-wallet-outline"
-                class=""
-                style="font-size:20px;"
-              />
-              <span class="ml-[-100px] block text-sm">放大单次消耗：</span>
-              <span class="text-sm pr-2"> 1积分 </span>
+              <span class="flex items-center" style="gap: 20px">
+                <SvgIcon
+                  icon="material-symbols:account-balance-wallet-outline"
+                  class=""
+                  style="font-size:20px;"
+                />
+                <span class="balanceInfo block text-sm"> {{ $t('midJourney.singleConsumptionUpscale') }}  ：</span>
+              </span>
+              <span class="text-sm pr-2"> 1 {{ $t('chat.points') }} </span>
             </div>
           </div>
         </div>
@@ -807,7 +815,7 @@ const activeTab = ref('working') // 默认选项
             <!-- <p>图生图：生成类似风格或类型图像；图生文：上传一张图片生成对应的提示词；融图：融合图片风格</p> -->
             <div>
               <div class="flex justify-between items-end">
-                <b>你想生成什么图像?</b>
+                <b>{{$t('midJourney.whatImageGen')}}?</b>
                 <NSpace>
                   <NButton
                     class="create"
@@ -818,7 +826,7 @@ const activeTab = ref('working') // 默认选项
                     <template #icon>
                       <SvgIcon icon="ri:translate" class="text-base" />
                     </template>
-                    翻译
+                    {{ $t('midJourney.translate') }}
                   </NButton>
                   <NButton
                     class="create"
@@ -832,7 +840,7 @@ const activeTab = ref('working') // 默认选项
                         class="text-base"
                       />
                     </template>
-                    联想
+                    {{ $t('midJourney.lenovo') }}
                   </NButton>
                 </NSpace>
               </div>
@@ -846,14 +854,14 @@ const activeTab = ref('working') // 默认选项
                     minRows: 4,
                     maxRows: 6,
                   }"
-                  placeholder="例如: A cute little cat (Midjourney对中文描述词有一定限制、我们建议您点击右侧翻译将您的描述词转为英文再进行提交、联想则是会将您的描述词交由GPT让其发挥想象空间为您在此基础创建更为详细的描述！)"
+                  :placeholder="$t('midJourney.promptPlaceholder')"
                 />
                 <div
                   v-if="Number(authStore.globalConfig.mjHideNotBlock) !== 1"
                   class="mt-4"
                 >
                   <div class="mb-3 flex justify-between items-end">
-                    <b>不需要的元素</b>
+                    <b>{{ $t('midJourney.unnecessary') }}</b>
                     <NButton
                       class="create"
                       type="primary"
@@ -863,7 +871,7 @@ const activeTab = ref('working') // 默认选项
                       <template #icon>
                         <SvgIcon icon="ri:translate" class="text-base" />
                       </template>
-                      翻译
+                      {{ $t('midJourney.translate') }}
                     </NButton>
                   </div>
                   <NInput
@@ -871,7 +879,7 @@ const activeTab = ref('working') // 默认选项
                     class="border-2 border-black rounded-lg"
                     type="textarea"
                     :rows="1"
-                    placeholder="例：生成房间图片、但是不要床、你可以填bed！"
+                    :placeholder="$t('midJourney.unnecessaryPlaceholder')"
                   />
                 </div>
               </div>
@@ -906,7 +914,7 @@ const activeTab = ref('working') // 默认选项
                   <template #icon>
                     <SvgIcon icon="ri:ai-generate" class="text-base" />
                   </template>
-                  提交绘画任务
+                  {{ $t('midJourney.submit') }}
                 </NButton>
               </div>
             </div>
@@ -920,7 +928,7 @@ const activeTab = ref('working') // 默认选项
                 :disabled="activeTab === 'working'"
                 @click="activeTab = 'working'"
               >
-                工作中的内容
+                {{ $t('midJourney.work') }}
               </el-button>
               <el-button
                 class="active-button"
@@ -928,21 +936,21 @@ const activeTab = ref('working') // 默认选项
                 :disabled="activeTab === 'myDrawings'"
                 @click="activeTab = 'myDrawings'"
               >
-                我的绘图
+                {{ $t('midJourney.drawing') }}
               </el-button>
             </div>
 
             <div v-if="activeTab === 'working'" class="mt-8">
               <div v-if="!curDrawTask.length">
                 <!-- 无任务情况 -->
-                <p>当前没有任务...</p>
+                <p>{{ $t('midJourney.noTask') }}...</p>
               </div>
               <div v-if="curDrawTask.length">
                 <!-- 有任务情况 -->
                 <div class="w-56 h-14 relative">
                   <Loading :text-color="loadingTextColor" />
                 </div>
-                <p>当前{{ curDrawTask.length }}个任务正在进行中...</p>
+                <p>{{ $t('midJourney.current') }} {{ curDrawTask.length }}{{ $t('midJourney.inProgress') }}...</p>
               </div>
             </div>
 
@@ -954,7 +962,7 @@ const activeTab = ref('working') // 默认选项
                   alt=""
                 >
                 <!-- 无绘图情况 -->
-                <p>暂无绘图...</p>
+                <p>{{ $t('midJourney.noDrawing') }}...</p>
               </div>
               <div v-if="drawList.length">
                 <!-- 有绘图情况 -->
