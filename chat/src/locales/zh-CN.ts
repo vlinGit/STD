@@ -265,4 +265,17 @@ export default {
 		current: "当前",
 		noDrawing: "暂无绘图",
 	},
+	aiShop: {
+		title: "欢迎来到Pockyt AI Shop!",
+		subTitle: "选择你的agent助手",
+		aiConvo: "AI 对话",
+		aiPaint: "AI 绘画",
+		allCat: "全部分类",
+		writing: "写作",
+		program: "程序",
+		companion: "情感陪伴",
+		work: "工作",
+		life: "生活",
+		mindMap: "思维导图",
+	},
 };

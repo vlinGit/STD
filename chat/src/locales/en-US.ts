@@ -273,4 +273,17 @@ export default {
 		current: "Current",
 		noDrawing: "No drawing yet",
 	},
+	aiShop: {
+		title: "Welcome to Pockyt AI shop",
+		subTitle: "Choose your agent",
+		aiConvo: "Ai conversation",
+		aiPaint: "Ai painting",
+		allCat: "All categories",
+		writing: "Writing",
+		program: "Program",
+		companion: "Emotional companion",
+		work: "Work",
+		life: "Life",
+		mindMap: "思维导图",
+	},
 };

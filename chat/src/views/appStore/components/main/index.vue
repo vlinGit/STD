@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import type { App } from '../helpter'
 import { fetchCollectAppAPI, fetchQueryAppCatsAPI, fetchQueryAppsAPI } from '@/api/appStore'
-import { useAppCatStore, useAuthStore } from '@/store'
+import { useAppCatStore, useAuthStore, useAppStore } from '@/store'
 import type { ResData } from '@/api/types'
 import { fetchQueryModelsListAPI } from '@/api/models'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
@@ -15,7 +15,8 @@ import Motion from '@/utils/motion/index'
 const emit = defineEmits<Emit>()
 const { isMobile } = useBasicLayout()
 const authStore = useAuthStore()
-const siteRobotName = authStore.globalConfig?.siteRobotName || '欢迎来到Pockyt AI shop！'
+const appStore = useAppStore()
+const siteRobotName = authStore.globalConfig?.siteRobotName || appStore.getLanguage() == 'en-US' ? 'Welcome to Pockyt AI shop!' : '欢迎来到Pockyt AI Shop!'
 
 const appMenuHeaderTips = computed(() => authStore.globalConfig.appMenuHeaderTips)
 const appMenuHeaderBgUrl = computed(() => authStore.globalConfig.appMenuHeaderBgUrl)
@@ -140,20 +141,20 @@ onMounted(() => {
         {{ siteRobotName }}
       </div>
       <div class="flex justify-center text-base text-small mb-4 mt-4 text-center text-gray-700 dark:text-gray-300 lg:text-lg">
-        {{ appMenuHeaderTips || '探索无限可能，与AI一同开创智慧未来！' }}
+        {{ appMenuHeaderTips || appStore.getLanguage() == 'en-US' ? 'Explore infinite possibilities and create a smart future with AI!' : '探索无限可能，与AI一同开创智慧未来！' }}
       </div>
       <div class="w-full flex justify-center my-3  " :class="isMobile ? 'space-x-1' : 'space-x-5'">
         <NButton v-if="isShowBtn('/chat')" class="ai-chat " style="font-weight: bold;" @click="handlJumpPath('/chat')">
           <Icon icon="token:chat" class="text-2xl mr-2" />
-          AI 对话
+          {{ $t('aiShop.aiConvo') }}
         </NButton>
         <NButton v-if="isShowBtn('/midjourney')" class="ai-chat" style="font-weight: bold;" @click="handlJumpPath('/midjourney')">
           <Icon icon="mdi:art" class=" text-2xl mr-2 " />
-          AI 绘画
+          {{ $t('aiShop.aiPaint') }}
         </NButton>
         <NButton v-if="isShowBtn('/mind')" class="ai-chat" style="font-weight: bold;" @click="handlJumpPath('/mind')">
           <Icon icon="ri:mind-map" class=" text-2xl mr-2 " />
-          思维导图
+          {{ $t('aiShop.mindMap') }}
         </NButton>
       </div>
       <div class="flex justify-center items-center mt-8">
