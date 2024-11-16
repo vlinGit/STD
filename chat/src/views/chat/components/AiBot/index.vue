@@ -5,7 +5,7 @@ import type { ChatboxItem } from './helper'
 import { defaultChatBox } from './helper'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchGetChatBoxList } from '@/api/index'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 
 interface Emit {
   (ev: 'prompt', item: string): void
@@ -14,6 +14,7 @@ interface Emit {
 const emit = defineEmits<Emit>()
 const router = useRouter()
 const authStore = useAuthStore()
+const appStore = useAppStore()
 
 const boxData = ref<ChatboxItem[]>([])
 
@@ -54,11 +55,11 @@ const { isMobile } = useBasicLayout()
     <!-- 将标题和副标题放在最上方 -->
     <h1 class="mb-1 text-left text-2xl font-bold mt-0 ">
       <!-- 修改这里为 text-left -->
-      {{ siteRobotName }}
+      {{ appStore.getLanguage() == 'en-US' ? 'Welcome to Pockyt AI Shop!' : siteRobotName }}
     </h1>
     <h2 class="mb-4 text-left text-medium text-neutral-600">
       <!-- 添加副标题 -->
-      点击以下模型，快速与我对话
+      {{ $t('chat.chooseModel') }}
     </h2>
     <div class="w-full md:min-w-[450px] mt-9 ">
       <div class=" grid  gap-4">

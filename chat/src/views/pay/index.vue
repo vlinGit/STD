@@ -175,7 +175,7 @@ onMounted(() => {
           <div class="" :style="{ height: '40%' }">
             <div class="" />
             <div class="p-5 text-lg h-[160px] overflow-hidden relative text-center flex flex-col justify-between">
-              {{ item.des }}
+              {{ appStore.getLanguage() == "en-US" ? " Membership package details" : item.des }}
               <span
                 style="font-weight: bold;
                       font-size: 42px;

@@ -140,6 +140,7 @@ export default {
 		myBuild: "My build",
 		paintingLoading:
 			"----------- Being generated. The larger the number of pictures, the longer it will take. It is expected to take 25S -----------",
+		chooseModel: "Click on the model below to quickly chat with me",
 	},
 	setting: {
 		setting: "Setting",

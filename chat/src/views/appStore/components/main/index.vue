@@ -16,8 +16,8 @@ const emit = defineEmits<Emit>()
 const { isMobile } = useBasicLayout()
 const authStore = useAuthStore()
 const appStore = useAppStore()
-const siteRobotName = authStore.globalConfig?.siteRobotName || appStore.getLanguage() == 'en-US' ? 'Welcome to Pockyt AI shop!' : '欢迎来到Pockyt AI Shop!'
-
+// const siteRobotName = authStore.globalConfig?.siteRobotName || appStore.getLanguage() == 'en-US' ? 'Welcome to Pockyt AI shop!' : '欢迎来到Pockyt AI Shop!'
+const siteRobotName = appStore.getLanguage() == 'en-US' ? 'Welcome to Pockyt AI shop!' : '欢迎来到Pockyt AI Shop!'
 const appMenuHeaderTips = computed(() => authStore.globalConfig.appMenuHeaderTips)
 const appMenuHeaderBgUrl = computed(() => authStore.globalConfig.appMenuHeaderBgUrl)
 
@@ -50,6 +50,184 @@ function isMineApp(app: App) {
 }
 
 async function queryApps() {
+  if (appStore.getLanguage() == 'en-US'){
+    appList.value =  [
+      {
+        "id": 15,
+        "name": "ChatGPT-4o",
+        "catId": 1,
+        "des": "ChatGPT-4o's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/790a08de4092.png",
+        "order": 1000,
+        "catName": "Writing"
+      },
+      {
+        "id": 17,
+        "name": "Cladue",
+        "catId": 1,
+        "des": "Cladue's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/4511cc15e59a.png",
+        "order": 999,
+        "catName": "Writing"
+      },
+      {
+        "id": 19,
+        "name": "Llama 3",
+        "catId": 1,
+        "des": "Llama 3's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/8f05d4cbd641.png",
+        "order": 998,
+        "catName": "Writing"
+      },
+      {
+        "id": 18,
+        "name": "Gemini Pro",
+        "catId": 1,
+        "des": "Gemini Pro's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/c47fbcfeb611.png",
+        "order": 997,
+        "catName": "Writing"
+      },
+      {
+        "id": 20,
+        "name": "智谱",
+        "catId": 1,
+        "des": "智谱's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/d724bc83be19.png",
+        "order": 996,
+        "catName": "Writing"
+      },
+      {
+        "id": 21,
+        "name": "通义千问",
+        "catId": 1,
+        "des": "通义千问's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/f5e422d6e4cd.png",
+        "order": 995,
+        "catName": "Writing"
+      },
+      {
+        "id": 22,
+        "name": "Kimi 月之暗面",
+        "catId": 1,
+        "des": "Kimi 月之暗面's base model, please adjust the model switching function above the dialog box when using",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/11/07/5b81b2f4c874.png",
+        "order": 994,
+        "catName": "Writing"
+      },
+      {
+        "id": 11,
+        "name": "Travel Guide",
+        "catId": 5,
+        "des": "Give me your location, I can help you make an interesting travel guide",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/a1dd5d212fea.png",
+        "order": 100,
+        "catName": "Life"
+      },
+      {
+        "id": 13,
+        "name": "SQL Terminal",
+        "catId": 2,
+        "des": "You can input any SQL command to me, and I will output the result for you!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/6c83ada98997.png",
+        "order": 100,
+        "catName": "Programming"
+      },
+      {
+        "id": 12,
+        "name": "Doctor",
+        "catId": 5,
+        "des": "As a doctor, you can ask me about your doubts!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/18/a205f65f48a4.png",
+        "order": 100,
+        "catName": "Life"
+      },
+      {
+        "id": 2,
+        "name": "Exam Assistant",
+        "catId": 1,
+        "des": "I am a skill summary assistant and cannot conduct interactive exams. But I can help you summarize your skills and knowledge in a clear and concise format.",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/12/9fd662785b2a.png",
+        "order": 100,
+        "catName": "Writing"
+      },
+      {
+        "id": 10,
+        "name": "JavaScript Console",
+        "catId": 2,
+        "des": "You can output any JavaScript statement to me, and I will execute and output it for you!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/eada699fde0e.png",
+        "order": 100,
+        "catName": "Programming"
+      },
+      {
+        "id": 9,
+        "name": "English-English Dictionary (with Chinese explanation)",
+        "catId": 4,
+        "des": "Give me any English word, I will prepare an English translation for you and tell you the Chinese meaning!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/a31b15595e77.png",
+        "order": 100,
+        "catName": "Work"
+      },
+      {
+        "id": 8,
+        "name": "Chinese Translation (English to Chinese)",
+        "catId": 4,
+        "des": "You can tell me any language, and I will translate it into reasonable Chinese for you. Start asking now!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/a941f4bd5f27.png",
+        "order": 100,
+        "catName": "Work"
+      },
+      {
+        "id": 7,
+        "name": "English Translation (Chinese to English)",
+        "catId": 4,
+        "des": "You can say anything to me, and I will convert it into more reasonable English for you. Start now, I am an English translator!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/7372063a70f1.png",
+        "order": 100,
+        "catName": "Work"
+      },
+      {
+        "id": 6,
+        "name": "Product Manager",
+        "catId": 4,
+        "des": "As a product manager, you can ask me questions about the product, and I will try to tell you!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/f325528ca932.png",
+        "order": 100,
+        "catName": "Work"
+      },
+      {
+        "id": 5,
+        "name": "Girlfriend",
+        "catId": 3,
+        "des": "Do you want to have your own girlfriend? Then let's start!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/7c0ddaa92c15.png",
+        "order": 100,
+        "catName": "Emotional Companion"
+      },
+      {
+        "id": 4,
+        "name": "IT Architect",
+        "catId": 2,
+        "des": "As an architect, I can provide you with useful solutions!",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/40a9a1170083.png",
+        "order": 100,
+        "catName": "Programming"
+      },
+      {
+        "id": 3,
+        "name": "Cybersecurity Expert",
+        "catId": 2,
+        "des": "I want you to act as a cybersecurity expert. I will provide some specific information on how to store and share data, and your job is to come up with strategies to protect this data from malicious actors. This may include suggesting encryption methods, creating firewalls, or implementing strategies that flag certain activities as suspicious. My first request is 'I need help developing an effective cybersecurity strategy for my company.'",
+        "coverImg": "https://pub-f4e794cfb4fc4021af1d15b161651a56.r2.dev/2024/09/14/9a0bd7202b68.png",
+        "order": 100,
+        "catName": "Programming"
+      }
+		]
+
+    return
+  }
+
   const res: ResData = await fetchQueryAppsAPI()
   appList.value = res?.data?.rows.map((item: App) => {
     item.loading = false
@@ -96,8 +274,37 @@ async function queryCats() {
   const defaultCat = {
     id: 0,
     name: '全部分类',
+    coverImg: '',
+    des: '',
+    appCount: 1
   }
+
   catList.value = [defaultCat, ...res?.data?.rows]
+
+  if (appStore.getLanguage() == 'en-US'){
+    catList.value.forEach((item: any) => {
+      switch(item.id){
+        case 0:
+          item.name = 'All Categories'
+          break
+        case 1:
+          item.name = 'Writing'
+          break
+        case 2:
+          item.name = 'Program'
+          break
+        case 3:
+          item.name = 'Emotional companionship'
+          break
+        case 4:
+          item.name = 'Work'
+          break
+        case 5:
+          item.name = 'Life'
+          break
+      }
+    })
+  }
 }
 
 async function queryMenu() {
@@ -175,7 +382,7 @@ onMounted(() => {
       <Motion :delay="0" :y="50" :duration="350">
         <div class=" flex flex-wrap" :class="isMobile ? 'px-4' : 'pl-0'">
           <div class="flex flex-wrap justify-center">
-            <div v-for="item in list" :key="item.id" class="custom-card w-1/5 mt-10 p-2 m-2">
+            <div v-for="item in list" :key="item.id" class="custom-card w-1/5 mt-10 p-2 m-2" style="height: fit-content">
               <div class="w-full flex items-center">
                 <span class="w-16 h-16 flex justify-center items-center rounded-md shadow-md mr-5 border border-[#00000014]">
                   <img :src="item.coverImg" class="w-14 h-14 mb-1" alt="">
@@ -188,12 +395,12 @@ onMounted(() => {
               </p>
 
               <div class="w-full flex justify-between mt-1">
-                <NButton class="join flex items-center justify-center" size="tiny" ghost :disabled="item.loading" @click.stop="handleCollect(item)">
+                <NButton class="join flex items-center justify-center" size="tiny" ghost :disabled="item.loading" @click.stop="handleCollect(item)" style="white-space: wrap; height: fit-content">
                   <template #icon>
                     <SvgIcon :icon=" isMineApp(item) ? 'iconamoon:sign-minus-bold' : 'mi:add'" class="text-base" />
                   </template>
                   <span class="ml-[-20px] font-bold">
-                    {{ isMineApp(item) ? '取消收藏' : '加入个人工作台' }}</span>
+                    {{ isMineApp(item) ? (appStore.getLanguage() == 'en-US' ? 'Cancel favorites' : '取消收藏') : (appStore.getLanguage() == 'en-US' ? 'Add a personal workbench' : '加入个人工作台') }}</span>
                 </NButton>
                 <NButton class="run-icon" size="tiny" ghost @click.stop="handleRunApp(item)">
                   <span class="ml-[0px] font-bold text-lg">

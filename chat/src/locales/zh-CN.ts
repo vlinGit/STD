@@ -134,6 +134,7 @@ export default {
 		myBuild: "我的生成",
 		paintingLoading:
 			" ----------- 正在生成中、图片越大数量越多所需时间越多、预计25S -----------",
+		chooseModel: "点击以下模型，快速与我对话",
 	},
 	setting: {
 		setting: "设置",

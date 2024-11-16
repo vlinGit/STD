@@ -46,6 +46,15 @@ function handleClose() {
 }
 
 async function queryNotice() {
+  if (appStore.getLanguage() == 'en-US'){
+    notice.value = {
+      noticeInfo: '# **_Welcome to Pockyt AI Shop_**\n\n![AI](https://cdn.sanity.io/images/poftgen7/production/5ecc4edc3fa12e784fd2940da790d47e213ec225-1200x628.png?w=600&q=90) \n\nClick the lower left corner to log in as a Pockyt Shop member, and you can start the Pockyt AI Shop trial for free\n\n**ChatGPT-4o | ChatGPT-3.5 | Claude | Gemini Pro | Llama 3 | Zhipu | Tongyi Qianwen | Kimi Dark Side of the Moon**\n\n\\***_Global head AI large model direct use_** \\***_AI Agent is easy to use_** \\***_WeChat, Alipay payment _** \\***_Multi-language support_** \\***_Member Discount_** \\***_AI Drawing_** \\***_AI Tool_**\n',
+      noticeTitle: "Your AI Toolbox",
+    }
+
+    return
+  }
+
   const res: ResData = await fetchGetGlobalNoticeAPI()
   const { success, data } = res
   if (success)
