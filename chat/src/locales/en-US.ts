@@ -194,6 +194,7 @@ export default {
 		bindWechatInfo: "Open WeChat and scan the QR code to bind the account",
 		please: "Please",
 		pleaseExtra: " complete binding within time",
+		signInRewards: "Sign-in rewards",
 	},
 	store: {
 		siderButton: "Prompt Store",

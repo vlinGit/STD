@@ -45,6 +45,14 @@ async function queryMenu() {
   if (!res.success)
     return
   menuList.value = res.data
+  if (appStore.getLanguage() == 'en-US'){
+    menuList.value.forEach((item: MenuItem) => {
+      item.menuTipText = item.menuTipText.replace('ChatGPT生图', 'ChatGPT generates pictures')
+      item.menuTipText = item.menuTipText.replace('Midjourney (AI生图)', 'Midjourney (AI generated pictures)')
+      item.menuTipText = item.menuTipText.replace('AI Agent市场', 'AI Agent Market')
+      item.menuTipText = item.menuTipText.replace('会员套餐', 'Membership package')
+    })
+  }
   nextTick(() => {
     calcExceededTotalWidth()
   })
@@ -239,7 +247,7 @@ watch(
           <SvgIcon class="text-xl cursor-pointer mb-5" icon="streamline-emojis:wrapped-gift-1" style="color: red"
             @click="handleSignIn" />
         </template>
-        签到奖励
+        {{ $t('setting.signinRewards') }}
       </NTooltip>
 
       <!-- NTooltip v-if="!isMobile" trigger="hover" placement="right">
@@ -255,7 +263,7 @@ watch(
           <NAvatar :size="50" :src="avatar" round bordered :fallback-src="defaultAvatar" class="cursor-pointer"
             @click="toPath('UserCenter')" />
         </template>
-        个人中心
+        {{ $t('setting.personalCenter') }}
       </NTooltip>
 
       <HoverButton v-if="!isLogin" tooltip="登录账户" :placement="isMobile ? 'bottom' : 'right'"

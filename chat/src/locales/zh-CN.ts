@@ -192,6 +192,7 @@ export default {
 		bindWechatInfo: "打开微信扫码绑定账户",
 		please: "请在",
 		pleaseExtra: " 时间内完成绑定",
+		signInRewards: '签到奖励'
 	},
 	store: {
 		siderButton: "提示词商店",
