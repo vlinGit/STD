@@ -46,6 +46,7 @@ export default {
 		placeholder: "来说点什么吧...（Shift + Enter = 换行）",
 		placeholderMobile: "来说点什么...",
 		copy: "复制",
+		regenerate: "重新生成",
 		copied: "复制成功",
 		copyCode: "复制代码",
 		clearChat: "清空会话",
@@ -135,6 +136,7 @@ export default {
 		paintingLoading:
 			" ----------- 正在生成中、图片越大数量越多所需时间越多、预计25S -----------",
 		chooseModel: "点击以下模型，快速与我对话",
+		signinBenfits: "签到领福利",
 	},
 	setting: {
 		setting: "设置",
@@ -192,7 +194,7 @@ export default {
 		bindWechatInfo: "打开微信扫码绑定账户",
 		please: "请在",
 		pleaseExtra: " 时间内完成绑定",
-		signInRewards: '签到奖励'
+		signInRewards: "签到奖励",
 	},
 	store: {
 		siderButton: "提示词商店",
@@ -279,5 +281,23 @@ export default {
 		work: "工作",
 		life: "生活",
 		mindMap: "思维导图",
+	},
+	appStore: {
+		tips: "当前模式下在此处直接使用应用、加入个人工作台的应用将会与对话窗口联动使用、更加便捷、您也可以前往",
+		workbench: "个人工作台",
+		create: "创建您的自定义专属应用",
+		clearContent: "清空内容",
+		complianceMobile: "请合规使用",
+		compliance:
+			"请您合法合规使用A功能，并自行核查生成内容，相关责任由您自行承拒",
+		remainingBalance: "剩余额度",
+		consumeAmount: "每次创作消耗1积分额度、每次创作会产生新的内容",
+		createNow: "立即创作",
+		consumeCreateAmount: "消耗1普通积分额度",
+		exampleRequirements: "示例需求",
+		smartContinuation: "智能续写",
+		recreate: "重新创作",
+		copy: "复制文案",
+		unusedApp: "您还没有使用过这个应用呢、快来试试吧",
 	},
 };

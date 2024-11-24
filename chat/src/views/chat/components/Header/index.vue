@@ -224,7 +224,7 @@ function handleLang(key: string, value: string) {
                   </span>
                 </button>
               </template>
-              签到领福利
+              {{ $t('chat.signinBenfits') }}
             </NTooltip>
             <NTooltip trigger="hover" :disabled="isMobile">
               <template #trigger>

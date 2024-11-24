@@ -13,7 +13,7 @@ const { isMobile } = useBasicLayout()
       <SvgIcon class="text-xl" icon="arcticons:huawei-tips" />
     </button>
     <h2 class="text-base text-[#999999] flex items-center w-full">
-      Tips: <span class="text-sm ml-2">当前模式下在此处直接使用应用、加入个人工作台的应用将会与对话窗口联动使用、更加便捷、您也可以前往 <span class="text-[#5a91fc] cursor-pointer" @click="router.push('/role')">个人工作台</span> 创建您的自定义专属应用！
+      Tips: <span class="text-sm ml-2">{{ $t('appStore.tip') }} <span class="text-[#5a91fc] cursor-pointer" @click="router.push('/role')">{{ $t('appStore.workbench') }}</span> {{ $t('appStore.create') }}!
       </span>
       <span class="flex-1 ele-drag" />
     </h2>

@@ -44,6 +44,7 @@ export default {
 		placeholder: "Ask me anything...(Shift + Enter = line break)",
 		placeholderMobile: "Ask me anything...",
 		copy: "Copy",
+		regenerate: "Regenerate",
 		copied: "Copied",
 		copyCode: "Copy Code",
 		clearChat: "Clear Chat",
@@ -141,6 +142,7 @@ export default {
 		paintingLoading:
 			"----------- Being generated. The larger the number of pictures, the longer it will take. It is expected to take 25S -----------",
 		chooseModel: "Click on the model below to quickly chat with me",
+		signinBenfits: "Sign in to receive benefits",
 	},
 	setting: {
 		setting: "Setting",
@@ -287,5 +289,24 @@ export default {
 		work: "Work",
 		life: "Life",
 		mindMap: "思维导图",
+	},
+	appStore: {
+		tips: "In the current mode, use the application directly here, and the application added to the personal workbench will be used in conjunction with the conversation window, which is more convenient. You can also go there",
+		workbench: "Personal workbench",
+		create: "Create your custom exclusive application",
+		clearContent: "Clear content",
+		complianceMobile: "Please use it compliantly",
+		compliance:
+			"Please use the A function legally and compliantly, and check the generated content by yourself. You will bear the relevant responsibilities by yourself.",
+		remainingBalance: "remaining balance",
+		consumeAmount:
+			"Each creation consumes 1 point, and each creation will produce new content",
+		createNow: "Create now",
+		consumeCreateAmount: "Consumption of 1 ordinary point amount",
+		exampleRequirements: "Example Requirements",
+		smartContinuation: "Smart Continuation",
+		recreate: "recreate",
+		copy: "Copy copy",
+		unusedApp: "You haven't used this application yet, come and try it",
 	},
 };
