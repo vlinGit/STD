@@ -4,12 +4,14 @@ import  CanvasMask from '@/components/common/CanvasMask/index.vue'
 import ImageEditorCanvas from '@/components/common/ImageEditorCanvas/index.vue'
 import { fetchProxyImgAPI } from '@/api/mjDraw'
 import { NButton } from 'naive-ui'
+import { useAppStore } from '@/store'
 
 const proxyImgBase = ref('')
 
 const mode1Url = ''
 const mode2Url = ''
 
+const appStore = useAppStore()
 
 const canvasRef = ref<any>(null)
 const drawImg = ref('')
@@ -17,9 +19,8 @@ const mode = ref(1) // 1 局部绘制  2：点击选取
 
 const isEraserEnabled = ref(false)
 const fileInfo =ref<any>({})
-const  testBtn = computed(() => mode.value === 1 ? '模块选区' : '自由绘制')
-const  testModeTip = computed(() => mode.value === 2 ? '模块选区模式' : '自由绘制模式')
-
+const  testBtn = computed(() => mode.value === 1 ? (appStore.getLanguage() == 'en-US'? 'Module selection' : '模块选区') : (appStore.getLanguage() == 'en-US'? 'Free drawing' : '自由绘制'))
+const  testModeTip = computed(() => mode.value === 2 ? (appStore.getLanguage() == 'en-US'? 'Module selection mode' : '模块选区模式') : (appStore.getLanguage() == 'en-US'? 'Free drawing mode': '自由绘制模式'))
 
 async function getBase(){
 	const base =  await canvasRef.value?.getBase()
@@ -33,7 +34,7 @@ async function getProxyData(){
 	drawImg.value = data
 }
 
-const eraserTip = computed(() => isEraserEnabled.value ? '橡皮擦模式' : '画笔模式')
+const eraserTip = computed(() => isEraserEnabled.value ? (appStore.getLanguage() == 'en-US'? 'Eraser mode' : '橡皮擦模式') : (appStore.getLanguage() == 'en-US'? 'Brush mode' : '画笔模式'))
 
 function checkMode(){
 	drawImg.value = null
@@ -67,18 +68,18 @@ function toggleEraser(){
 	<div class="w-full h-full bg-gray-100">
 		<div class="h-[80px] w-full flex justify-center items-center space-x-5">
 			<span class="text-2xl font-bold">
-				当前测试模式：{{ testModeTip }}
+				{{$t('inpaint.testMode')}}: {{ testModeTip }}
 			</span>
-			<NButton type="primary" @click="checkMode">切换至{{ testBtn }}模式</NButton>
+			<NButton type="primary" @click="checkMode">{{$t('inpaint.switch')}}{{ testBtn }}{{$t('inpaint.model')}}</NButton>
 		</div>
 		<div class="bg-gray-100 flex-1 h-full w-full flex" v-if="mode === 1">
 			<div class="w-[50%] flex flex-col border-r">
-				<span class="text-2xl w-full text-center">操作区域</span>
+				<span class="text-2xl w-full text-center">{{ $t('inpaint.opArea') }}</span>
 				<div class="border-b border-t h-[50px] flex justify-center items-center space-x-5">
-					<NButton type="primary" @click="undo">返回上一步</NButton>
-					<NButton type="primary" @click="clear">清空画布</NButton>
-					<NButton type="primary" @click="toggleEraser">切换橡皮擦模式</NButton>
-					当前模式: {{ eraserTip }}
+					<NButton type="primary" @click="undo">{{ $t('inpaint.return') }}</NButton>
+					<NButton type="primary" @click="clear">{{ $t('inpaint.clear') }}</NButton>
+					<NButton type="primary" @click="toggleEraser">{{ $t('inpaint.erase') }}</NButton>
+					{{ $t('inpaint.currentMode') }}: {{ eraserTip }}
 				</div>
 				<div class="mt-10 ml-10">
 					<div>
@@ -87,15 +88,15 @@ function toggleEraser(){
 				</div>
 			</div>
 			<div class="w-[50%] flex flex-col">
-				<span class="text-2xl w-full text-center">预览区域</span>
+				<span class="text-2xl w-full text-center">{{ $t('inpaint.preview') }}</span>
 				<div class="border-b border-t h-[50px] flex justify-center items-center space-x-5">
-					<NButton type="primary" @click="getBase">获取蒙层</NButton>
+					<NButton type="primary" @click="getBase">{{ $t('inapint.getMaskLayer') }}</NButton>
 				</div>
 				<div class="border-b border-t h-[50px] flex justify-center items-center space-x-5">
-					<span>图片原始信息：</span>
-					<span>宽度： {{ fileInfo.width }}</span>
-					<span>高度： {{ fileInfo.height }}</span>
-					<span>缩放比： {{ fileInfo.scaleRatio }}</span>
+					<span>{{ $t('inpaint.originalInfo') }}: </span>
+					<span>{{ $t('inpaint.width')}}： {{ fileInfo.width }}</span>
+					<span>{{$t('inpaint.height')}}： {{ fileInfo.height }}</span>
+					<span>{{$t('inpaint.zoomRatio')}}： {{ fileInfo.scaleRatio }}</span>
 				</div>
 				<div>
 					<img v-if="proxyImgBase" :src="proxyImgBase" alt="">
@@ -105,11 +106,11 @@ function toggleEraser(){
 
 		<div class="bg-gray-100 flex-1 h-full w-full flex" v-if="mode === 2">
 			<div class="w-[50%] flex flex-col border-r">
-				<span class="text-2xl w-full text-center">操作区域</span>
+				<span class="text-2xl w-full text-center">{{ $t('inpaint.opArea') }}</span>
 				<div class="border-b border-t h-[50px] flex justify-center items-center space-x-5">
-					<NButton type="primary" @click="undo">返回上一步</NButton>
-					<NButton type="primary" @click="clear">清空画布</NButton>
-					当前模式: {{ eraserTip }}
+					<NButton type="primary" @click="undo">{{ $t('inpaint.return') }}</NButton>
+					<NButton type="primary" @click="clear">{{ $t('inpaint.clear') }}</NButton>
+					{{ $t('inpaint.currentMode') }}: {{ eraserTip }}
 				</div>
 				<div class="mt-10 ml-10">
 					<div>
@@ -118,15 +119,15 @@ function toggleEraser(){
 				</div>
 			</div>
 			<div class="w-[50%] flex flex-col">
-				<span class="text-2xl w-full text-center">预览区域</span>
+				<span class="text-2xl w-full text-center">{{$t('inpaint.preveiw')}}</span>
 				<div class="border-b border-t h-[50px] flex justify-center items-center space-x-5">
-					<NButton type="primary" @click="getBase">获取蒙层</NButton>
+					<NButton type="primary" @click="getBase">{{ $t('inpaint.getMaskLayer') }}</NButton>
 				</div>
 				<div class="border-b border-t h-[50px] flex justify-center items-center space-x-5">
-					<span>图片原始信息：</span>
-					<span>宽度： {{ fileInfo.width }}</span>
-					<span>高度： {{ fileInfo.height }}</span>
-					<span>缩放比： {{ fileInfo.scaleRatio }}</span>
+					<span>{{$t('inpaint.originalInfo')}}：</span>
+					<span>{{$t('inpaint.width')}}： {{ fileInfo.width }}</span>
+					<span>{{$t('inpaint.height')}}： {{ fileInfo.height }}</span>
+					<span>{{$t('inpaint.zoomRatio')}}： {{ fileInfo.scaleRatio }}</span>
 				</div>
 				<div>
 					<img v-if="proxyImgBase" :src="proxyImgBase" alt="">

@@ -13,10 +13,10 @@ function goHome() {
   <div class="flex h-full">
     <div class="px-4 m-auto space-y-4 text-center max-[400px]">
       <h1 class="text-4xl text-slate-800 dark:text-neutral-200">
-        404 - 页面迷路了！
+        404 - {{$t('common.erro404')}}！
       </h1>
       <p class="text-base text-slate-500 dark:text-neutral-400">
-        哎呀！页面好像迷路了，找不到了。
+        {{ $t('common.erro404Extra') }}
       </p>
       <div class="flex items-center justify-center text-center">
         <div class="w-[300px]">

@@ -12,7 +12,7 @@ function toHome() {
     <div class="store-container">
       <div class="border-animation">
         <svg id="store" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="130 0 1230 930">
-          <title xml:lang="en">欢迎来到本社区......</title>
+          <title xml:lang="en">{{$t('chat.welcome')}}......</title>
           <defs>
             <filter id="f1">
               <feGaussianBlur in="SourceGraphic" stdDeviation="0,4" />

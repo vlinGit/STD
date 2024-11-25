@@ -97,13 +97,20 @@ onBeforeUnmount(() => {
 		<div v-if="loading" class="main-container absolute left-0 right-0 bottom-0 top-0 backdrop-blur" :class="[ darkMode ?  'dark:bg-black/20' : 'bg-white/80' ]">
 			<div class="loading">
 				<div :class="['loading-text ', darkMode ? 'text-[#fff]' : 'text-[#000]']" id="loading-text">
-					<span class="loading-text-words">内</span>
-					<span class="loading-text-words">容</span>
-					<span class="loading-text-words">正</span>
-					<span class="loading-text-words">在</span>
-					<span class="loading-text-words">加</span>
-					<span class="loading-text-words">载</span>
-					<span class="loading-text-words">中</span>
+					<span v-if="appStore.getLanguage() == 'en-US'">
+						<span class="loading-text-words">内</span>
+						<span class="loading-text-words">容</span>
+						<span class="loading-text-words">正</span>
+						<span class="loading-text-words">在</span>
+						<span class="loading-text-words">加</span>
+						<span class="loading-text-words">载</span>
+						<span class="loading-text-words">中</span>
+					</span>
+					<span v-else>
+						<span class="loading-text-words">Content</span>
+						<span class="loading-text-words">is</span>
+						<span class="loading-text-words">loading</span>
+					</span>
 				</div>
 			</div>
 		</div>

@@ -53,16 +53,16 @@ function loadMore() {
     class="bg-[#fff] h-[100vh] overflow-hidden p-4 pr-0 dark:bg-[#18181c] flex flex-col"
   >
     <div class="p-4 flex pr-6 justify-between items-center">
-      <div class="font-bold text-xl">AI绘画广场</div>
+      <div class="font-bold text-xl">{{$t('market.aiPaintingSquare')}}</div>
       <div class="w-[200px] sm:w-[300px] flex justify-between">
-        <span class="hidden sm:block">尺寸调整</span>
+        <span class="hidden sm:block">{{ $t('market.sizeAdjust') }}</span>
         <div class="flex-1 ml-5">
           <n-slider v-model:value="scaleWidth" :step="10" />
         </div>
       </div>
     </div>
     <div class="px-4 mb-1 pr-5">
-      <n-input v-model:value="keyword" placeholder="关键词搜索">
+      <n-input v-model:value="keyword" :placeholder="$t('market.keywordSearch')">
         <template #prefix>
           <n-icon :component="FlashOutline" />
         </template>

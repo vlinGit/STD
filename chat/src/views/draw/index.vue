@@ -142,11 +142,11 @@ function formatFileInfo(data: any) {
 
 async function drawImage() {
   if (!form.value.prompt)
-    return ms.error('请输入您想要生成的图片描述信息！')
+    return appStore.getLanguage() == 'en-US' ? ms.error('Please enter the image description information you want to generate!') : ms.error('请输入您想要生成的图片描述信息！')
   try {
     loading.value = true
     await fetchChatDraw(form.value)
-    ms.success('生成图片成完成、前往我的生成查看图片！')
+    appStore.getLanguage() == 'en-US' ? ms.success('The generated image is complete, go to My Generation to view the image!') : ms.success('生成图片成完成、前往我的生成查看图片！')
     await queryMyDrawList()
     loading.value = false
   }
