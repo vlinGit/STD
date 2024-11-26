@@ -362,4 +362,105 @@ export default {
 		enhancedInfo: "Significantly enhanced based on the current image",
 		adjustInfo: "Subtle adjustments based on the current image",
 	},
+	mind: {
+		needs: "Your needs",
+		placeholderDescription:
+			"Please enter a simple description of the content you want to generate, and AI will output a complete markdown content and its mind map for you",
+		intelligentGeneration: "Intelligent generation generates mind maps",
+		contentReq: "Content requirements",
+		tryExample: "Try the example",
+		placeholderMarkdown:
+			"Please use markdown syntax to enter the content you want to generate a mind map or use the description above to let AI help you improve it",
+		consumeAmount: "Each use consumes basic points",
+		export: "Export",
+		map: "Mind Map",
+	},
+	mjDdraw: {
+		aiProf: "AI Painting Professional Edition",
+		aiProfDes:
+			"The painting time of the professional version is estimated to be 60~80 seconds. Please wait patiently. Your descriptors will be converted into English by us. Please be aware that please draw rationally. If sensitive words are triggered, your account will be banned directly. Please use the tool rationally! ",
+		mjPaintCost:
+			"Each painting or image variation will deduct an MJ Painting balance. Enlarging the image is free and your balance will not be deducted! ",
+		changeEx: "Change example",
+		promptEx: "Prompt example",
+		placeholderPrompt:
+			"Please enter the prompt word, you can refer to the above prompt word, we will convert your description word into English!",
+		genPic: "Generate picture",
+		modifierRef: "modifier reference",
+		modifierDes:
+			"You can refer to or choose the following types of modifiers to enrich your input text and try to generate more diverse images. For more modifiers, please refer to the Prompt Guide or Free Input to explore more unknown capabilities in large model painting",
+		imageType: "image type",
+		timePrompt:
+			"Being generated, the larger the number of pictures, the longer it will take, estimated to be 15S",
+		publicGen: "Public generation",
+		empty: "No data yet~",
+		gen: "my generation",
+		freeDraw: "Draw this picture into a single complete picture [free]",
+		variations:
+			"Make variations based on this picture and generate new pictures based on this",
+		previewLarge: "Click to preview to enlarge the picture",
+	},
+	share: {
+		referral: "Referral Plan",
+		joinUs:
+			"Join us and share success! Welcome to our distribution page, become our partner, and create a better future together! ",
+		rookieRec: "rookie recommendation officer",
+		myRec: "My recommendation",
+		yuan: "yuan",
+		remainingWithdrawal: "remaining withdrawal amount",
+		amountWithdrawn: "Withdrawal amount",
+		immediateWithdraw: "Withdraw immediately",
+		lowest: "lowest",
+		orderQuantity: "Purchase order quantity",
+		linkVisits: "Number of promotional link visits",
+		registeredUser: "Registered user",
+		earnings: "referral earnings",
+		recommendDes:
+			"Commission amount will be returned after the recommended user registers and purchases the product",
+		percent: "Percent",
+		applySeniorAgent: "Apply to become a senior agent",
+		contactSeniorAgent:
+			"Contact the webmaster to apply for a senior agent to enjoy super high commission",
+		partnerJoin: "Join us as a partner",
+		partnerJoinDes:
+			"Join us as a partner to run the community together and achieve win-win cooperation! ",
+		win: "Win-win cooperation and progress together",
+		recLink: "recommended link",
+		apply: "Apply",
+		recRecord: "Recommendation record",
+		recWithdraw: "Withdrawal record",
+		regUser: "Registered user",
+		invite:
+			"Invite friends, get free package card keys, and enjoy recharge rebates! ",
+		inviteLink: "invitation link",
+		copy: "copy",
+		bothParties:
+			"Both parties who invite friends can enjoy a certain amount of permanent secondary card rewards",
+		rechargeFriend:
+			"Invite friends to recharge and you can get the recharge amount",
+		rebate: "rebate",
+	},
+	userCenter: {
+		changePassword: "Change your password",
+		oldPassword: "Old password",
+		newPassword: "New Password",
+		confirmPassword: "Confirm password",
+		relogin: "You will log in again after updating your password!",
+		updatePassword: "Update your password",
+		passwordReq: "Password requirement",
+		newPasswordReq: "The new password must meet all the following requirements",
+		minChar: "At least 6 characters",
+		maxChar: "Maximum 30 characters",
+		minNum: "At least one number",
+		inviteUsers: "Invite users and get benefits!",
+		inviteCode: "My invitation code",
+		exclusiveInviteCode: "Generate exclusive invitation code",
+		copyExclusicInviteCode: "Copy exclusive invitation link",
+		inviteUserToGive: "Invite a user to give",
+		pointBaseModelAmount: "Point base model amount",
+		pointAdvancedModelQuota: "Points advanced model quota",
+		mjPaintingPoints: "MJ Painting Points Amount",
+		usersWhoReceieveInvitations: "Users who receive invitations receive",
+		inviteRecord: "invitation record",
+	},
 };

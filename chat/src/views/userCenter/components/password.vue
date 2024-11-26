@@ -3,7 +3,7 @@ import type { FormInst, FormItemInst, FormItemRule, FormRules } from 'naive-ui'
 import { NButton, NCard, NForm, NFormItem, NGrid, NGridItem, NInput, useMessage } from 'naive-ui'
 import { ref } from 'vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 import { fetchUpdatePasswordAPI } from '@/api'
 import type { ResData } from '@/api/types'
 
@@ -24,41 +24,43 @@ const formRef = ref<FormInst | null>(null)
 
 const rPasswordFormItemRef = ref<FormItemInst | null>(null)
 
+const appStore = useAppStore()
+
 const rules: FormRules = {
   oldPassword: [
     {
       required: true,
       min: 6,
-      message: '密码最短长度为6位数',
+      message: appStore.getLanguage() == 'en-US' ? 'The minimum password length is 6 digits' : '密码最短长度为6位数',
       trigger: ['blur'],
     },
     {
       required: true,
       max: 30,
-      message: '密码最长长度为30位数',
+      message: appStore.getLanguage() == 'en-US' ? 'The maximum password length is 30 digits' : '密码最长长度为30位数',
       trigger: ['blur'],
     },
   ],
   password: [
     {
       required: true,
-      message: '请输入密码',
+      message: appStore.getLanguage() == 'en-US' ? 'Please enter password' : '请输入密码',
     },
   ],
   reenteredPassword: [
     {
       required: true,
-      message: '请再次输入密码',
+      message: appStore.getLanguage() == 'en-US' ? 'Please enter password again' : '请再次输入密码',
       trigger: ['input', 'blur'],
     },
     {
       validator: validatePasswordStartWith,
-      message: '两次密码输入不一致',
+      message: appStore.getLanguage() == 'en-US' ? 'The two password inputs are inconsistent' : '两次密码输入不一致',
       trigger: 'input',
     },
     {
       validator: validatePasswordSame,
-      message: '两次密码输入不一致',
+      message: appStore.getLanguage() == 'en-US' ? 'The two password inputs are inconsistent' : '两次密码输入不一致',
       trigger: ['blur', 'password-input'],
     },
   ],
@@ -88,7 +90,7 @@ const ms = useMessage()
 async function updatePassword(options: { oldPassword: string; password: string }) {
   const res: ResData = await fetchUpdatePasswordAPI(options)
   if (res.success)
-    ms.success('密码更新成功、请重新登录系统！')
+    appStore.getLanguage() == 'en-US' ? ms.success('Password updated successfully, please log in to the system again!') : ms.success('密码更新成功、请重新登录系统！')
   resetForm()
   authStore.updatePasswordSuccess()
 }
@@ -115,15 +117,15 @@ function handleValidate(e: MouseEvent) {
 <template>
   <NCard>
     <template #header>
-      <div>变更您的密码</div>
+      <div>{{ $t('userCenter.changePassword') }}</div>
     </template>
     <NGrid :x-gap="24" :y-gap="24" :cols=" isSmallXl ? 1 : 3" class="mt-3">
       <NGridItem class="border rounded-sm p-3  dark:border-[#ffffff17]" span="2">
         <NForm ref="formRef" :model="model" :rules="rules">
-          <NFormItem path="oldPassword" label="旧密码">
+          <NFormItem path="oldPassword" :label="$t('userCenter.oldPassword')">
             <NInput v-model:value="model.oldPassword" @keydown.enter.prevent />
           </NFormItem>
-          <NFormItem path="password" label="新密码">
+          <NFormItem path="password" :label="$t('userCenter.newPassword')">
             <NInput
               v-model:value="model.password"
               type="password"
@@ -135,7 +137,7 @@ function handleValidate(e: MouseEvent) {
             ref="rPasswordFormItemRef"
             first
             path="reenteredPassword"
-            label="确认密码"
+            :label="$t('userCenter.confirmPassword')"
           >
             <NInput
               v-model:value="model.reenteredPassword"
@@ -147,30 +149,30 @@ function handleValidate(e: MouseEvent) {
           </NFormItem>
 
           <div class="flex justify-between">
-            <span class="text-[#95AAC9]">更新密码后将重新登录！</span>
+            <span class="text-[#95AAC9]">{{$t('share.relogin')}}</span>
             <NButton
               :disabled="model.oldPassword === null"
               type="primary"
               @click="handleValidate"
             >
-              更新您的密码
+              {{$t('share.updatePassword')}}
             </NButton>
           </div>
         </NForm>
       </NGridItem>
       <NGridItem class="border rounded-sm p-3  bg-[#f8f9fa] h-48 dark:bg-[#18181c]  dark:border-[#ffffff17]">
-        <b class="text-base ">密码要求</b>
+        <b class="text-base ">{{ $t('share.passwordReq') }}</b>
         <p class="text-[#95AAC9] mt-3">
-          新的密码必须满足以下所有要求。
+          {{$t('userCenter.newPasswordReq')}}。
         </p>
         <div class="ml-3 text-[#95AAC9] mt-2">
-          最少6个字符
+          {{ $t('userCenter.minChar') }}
         </div>
         <div class="ml-3 text-[#95AAC9] mt-2">
-          最多30个字符
+          {{ $t('userCenter.maxChar') }}
         </div>
         <div class="ml-3 text-[#95AAC9] mt-2">
-          至少带有一个数字
+          {{ $t('userCenter.minNum') }}
         </div>
       </NGridItem>
     </NGrid>

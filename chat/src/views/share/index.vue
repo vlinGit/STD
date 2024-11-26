@@ -9,7 +9,7 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import qianbao from '@/assets/qianbao.png'
 import { SvgIcon } from '@/components/common'
 import { copyText } from '@/utils/format'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 import BadgeImg from '@/assets/badge.png'
 import { fetchGenInviteCodeAPI, fetchGetInviteRecordAPI } from '@/api/user'
 import { fetchSalesAccountAPI, fetchSalesOrderAPI, fetchSalesRecordsAPI } from '@/api/sales'
@@ -68,6 +68,7 @@ const inviteDialog = ref(false)
 const salesRecords = ref<SalesRecords[]>([])
 const drawMoneyOrders = ref<DrawMoneyOrder[]>([])
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const globalConfig = computed(() => authStore.globalConfig)
 const salesBaseRatio = computed(() => globalConfig.value?.salesBaseRatio ? Number(globalConfig.value?.salesBaseRatio) : 10)
 const salesSeniorRatio = computed(() => globalConfig.value?.salesSeniorRatio ? Number(globalConfig.value?.salesSeniorRatio) : 10)
@@ -157,7 +158,7 @@ const paginationReg = reactive({
 /* 推介记录 */
 const recColumns = ref<any[]>([
   {
-    title: '订单金额',
+    title: appStore.getLanguage() == 'en-US' ? 'Order amount' : '订单金额',
     align: 'center',
     orderPrice: 'address',
     render(row: SalesRecords) {
@@ -166,7 +167,7 @@ const recColumns = ref<any[]>([
   },
   {
     align: 'center',
-    title: '商品类型',
+    title: appStore.getLanguage() == 'en-US' ? 'Product type' : '商品类型',
     key: 'tags',
     render(row: SalesRecords) {
       return '购买套餐'
@@ -174,7 +175,7 @@ const recColumns = ref<any[]>([
   },
   {
     align: 'center',
-    title: '状态',
+    title: appStore.getLanguage() == 'en-US' ? 'State' : '状态',
     key: 'status',
     render(row: SalesRecords) {
       return h(
@@ -190,7 +191,7 @@ const recColumns = ref<any[]>([
   },
   {
     align: 'center',
-    title: '佣金比例',
+    title: appStore.getLanguage() == 'en-US' ? 'Commission ratio' : '佣金比例',
     key: 'commissionAmount',
     render(row: SalesRecords) {
       return `${row.commissionPercentage}%`
@@ -198,7 +199,7 @@ const recColumns = ref<any[]>([
   },
   {
     align: 'center',
-    title: '佣金',
+    title: appStore.getLanguage() == 'en-US' ? 'Commission' : '佣金',
     key: 'commissionAmount',
     render(row: SalesRecords) {
       return `￥${row.commissionAmount}元`
@@ -206,7 +207,7 @@ const recColumns = ref<any[]>([
   },
   {
     align: 'center',
-    title: '订购时间',
+    title: appStore.getLanguage() == 'en-US' ? 'Order time' : '订购时间',
     key: 'createdAt',
   },
 ])
@@ -224,7 +225,7 @@ async function genMyInviteCode() {
   const res: ResData = await fetchGenInviteCodeAPI()
   if (!res.data)
     return ms.error(res.message)
-  ms.success('生成邀请码成功')
+  appStore.getLanguage() == 'en-US' ? ms.success('Invitation code generated successfully') : ms.success('生成邀请码成功')
   authStore.getUserInfo()
 }
 
@@ -276,17 +277,17 @@ async function querySalesOrder() {
 
 const drawMoneyColums = ref<any[]>([
   {
-    title: '提现时间',
+    title: appStore.getLanguage() == 'en-US' ? 'Withdrawal time' : '提现时间',
     key: 'createdAt',
     align: 'center',
   },
   {
-    title: '提现金额',
+    title: appStore.getLanguage() == 'en-US' ? 'Withdraw amount' : '提现金额',
     key: 'withdrawalAmount',
     align: 'center',
   },
   {
-    title: '提现渠道',
+    title: appStore.getLanguage() == 'en-US' ? 'Withdrawal channels' : '提现渠道',
     key: 'withdrawalChannels',
     align: 'center',
     render(row: DrawMoneyOrder) {
@@ -297,12 +298,12 @@ const drawMoneyColums = ref<any[]>([
           size: 'small',
           round: true,
         },
-        () => row.withdrawalChannels === 1 ? '支付宝' : '微信',
+        () => row.withdrawalChannels === 1 ? (appStore.getLanguage() == 'en-US' ? 'Alipay' : '支付宝') : (appStore.getLanguage() == 'en-US' ? 'WeChat' : '微信'),
       )
     },
   },
   {
-    title: '提现状态',
+    title: appStore.getLanguage() == 'en-US' ? 'Withdrawal status' : '提现状态',
     key: 'paymentStatus',
     render(row: DrawMoneyOrder) {
       return h(
@@ -317,7 +318,7 @@ const drawMoneyColums = ref<any[]>([
     },
   },
   {
-    title: '提现备注',
+    title: appStore.getLanguage() == 'en-US' ? 'Withdrawal notes' : '提现备注',
     key: 'contactInformation',
     align: 'center',
     render(row: DrawMoneyOrder) {
@@ -325,7 +326,7 @@ const drawMoneyColums = ref<any[]>([
     },
   },
   {
-    title: '审核人',
+    title: appStore.getLanguage() == 'en-US' ? 'Reviewer' : '审核人',
     key: 'auditUserId',
     align: 'center',
     render(row: DrawMoneyOrder) {
@@ -336,7 +337,7 @@ const drawMoneyColums = ref<any[]>([
 
 const regColums = ref<any[]>([
   {
-    title: '头像',
+    title: appStore.getLanguage() == 'en-US' ? 'Avatar' : '头像',
     align: 'center',
     key: 'avatar',
     render(row: InviteRecord) {
@@ -353,16 +354,16 @@ const regColums = ref<any[]>([
   },
   {
     align: 'center',
-    title: '用户名',
+    title: appStore.getLanguage() == 'en-US' ? 'Username' : '用户名',
     key: 'username',
   },
   {
     align: 'center',
-    title: '邮箱',
+    title: appStore.getLanguage() == 'en-US' ? 'Mail' : '邮箱',
     key: 'email',
   },
   {
-    title: '受邀人状态',
+    title: appStore.getLanguage() == 'en-US' ? 'Invitee status' : '受邀人状态',
     align: 'center',
     key: 'status',
     render(row: InviteRecord) {
@@ -378,12 +379,12 @@ const regColums = ref<any[]>([
     },
   },
   {
-    title: '注册时间',
+    title: appStore.getLanguage() == 'en-US' ? 'Registration time' : '注册时间',
     align: 'center',
     key: 'createdAt',
   },
   {
-    title: '最后登录',
+    title: appStore.getLanguage() == 'en-US' ? 'Last login' : '最后登录',
     align: 'center',
     key: 'updatedAt',
   },
@@ -408,9 +409,9 @@ async function queryInviteRecord() {
 /* 复制分享连接 */
 function copyUrl() {
   if (!inviteCode.value)
-    return ms.error('请先申请你的邀请码')
+    return appStore.getLanguage() == 'en-US' ? ms.error('Please apply for your invitation code first') : ms.error('请先申请你的邀请码')
   copyText({ text: inviteUrl.value })
-  ms.success('复制推荐链接成功')
+  appStore.getLanguage() == 'en-US' ? ms.success('Copy recommendation link successfully') : ms.success('复制推荐链接成功')
   const element: any = selectable.value
   const range = document.createRange()
   const selection: any = window.getSelection()
@@ -428,17 +429,17 @@ onMounted(() => {
 
 <template>
   <div class="main bg-[#f8f8fb] min-h-screen bg-center dark:bg-[#2F2E34]">
-    <TitleBar :class="[isMobile ? 'px-3' : 'px-14']" title="推介计划" des="加入我们，共享成功！欢迎来到我们的分销页面，成为我们的合作伙伴，一同开创美好未来！" />
+    <TitleBar :class="[isMobile ? 'px-3' : 'px-14']" :title="$t('share.referral')" :des="$t('share.joinUs')" />
     <div class="flex-1 flex-wrap py-5 flex justify-between" :class="[isMobile ? 'px-3' : 'px-20']">
       <div class="px-[12px] min-w-[350px]" :class="[isMobile ? 'w-full' : 'w-1/3']">
         <!-- 我得账户 -->
 
         <div class="w-full bg-[#f78400] p-6 flex flex-col justify-between rounded shadow-xl relative">
           <div class="absolute right-4 top-6 font-bold text-base opacity-60 text-[#eee] flex">
-            {{ inviteAccount?.salesOutletName || '新秀推荐官' }} <img :src="BadgeImg" class="ml-2 w-6 h-6 opacity-50">
+            {{ inviteAccount?.salesOutletName || $t('share.rookieRec') }} <img :src="BadgeImg" class="ml-2 w-6 h-6 opacity-50">
           </div>
           <h2 class="text-[#fff] font-bold text-xl">
-            我的推介
+            {{ $t('share.myRec') }}
           </h2>
           <div class="leading-loose flex justify-between items-center py-5">
             <div class="text-[#fff]">
@@ -451,7 +452,7 @@ onMounted(() => {
                   :precision="2"
                 />
               </span>
-              <span class="ml-3">元</span>
+              <span class="ml-3">{{$t('share.yuan')}}</span>
             </div>
             <img :src="qianbao" class="w-20 opacity-10" alt="">
           </div>
@@ -459,16 +460,16 @@ onMounted(() => {
             <div class="flex flex-col">
               <div class="flex items-end">
                 <span class="font-bold text-xl">{{ inviteAccount?.distributionBalance || 0 }}</span>
-                <span class="ml-2">元</span>
+                <span class="ml-2">{{$t('share.yuan')}}</span>
               </div>
-              <div>剩余可提金额</div>
+              <div>{{$t('share.remainingWithdrawal')}}</div>
             </div>
             <div class="flex flex-col">
               <div class="flex items-end">
                 <span class="font-bold text-xl">{{ inviteAccount?.drawMoneyIn || 0 }}</span>
-                <span class="ml-2">元</span>
+                <span class="ml-2">{{$t('share.yuan')}}</span>
               </div>
-              <div>提现中金额</div>
+              <div>{{$t('share.amountWithdrawn') }}</div>
             </div>
             <div>
               <NPopover
@@ -478,10 +479,10 @@ onMounted(() => {
               >
                 <template #trigger>
                   <div class="btn " :class="[inviteAccount?.distributionBalance < Number(salesBaseRatio) ? 'disabled' : '']" @click="drawMoneyVisibleDialog = true">
-                    立即提现
+                    {{ $t('share.immediateWithdraw') }}
                   </div>
                 </template>
-                <span>最低{{ Number(globalConfig?.salesAllowDrawMoney) || 10 }}元可提现!</span>
+                <span>{{$t('share.lowest')}} {{ Number(globalConfig?.salesAllowDrawMoney) || 10 }}元可提现!</span>
               </NPopover>
             </div>
           </div>
@@ -492,21 +493,21 @@ onMounted(() => {
           <div class="flex p-4 justify-between  border-b dark:border-[#3a3a40]">
             <div class="flex item-center">
               <SvgIcon class="text-lg" icon="icon-park-outline:order" />
-              <span class="ml-2">购买订单数量</span>
+              <span class="ml-2">{{$t('share.orderQuantity')}}</span>
             </div>
             <b class="text-base">{{ inviteAccount?.orderCount || 0 }}</b>
           </div>
           <div class="flex p-4 justify-between  border-b dark:border-[#3a3a40]">
             <div class="flex item-center">
               <SvgIcon class="text-lg" icon="ep:link" />
-              <span class="ml-2">推广链接访问次数</span>
+              <span class="ml-2">{{ $t('share.linkVisits') }}</span>
             </div>
             <b class="text-base">{{ inviteAccount?.inviteLinkCount || 0 }}</b>
           </div>
           <div class="flex p-4 justify-between  ">
             <div class="flex item-center">
               <SvgIcon class="text-lg" icon="ph:user" />
-              <span class="ml-2">注册用户</span>
+              <span class="ml-2">{{ $t('share.registeredUser') }}</span>
             </div>
             <b class="text-base">{{ inviteAccount?.inviteCount || 0 }}</b>
           </div>
@@ -517,40 +518,40 @@ onMounted(() => {
           <div class="py-6 px-4 flex justify-between items-center">
             <div class="flex flex-col">
               <h3 class="text-base">
-                推介收益
+                {{ $t('share.earnings') }}
               </h3>
               <div class="text-[#999] text-xs mt-2">
-                推介的用户注册购买产品后返佣金额
+                {{ $t('share.recommendDes') }}
               </div>
             </div>
             <NTag round :bordered="false" type="success" size="small">
-              百分比{{ salesBaseRatio }}%
+              {{$t('share.percent')}} {{ salesBaseRatio }}%
             </NTag>
           </div>
           <div class="py-6 px-4 flex justify-between items-center">
             <div class="flex flex-col">
               <h3 class="text-base">
-                申请成为高级代理
+                {{ $t('share.applySeniorAgent') }}
               </h3>
               <div class="text-[#999] text-xs mt-2">
-                联系站长申请高级代理可享超高返佣
+                {{ $t('share.contactSeniorAgent') }}
               </div>
             </div>
             <NTag round :bordered="false" type="success" size="small">
-              百分比{{ salesSeniorRatio }}%
+              {{$t('share.percent')}} {{ salesSeniorRatio }}%
             </NTag>
           </div>
           <div class="py-6 px-4 flex justify-between items-center">
             <div class="flex flex-col">
               <h3 class="text-base">
-                加入我们成为合伙人
+                {{ $t('share.partnerJoin') }}
               </h3>
               <div class="text-[#999] text-xs mt-2">
-                加入我们成为合伙人共同运营社区、合作双赢！
+                {{ $t('share.partnerJoinDes') }}
               </div>
             </div>
             <NTag round :bordered="false" type="error" size="small">
-              合作共赢，携手共进
+              {{ $t('share.win') }}
             </NTag>
           </div>
         </div>
@@ -561,14 +562,14 @@ onMounted(() => {
         <div class="bg-[#fff]  dark:bg-[#24272e] p-5 rounded flex">
           <div class="w-full flex ">
             <div class="border border-[ced4da] dark:border-[#3a3a40] text-sm py-1 rounded-l-md flex items-center" :class="[isMobile ? 'px-1' : 'px-3']">
-              推荐链接：
+              {{$t('share.recLink')}} ：
             </div>
             <!-- <NInput value="https://www.asiayun.com/aff/KOSLCAQV" disabled :style="{ width: '500px' }" /> -->
             <div ref="selectable" class="bg-[#fafafa] dark:bg-[#2F2E34] flex-1 flex items-center  dark:border-[#ffffff17] border-b border-t pl-4 max-w-[500px] select-text overflow-x-hidden whitespace-nowrap">
               {{ inviteUrl }}
             </div>
             <div v-if="!inviteCode" :class="[isMobile ? 'px-2' : 'px-5']" class="cursor-pointer  hover:text-[#5A91FC] transition-all border dark:border-[#ffffff17] flex items-center  mr-[-1px] select-none" @click="genMyInviteCode">
-              申请
+              {{$t('share.apply')}}
             </div>
             <div v-if="inviteCode" :class="[isMobile ? 'px-2' : 'px-5']" class="cursor-pointer  hover:text-[#5A91FC] transition-all border dark:border-[#ffffff17] flex items-center  mr-[-1px]">
               <SvgIcon class="text-lg" icon="fluent:document-copy-48-regular" @click="copyUrl" />
@@ -582,17 +583,17 @@ onMounted(() => {
         <!-- 推荐记录 -->
         <div class="mt-5 bg-[#fff] p-5 dark:bg-[#24272e]">
           <NTabs ref="tabRef" v-model:value="tabValue" :bar-width="338" animated justify-content="space-evenly" type="line" @update:value="handleUpdateValue">
-            <NTabPane name="rec" tab="推介记录">
+            <NTabPane name="rec" :tab="$t('share.recRecord')">
               <div class="pt-5">
                 <NDataTable :min-width="200" :loading="recLoading" :remote="true" pagination-behavior-on-filter="first" class="min-h-[350px]" :columns="recColumns" :data="salesRecords" :pagination="paginationRec" :scroll-x="700" />
               </div>
             </NTabPane>
-            <NTabPane name="drawMoney" tab="提现记录">
+            <NTabPane name="drawMoney" :tab="$t('share.recWithdraw')">
               <div class="pt-5">
                 <NDataTable :loading="drawOrderLoading" :remote="true" pagination-behavior-on-filter="first" class="min-h-[350px]" :columns="drawMoneyColums" :data="drawMoneyOrders" :pagination="paginationOrder" :scroll-x="500" />
               </div>
             </NTabPane>
-            <NTabPane name="register" tab="注册用户">
+            <NTabPane name="register" :tab="$t('share.regUser')">
               <div class="pt-5">
                 <NDataTable :loading="registerLoading" :remote="true" pagination-behavior-on-filter="first" class="min-h-[350px]" :columns="regColums" :data="inviteData" :pagination="paginationReg" :scroll-x="500" />
               </div>
@@ -612,7 +613,7 @@ onMounted(() => {
             <NIcon size="22" color="#0e7a0d">
               <ShareOutline />
             </NIcon>
-            <span class="ml-[8px] mt-2 ">邀好友、赠套餐卡密、享充值返佣！</span>
+            <span class="ml-[8px] mt-2 ">{{ $t('share.invite') }}</span>
           </div>
           <NIcon size="20" color="#0e7a0d" class="cursor-pointer">
             <CloseOutline />
@@ -621,11 +622,11 @@ onMounted(() => {
         <div class="w-full flex mb-5 px-6">
           <NInputGroup>
             <NInputGroupLabel size="small">
-              邀请链接
+              {{$t('share.inviteLink')}}
             </NInputGroupLabel>
             <NInput size="small" :style="{ flex: 1 }" :value="inviteUrl" />
             <NInputGroupLabel size="small" @click="copyUrl">
-              <div>复制</div>
+              <div>{{ $t('share.copy') }}</div>
             </NInputGroupLabel>
           </NInputGroup>
         </div>
@@ -635,10 +636,10 @@ onMounted(() => {
         </div>
         <div class="flex flex-col p-5 justify-center">
           <span class="text-center">
-            1. 邀请好友双方都可享受一定额度的永久次卡奖励
+            1. {{ $t('share.bothParties') }}
           </span>
           <span class="text-center">
-            2. 邀请好友充值，您可获得充值金额的{{ salesBaseRatio || 10 }}%返佣
+            2. {{$t('share.rechargeFriend')}} {{ salesBaseRatio || 10 }}%{{$t('share.rebate')}}
           </span>
         </div>
       </div>

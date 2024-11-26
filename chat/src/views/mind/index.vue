@@ -8,11 +8,12 @@ import { saveAs } from 'file-saver'
 import * as htmlToImage from 'html-to-image'
 import domtoimage from 'dom-to-image'
 import { SvgIcon } from '@/components/common'
-import { useAuthStore, useGlobalStoreWithOut } from '@/store'
+import { useAuthStore, useGlobalStoreWithOut, useAppStore } from '@/store'
 
 import { fetchGetchatMindApi } from '@/api/index'
 
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const useGlobalStore = useGlobalStoreWithOut()
 const ms = useMessage()
 
@@ -23,7 +24,43 @@ const transformer = new Transformer()
 
 const loading = ref(false)
 
-const demoData = `
+const demoData = appStore.getLanguage() == 'en-US' ?
+`
+# Meeting process
+
+## Opening remarks
+- Welcome message
+-Introduce yourself
+
+## Agenda
+- Introduce the meeting agenda
+- Confirm that the agenda is accepted by everyone
+
+## Summary of the last meeting
+- Review the topics and results of the last meeting
+- Confirm whether the action items from the last meeting have been completed
+
+## Topic discussion
+- Propose the theme of this meeting
+-Introduce background information about the topic
+- Ask questions and discuss
+- Form consensus or decision-making
+
+## Action items
+- Determine action items and responsible persons
+- Determine completion time and goals
+
+## Announcements and other matters
+- Announce upcoming events or projects
+- Announce other matters of the company
+
+## Conclusion
+- Thanks to everyone who participated
+- Summarize the content of the meeting
+- Confirm the time and topic of the next meeting
+`
+:
+`
 # 会议流程
 
 ## 开场白
@@ -59,7 +96,22 @@ const demoData = `
 `
 
 const prompt = ref('')
-const initValue = `# YiAi
+const initValue = appStore.getLanguage() == 'en-US' ?
+`
+#YiAi
+## Basic functions
+- Support AI chat
+-Support GPT4
+- Support DLLAE2
+- Support Midjourney
+- More functions are waiting for you to explore...
+
+## More content
+- Enter what you want generated above
+- Click to generate
+`
+:
+`# YiAi
 ## 基础功能
 - 支持AI聊天
 - 支持GPT4
@@ -158,14 +210,15 @@ async function chatmind() {
   }
   catch (error: any) {
     loading.value = false
-    const { code = 500, message = '好像出错了，请稍后再试！' } = error
+    const errorMsg = appStore.getLanguage() == 'en-US' ? 'Something went wrong, please try again later!' : '好像出错了，请稍后再试！'
+    const { code = 500, message = errorMsg } = error
     if (code === 429 && message.includes('balance has been exhausted'))
-      return ms.error('当前系统Key余额耗尽、请联系管理员补充！')
+      return appStore.getLanguage() == 'en-US' ? ms.error('The current system Key balance is exhausted, please contact the administrator to replenish it!') : ms.error('当前系统Key余额耗尽、请联系管理员补充！')
 
     if (code === 500) {
-      let errorMessage = error?.message ?? '好像出错了，请稍后再试！'
+      let errorMessage = error?.message ?? errorMsg
       if (errorMessage === 'Request failed with status code 401')
-        errorMessage = '非法操作、请先登录后再进行问答使用！'
+        errorMessage = appStore.getLanguage() == 'en-US' ? 'Illegal operation, please log in first before using Q&A!' : '非法操作、请先登录后再进行问答使用！'
       ms.error(errorMessage)
       return
     }
@@ -174,7 +227,7 @@ async function chatmind() {
       useGlobalStore.updateGoodsDialog(true)
       return
     }
-    ms.error('出了点小错误、请稍后试试吧！')
+    appStore.getLanguage() == 'en-US' ? ms.error('There was a small error, please try again later!') : ms.error('出了点小错误、请稍后试试吧！')
   }
   finally {
     loading.value = false
@@ -214,7 +267,7 @@ onUpdated(update)
           思维导图
         </h2> -->
         <h4 class=" mb-2">
-          您的需求？
+          {{$t('mind.needs')}}？
         </h4>
         <NInput
           ref="inputRef"
@@ -224,19 +277,19 @@ onUpdated(update)
           :autosize="{
             minRows: 3,
           }"
-          placeholder="请输入您想要生成内容的简单描述、AI将为您输出一份完整的markdown内容及其思维导图!"
+          :placeholder="`${$t('mind.placeholderDescription')}!`"
         />
         <div class="flex my-4">
           <NButton type="primary" size="small" style="width: 100%" :loading="loading" @click="chatmind">
-            智能生成生成思维导图
+            {{$t('mind.intelligentGeneration')}}
           </NButton>
         </div>
         <div class="flex justify-between mb-2">
           <h4 class="font-bold">
-            内容需求
+            {{ $t('mind.contentReq') }}
           </h4>
           <NButton text @click="handleUseDemo">
-            试试示例
+            {{ $t('mind.tryExample') }}
           </NButton>
         </div>
         <NInput
@@ -247,26 +300,26 @@ onUpdated(update)
             minRows: 8,
             maxRows: 24,
           }"
-          placeholder="请用markdown语法输入您想要生成思维导图的内容或在上方使用描述让AI帮您完善！"
+          :placeholder="`${$t('mind.placeholderMarkdown')}！`"
         />
       </div>
       <div class="py-3 bottom-0 border-t-2 border-[#00000014] w-full flex flex-col justify-center items-center">
         <div class="items-start mb-2">
-          每次使用消耗基础积分： 1
+          {{$t('mind.consumeAmount')}}： 1
         </div>
         <div>
           <NButtonGroup size="small">
             <NButton type="primary" @click="exportHTML">
               <SvgIcon icon="ri:error-warning-line" class="text-base" />
-              导出HTML
+              {{$t('mind.export')}}HTML
             </NButton>
             <NButton type="primary" @click="exportPNG">
               <SvgIcon icon="ri:error-warning-line" class="text-base" />
-              导出PNG
+              {{$t('mind.export')}}PNG
             </NButton>
             <NButton type="warning" @click="exportSVG">
               <SvgIcon icon="ri:error-warning-line" class="text-base" />
-              导出SVG
+              {{$t('mind.export')}}SVG
             </NButton>
           </NButtonGroup>
         </div>
@@ -274,7 +327,7 @@ onUpdated(update)
     </div>
     <div class="h-full flex-1 overflow-y-auto overflow-hidden min-h-[80vh] flex flex-col">
 			<header class="flex items-center p-5">
-				<h2 class="font-bold text-2xl">思维导图</h2>
+				<h2 class="font-bold text-2xl">{{ $t('mind.map') }}</h2>
 			</header>
 			<div class="flex-1 w-full p-4 ">
 				<svg ref="svgRef" class="box-border  w-full h-full border rounded-md " />
