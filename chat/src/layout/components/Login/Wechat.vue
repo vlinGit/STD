@@ -4,7 +4,7 @@ import { NCountdown, NImage, NSkeleton, NSpin, useMessage, NButton, CountdownIns
 import { fetchGetQRCodeAPI, fetchGetQRSceneStrAPI, fetchLoginBySceneStrAPI } from '@/api/user'
 import type { ResData } from '@/api/types'
 import { SvgIcon } from '@/components/common'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 import { ss } from '@/utils/storage'
 import Motion from '@/utils/motion/index'
 let timer: any
@@ -22,6 +22,7 @@ const sceneStr = ref('')
 const activeCount = ref(false)
 const Nmessage = useMessage()
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const countdownRef = ref<CountdownInst | null>()
 const phoneLoginStatus = computed(() => Number(authStore.globalConfig.phoneLoginStatus) === 1)
 const { isMobile } = useBasicLayout()
@@ -51,7 +52,7 @@ async function loginBySnece() {
   const res: ResData = await fetchLoginBySceneStrAPI({ sceneStr: sceneStr.value })
   if (res.data) {
     clearInterval(timer)
-    Nmessage.success('账户登录成功、开始体验吧！')
+    appStore.getLanguage() == 'en-US' ? Nmessage.success('Account login successful, let’s start the experience!') : Nmessage.success('账户登录成功、开始体验吧！')
     authStore.setToken(res.data)
     authStore.getUserInfo()
     authStore.setLoginDialog(false)
@@ -91,10 +92,10 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="w-full h-full flex flex-col items-center">
-		<div class="text-[#374151] dark:text-white font-bold text-[20px] mt-[50px]">微信扫码登录</div>
+		<div class="text-[#374151] dark:text-white font-bold text-[20px] mt-[50px]">{{$t('loginWechat.scanCode')}}</div>
     <div style="white-space: nowrap" class="mt-[20px] w-full text-center font-bold text-sm">
       <p>
-        <span class="w-[65px] inline-block font-normal text-[#FF505C] text-left"><NCountdown ref="countdownRef" :active="activeCount" :duration="60 * 1000" :on-finish="handleTimeDown" /></span> 秒后二维码将刷新
+        <span class="w-[65px] inline-block font-normal text-[#FF505C] text-left"><NCountdown ref="countdownRef" :active="activeCount" :duration="60 * 1000" :on-finish="handleTimeDown" /></span> {{ $t('loginWechat.qrCodeRefresh') }}
       </p>
     </div>
 
@@ -111,7 +112,7 @@ onBeforeUnmount(() => {
 
 				<div class="mt-2 text-[#222222] dark:text-white font-normal flex items-center">
 					<img :src="wechatIcon" class="w-[16px]  mr-1" alt="">
-					微信扫码
+					{{$t('loginWechat.scanCode')}}
 				</div>
 			</div>
 		</Motion>
@@ -119,11 +120,11 @@ onBeforeUnmount(() => {
 			<div class="flex items-center justify-center space-x-5 mt-[36px] ">
 				<n-button v-if="emailLoginStatus" ghost class="!px-10" @click="emit('changeLoginType', 'email')">
 					<SvgIcon class="text-xl mr-2 text-[#3076fd]" icon="clarity:email-line" />
-					邮箱号登录
+					{{ $t("loginWechat.emailLogin") }}
 				</n-button>
 				<n-button  v-if="phoneLoginStatus" ghost  class="!px-10"  @click="emit('changeLoginType', 'phone')">
 					<SvgIcon  class="text-xl mr-2 text-[#3076fd]" icon="clarity:mobile-phone-solid" />
-					手机号登录
+					{{ $t('loginWechat.phonenumberLogin') }}
 				</n-button>
 			</div>
 		</Motion>

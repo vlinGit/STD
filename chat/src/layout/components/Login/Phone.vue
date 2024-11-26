@@ -49,12 +49,12 @@ const { isMobile } = useBasicLayout()
 
 const rules: FormRules = {
   username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 2, max: 30, message: '用户名长度应为 2 到 30 个字符', trigger: 'blur' },
+    { required: true, message: appStore.getLanguage() == 'en-US' ? 'Please enter username' : '请输入用户名', trigger: 'blur' },
+    { min: 2, max: 30, message: appStore.getLanguage() == 'en-US' ? 'Username should be 2 to 30 characters long' : '用户名长度应为 2 到 30 个字符', trigger: 'blur' },
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 30, message: '密码长度应为 6 到 30 个字符', trigger: 'blur' },
+    { required: true, message: appStore.getLanguage() == 'en-US' ? 'Please enter password' : '请输入密码', trigger: 'blur' },
+    { min: 6, max: 30, message: appStore.getLanguage() == 'en-US' ? 'Password length should be 6 to 30 characters' : '密码长度应为 6 到 30 个字符', trigger: 'blur' },
   ],
   phone: [
     {
@@ -62,23 +62,23 @@ const rules: FormRules = {
       trigger: 'blur',
       validator(rule: FormItemRule, value: string) {
         if (!value)
-          return new Error('请输入手机号')
+          return new Error(appStore.getLanguage() == 'en-US' ? 'Please enter mobile phone number' : '请输入手机号')
 
         else if (!/^1[3,4,5,6,7,8,9][0-9]{9}$/.test(value))
-          return new Error('请输入正确格式的手机号')
+          return new Error(appStore.getLanguage() == 'en-US' ? 'Please enter your mobile phone number in the correct format' : '请输入正确格式的手机号')
 
         return true
       },
     },
   ],
   captchaCode: [
-    { required: true, message: '请填写图形验证码结果', trigger: 'blur' },
+    { required: true, message: appStore.getLanguage() == 'en-US' ? 'Please fill in the graphic verification code result' : '请填写图形验证码结果', trigger: 'blur' },
   ],
   phoneCode: [
-    { required: true, message: '请填写手机验证码', trigger: 'blur' },
+    { required: true, message: appStore.getLanguage() == 'en-US' ? 'Please fill in the mobile phone verification code' : '请填写手机验证码', trigger: 'blur' },
   ],
 }
-const logTips = computed(() => (isLogin.value ? '还没账号?去注册！' : '已有账号, 去登录！'))
+const logTips = computed(() => (isLogin.value ? appStore.getLanguage() == 'en-US' ? 'Don’t have an account yet? Register!' : '还没账号?去注册！' : appStore.getLanguage() == 'en-US' ? 'Already have an account? Log in!' : '已有账号, 去登录！'))
 const wechatRegisterStatus = computed(() => Number(authStore.globalConfig.wechatRegisterStatus) === 1)
 const phoneRegisterStatus = computed(() => Number(authStore.globalConfig.phoneRegisterStatus) === 1)
 const phoneLoginStatus = computed(() => Number(authStore.globalConfig.phoneLoginStatus) === 1)
@@ -139,14 +139,14 @@ function handlerSubmit() {
         if (!success)
           return Nmessage.error(message)
         if (!isLogin.value) {
-          Nmessage.success('账户注册成功、开始体验吧！')
+          appStore.getLanguage() == 'en-US' ? Nmessage.success('Account registration successful, let’s start the experience!') : Nmessage.success('账户注册成功、开始体验吧！')
           const { phone, password } = registerForm.value
           loginForm.value.phone = phone
           loginForm.value.password = password
           isLogin.value = !isLogin.value
         }
         else {
-          Nmessage.success('账户登录成功、开始体验吧！')
+          appStore.getLanguage() == 'en-US' ? Nmessage.success('Account login successful, let’s start the experience!') : Nmessage.success('账户登录成功、开始体验吧！')
           authStore.setToken(res.data)
           authStore.getUserInfo()
           authStore.setLoginDialog(false)
@@ -189,25 +189,25 @@ onMounted(() => {
       require-mark-placement="right-hanging"
       :style="{ maxWidth: '640px' }"
     >
-      <Motion :delay="50">
+    <Motion :delay="50">
         <NFormItem path="username">
-          <NInput v-model:value="registerForm.username" placeholder="请输入您的用户名昵称" />
+          <NInput v-model:value="registerForm.username" :placeholder="$t('login.username')" />
         </NFormItem>
       </Motion>
       <Motion :delay="120">
         <NFormItem path="password">
-          <NInput v-model:value="registerForm.password" placeholder="请输入您的账户密码" type="password" :maxlength="30" show-password-on="click" tabindex="0" @keyup.enter="handlerSubmit" />
+          <NInput v-model:value="registerForm.password" :placeholder="$t('login.password')" type="password" :maxlength="30" show-password-on="click" tabindex="0" @keyup.enter="handlerSubmit" />
         </NFormItem>
       </Motion>
       <Motion :delay="190">
-        <NFormItem path="phone">
-          <NInput v-model:value="registerForm.phone" placeholder="请填写您的手机号" />
+        <NFormItem path="email">
+          <NInput v-model:value="registerForm.email" :placeholder="$t('login.email')" />
         </NFormItem>
       </Motion>
       <Motion :delay="260">
         <NFormItem v-if="!isSendCaptcha" path="captchaCode">
           <div class="flex items-center w-full space-x-4">
-            <NInput v-model:value="registerForm.captchaCode" class="flex-1" placeholder="请填写图中验证码结果" />
+            <NInput v-model:value="registerForm.captchaCode" class="flex-1" :placeholder="$t('login.verifyCode')" />
             <div v-if="captchaSvg">
               <!-- <img :src="captchaSvg" alt=""> -->
               <span class="cursor-pointer rounded" @click="getCaptchaImg" v-html="captchaSvg" />
@@ -217,13 +217,13 @@ onMounted(() => {
       </Motion>
       <Motion :delay="330">
         <NFormItem v-if="isSendCaptcha" path="phoneCode">
-          <NInput v-model:value="registerForm.phoneCode" class="flex-1" placeholder="请填写手机验证码" />
+          <NInput v-model:value="registerForm.phoneCode" class="flex-1" :placeholder="$t('login.mobileVerifyCode')" />
         </NFormItem>
       </Motion>
 
       <Motion :delay="400">
         <NFormItem path="invitedBy">
-          <NInput v-model:value="registerForm.invitedBy" placeholder="邀请码[非必填]" />
+          <NInput v-model:value="registerForm.invitedBy" :placeholder="$t('login.invitecode')" />
         </NFormItem>
       </Motion>
 
@@ -236,7 +236,7 @@ onMounted(() => {
           :loading="loading"
           @click="handleSendCaptch"
         >
-          发送验证码
+          {{$t('login.sendVerifyCode')}}
         </NButton>
 
         <div v-else class="flex space-x-2 w-full">
@@ -248,7 +248,7 @@ onMounted(() => {
             class="flex-1"
             @click="handlerSubmit"
           >
-            注册账户
+            {{ $t('login.regAccount') }}
           </NButton>
           <NButton
             block
@@ -256,7 +256,7 @@ onMounted(() => {
             :disabled="lastSendPhoneCodeTime > 0"
             @click="isSendCaptcha = false"
           >
-            重新发送{{ lastSendPhoneCodeTime ? `(${lastSendPhoneCodeTime}S)` : '' }}
+            {{$t('login.resend')}}{{ lastSendPhoneCodeTime ? `(${lastSendPhoneCodeTime}S)` : '' }}
           </NButton>
         </div>
       </NFormItem>
@@ -278,12 +278,12 @@ onMounted(() => {
     >
       <Motion :delay="50">
         <NFormItem path="phone">
-          <NInput v-model:value="loginForm.phone" placeholder="请输入手机号" />
+          <NInput v-model:value="loginForm.phone" :placeholder="$t('login.enterPhonenumber')" />
         </NFormItem>
       </Motion>
       <Motion :delay="120">
         <NFormItem path="password">
-          <NInput v-model:value="loginForm.password" placeholder="请输入您的账户密码" type="password" :maxlength="30" show-password-on="click" tabindex="0" @keyup.enter="handlerSubmit" />
+          <NInput v-model:value="loginForm.password" :placeholder="$t('login.motionPassword')" type="password" :maxlength="30" show-password-on="click" tabindex="0" @keyup.enter="handlerSubmit" />
         </NFormItem>
       </Motion>
       <NFormItem>
@@ -295,8 +295,8 @@ onMounted(() => {
           class="!mt-[50px]"
           @click="handlerSubmit"
         >
-          登录账户
-        </NButton>
+        {{$t('login.accountLogin')}}
+      </NButton>
       </NFormItem>
     </NForm>
   </div>
@@ -307,11 +307,11 @@ onMounted(() => {
   <div class="flex items-center justify-center space-x-5 " :class="phoneRegisterStatus ? 'mt-[16px]' : 'mt-[36px]'">
     <NButton v-if="wechatRegisterStatus" ghost class="!px-10" @click="emit('changeLoginType', 'wechat')">
       <SvgIcon class="text-xl mr-2 text-[#3076fd]" icon="ph:wechat-logo" />
-      微信登录
+      {{ $t('login.wechat') }}
     </NButton>
     <NButton v-if="emailLoginStatus" ghost class="!px-10" @click="emit('changeLoginType', 'email')">
       <SvgIcon class="text-xl mr-2 text-[#3076fd]" icon="clarity:email-line" />
-      邮箱号登录
+      {{ $t('login.mobileLogin') }}
     </NButton>
   </div>
 

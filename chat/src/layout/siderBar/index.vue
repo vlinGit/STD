@@ -266,7 +266,7 @@ watch(
         {{ $t('setting.personalCenter') }}
       </NTooltip>
 
-      <HoverButton v-if="!isLogin" tooltip="登录账户" :placement="isMobile ? 'bottom' : 'right'"
+      <HoverButton v-if="!isLogin" :tooltip="$t('chat.login')" :placement="isMobile ? 'bottom' : 'right'"
         :class="isMobile ? 'mb-0' : 'mb-5'" @click="toggleLogin">
         <NIcon size="20" color="#555">
           <component :is="logInIcon" />

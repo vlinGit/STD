@@ -3,7 +3,7 @@ import type { CountdownInst } from 'naive-ui'
 import { NButton, NCountdown, NIcon, NModal, NRadio, NRadioGroup, NSkeleton, NSpace, NSpin, useMessage } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 import { CloseOutline, PaperPlaneOutline } from '@vicons/ionicons5'
-import { useAuthStore, useGlobalStore } from '@/store'
+import { useAuthStore, useGlobalStore, useAppStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { fetchOrderBuyAPI, fetchOrderQueryAPI } from '@/api/order'
 
@@ -11,6 +11,7 @@ import type { ResData, paymentRes } from '@/api/types'
 import QRCode from '@/components/common/QRCode/index.vue'
 import alipay from '@/assets/alipay.png'
 import wxpay from '@/assets/wxpay.png'
+import { AppStore } from '@icon-park/vue-next'
 defineProps<Props>()
 
 const { isMobile } = useBasicLayout()
@@ -22,6 +23,7 @@ const ms = useMessage()
 const active = ref(true)
 const payType = ref('alipay') // 默认支付宝支付
 const payResult = ref('')
+const appStore = useAppStore()
 
 interface Props {
   visible: boolean
@@ -87,8 +89,8 @@ const orderId = ref('')
 let timer: any
 const payTypes = computed(() => {
   return [
-    { label: '微信支付', value: 'wxpay', icon: wxpay, payChannel: 'wxpay' },
-    { label: '支付宝支付', value: 'alipay', icon: alipay, payChannel: 'alipay' },
+    { label: appStore.getLanguage() == 'en-US' ? 'WeChat Pay' : '微信支付', value: 'wxpay', icon: wxpay, payChannel: 'wxpay' },
+    { label: appStore.getLanguage() == 'en-US' ? 'Alipay payment' : '支付宝支付', value: 'alipay', icon: alipay, payChannel: 'alipay' },
   ].filter(item => payChannel.value.includes(item.payChannel))
 })
 
@@ -101,7 +103,7 @@ const queryOrderStatus = async () => {
     const { status } = data
     if (status === 1 && !payResult.value) {
       clearInterval(timer)
-      ms.success('恭喜你支付成功、祝您使用愉快！')
+      appStore.getLanguage() == 'en-US' ? ms.success('Congratulations on your successful payment and wish you a happy use!') : ms.success('恭喜你支付成功、祝您使用愉快！')
       active.value = false
       payResult.value = 'success'
       authStore.getUserInfo()
@@ -168,7 +170,7 @@ async function handleOpenDialog() {
 }
 
 function handleFinish() {
-  ms.error('支付超时，请重新下单!')
+  appStore.getLanguage() == 'en-US' ? ms.error('Payment timeout, please place an order again!') : ms.error('支付超时，请重新下单!')
   clearInterval(timer)
   useGlobal.updatePayDialog(false)
   // useGlobal.updateGoodsDialog(true)
@@ -183,7 +185,7 @@ function handleFinish() {
           <NIcon size="0" color="">
             <PaperPlaneOutline />
           </NIcon>
-          <span class="mt-8 ml-[40px]">商品支付</span>
+          <span class="mt-8 ml-[40px]">{{$t('payDialog.productPayment')}}</span>
         </div>
         <NIcon size="20" color="black" class="mt-10 mr-4 cursor-pointer">
           <CloseOutline />
@@ -191,7 +193,7 @@ function handleFinish() {
       </div>
       <div class="">
         <div>
-          <span class="ml-6 font-bold p-4 flex flex-col items-center">支付金额</span><br>
+          <span class="ml-6 font-bold p-4 flex flex-col items-center">{{ $t('payDialog.paymentAmount') }}</span><br>
           <span
             class="mt-[-40px] flex flex-col items-center"
             style="font-weight: bold;
@@ -207,18 +209,18 @@ function handleFinish() {
           >{{ `$${orderInfo.pkgInfo?.price}` }}</span>
         </div>
         <div class="mt-[-20px] w-full text-center font-bold text-sm flex flex-col justify-between h-full">
-          <span>请在
+          <span>{{$t('seeting.please')}}
             <span class="w-[60px] inline-block text-[#27E093] text-left"><NCountdown ref="countdownRef" :active="active" :duration="300 * 1000" :on-finish="handleFinish" />
             </span>
-            时间内完成支付！
+            {{ $t('payDialog.completePayment') }}
           </span>
         </div>
       </div>
       <div class="mt-8 justify-between ml-8 mt-2 flex">
-        <span class="whitespace-nowrap font-bold">套餐名称：</span><span class="text-right mr-10"> {{ orderInfo.pkgInfo?.name }}</span>
+        <span class="whitespace-nowrap font-bold">{{$t('payDialog.packageName')}}</span><span class="text-right mr-10"> {{ orderInfo.pkgInfo?.name }}</span>
       </div>
       <div class="justify-between ml-8 mt-2 flex">
-        <span class="whitespace-nowrap font-bold">套餐描述：</span><span class="text-right mr-10"> {{ orderInfo.pkgInfo?.des }} </span>
+        <span class="whitespace-nowrap font-bold">{{ $t('payDialog.packageDes') }}</span><span class="text-right mr-10"> {{ orderInfo.pkgInfo?.des }} </span>
       </div>
 
       <div class=" flex flex-col" :class="[isMobile ? 'w-full ' : ' ml-10 w-[200] ']">
@@ -228,7 +230,7 @@ function handleFinish() {
 
         <div class="mt-6 w-full text-center font-bold text-sm flex flex-col justify-between h-full" :class="[isMobile ? 'ml-0' : 'ml-0']">
           <NButton class="mr-10 pay-button" type="primary" ghost :disabled="redirectloading" :loading="redirectloading" @click="handleRedPay">
-            点击前往支付
+            {{ $t('payDialog.clickToPay') }}
           </NButton>
         </div>
         <NRadioGroup v-model:value="payType" name="radiogroup" class="flex">

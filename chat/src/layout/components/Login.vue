@@ -83,12 +83,12 @@ function changeLoginType(type: string){
 						<NResult
 							size="small"
 							status="403"
-							title="网站已经关闭注册通道"
-							description="请联系管理员开通吧"
+							:title="$t('login.closed')"
+							:description="$t('login.contactToActivate')"
 						>
 							<template #footer>
 								<NButton size="small" @click="authStore.setLoginDialog(false)">
-									知道了
+									{{$t('login.understood')}}
 								</NButton>
 							</template>
 						</NResult>
@@ -97,10 +97,10 @@ function changeLoginType(type: string){
 					<Wechat v-if="wechatRegisterStatus && showWxLogin" @changeLoginType="changeLoginType" />
 					<div class="mt-[50px]" >
 						<NTabs v-if="!showWxLogin" ref="tabsRef" v-model:value="tabName" animated  justify-content="space-evenly" >
-							<NTabPane v-if="emailLoginStatus" name="email" tab="邮箱号登录">
+							<NTabPane v-if="emailLoginStatus" name="email" :tab="$t('loginWechat.emailLogin')">
 								<Email  @changeLoginType="changeLoginType"  />
 							</NTabPane>
-							<NTabPane v-if="phoneLoginStatus" name="phone" tab="手机号登录">
+							<NTabPane v-if="phoneLoginStatus" name="phone" :tab="$t('loginWechat.phonenumberLogin')">
 								<Phone  @changeLoginType="changeLoginType" />
 							</NTabPane>
 						</NTabs>

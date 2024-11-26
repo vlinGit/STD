@@ -13,6 +13,7 @@ interface Props {
 }
 defineProps<Props>()
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const useGlobalStore = useGlobalStoreWithOut()
 const loading = ref(false)
 const { isMobile } = useBasicLayout()
@@ -76,7 +77,7 @@ async function handleSignIn() {
     signInLoading.value = true
     const res: ResData = await fetchSignInAPI()
     if (res.success)
-      ms.success('签到成功！')
+      appStore.getLanguage() == 'en-US' ? ms.success('Sign in successfully!') : ms.success('签到成功！')
     getSigninLog()
     authStore.getUserInfo()
     signInLoading.value = false
@@ -96,30 +97,30 @@ async function openDrawerAfter() {
     <NSpace vertical>
       <NCard closable @close="handleClose">
         <template #header>
-          <span class="text-base">签到奖励 <span>（已连续签到<b class="text-[red]">{{ consecutiveDays }}</b>天）</span></span>
+          <span class="text-base">{{$t('setting.signInRewards')}} <span>（{{ $t('signinDialog.signinContinuous') }}<b class="text-[red]">{{ consecutiveDays }}</b>{{$t('common.days')}}）</span></span>
         </template>
         <NAlert class="mb-5 p-0 !bg-[#ccddff]" :show-icon="false" type="primary">
-          每日签到赠送：
-          <span v-if="signInModel3Count > 0"><b class=" text-[red]">{{ signInModel3Count }}</b>积分基础模型对话额度</span>
-          <span v-if="signInModel4Count > 0"><b class="ml-2 text-[red]">{{ signInModel4Count }}</b>积分高级模型对话额度</span>
-          <span v-if="signInMjDrawToken > 0"><b class="ml-2 text-[red]">{{ signInMjDrawToken }}</b>点绘画积分额度</span>
+          {{$t('signinDialog.dailySignIn')}}：
+          <span v-if="signInModel3Count > 0"><b class=" text-[red]">{{ signInModel3Count }}</b>{{ $t('signinDialog.pointDialogAmount') }}</span>
+          <span v-if="signInModel4Count > 0"><b class="ml-2 text-[red]">{{ signInModel4Count }}</b>{{$t('signinDialog.pointAdvancedDialogQuota')}}</span>
+          <span v-if="signInMjDrawToken > 0"><b class="ml-2 text-[red]">{{ signInMjDrawToken }}</b>{{ $t('signinDialog.pointDrawing') }}</span>
         </NAlert>
         <NSpin :show="loading">
           <NCalendar v-model:value="value" style="height:420px" #="{ month, date }" :is-date-disabled="isDateDisabled">
             <div v-if="signed(month, date)" class="flex items-center w-full mt-2">
               <SvgIcon icon="heroicons:gift" class="text-xl text-[#5A91FC]" />
-              <span v-if="!isMobile" class="ml-2 text-xs">已签到</span>
+              <span v-if="!isMobile" class="ml-2 text-xs">{{$t('signinDialog.signedIn')}}</span>
             </div>
           </NCalendar>
         </NSpin>
         <div v-if="hasSignedInToday" class="flex mt-3 w-full mt-14">
           <NButton style="width: 100%" type="primary" round :loading="signInLoading" @click="handleSignIn">
-            今日尚未签到、点击签到
+            {{$t('signinDialog.notSignedIn')}}
           </NButton>
         </div>
 				<div v-if="!hasSignedInToday" class="flex mt-8 w-full mt-14">
           <NButton style="width: 100%" type="primary" round :loading="signInLoading" >
-            今日已成功签到
+            {{$t('signinDialog.signedInSuccess')}}
           </NButton>
         </div>
       </NCard>

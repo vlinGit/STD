@@ -1,18 +1,18 @@
 
 
 <script lang='ts' setup>
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 import { computed } from 'vue'
 import { NAlert} from 'naive-ui'
 
 const authStore = useAuthStore()
-
+const appStore = useAppStore()
 
 const registerSendStatus = computed(() => Number(authStore.globalConfig.registerSendStatus))
 const registerSendModel3Count = computed(() => Number(authStore.globalConfig.registerSendModel3Count))
 const registerSendModel4Count = computed(() => Number(authStore.globalConfig.registerSendModel4Count))
 const registerSendDrawMjCount = computed(() => Number(authStore.globalConfig.registerSendDrawMjCount))
-const registerTips = computed(() => (`首次认证：赠送${registerSendModel3Count.value}积分基础模型余额 | ${registerSendModel4Count.value}积分高级模型余额 | ${registerSendDrawMjCount.value}积分绘画余额`))
+const registerTips = computed(() => (`${appStore.getLanguage() == 'en-US' ? 'First certification: free' :'首次认证：赠送'}${registerSendModel3Count.value}${appStore.getLanguage() == 'en-US' ? 'points base model balance' : '积分基础模型余额'} | ${registerSendModel4Count.value}${appStore.getLanguage() == 'en-US' ? 'points advanced model balance' : '积分高级模型余额'} | ${registerSendDrawMjCount.value}${appStore.getLanguage() == 'en-US' ? 'points drawing balance' : '积分绘画余额'}`))
 
 </script>
 

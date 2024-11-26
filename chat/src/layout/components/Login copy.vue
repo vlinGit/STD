@@ -5,11 +5,12 @@ import { CloseOutline } from '@vicons/ionicons5'
 import Phone from './Login/Phone.vue'
 import Email from './Login/Email.vue'
 import Wechat from './Login/Wechat.vue'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 
 defineProps<Props>()
 let timer: any
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const activeCount = ref(false)
 const wxLoginUrl = ref('')
 const sceneStr = ref('')
@@ -42,7 +43,7 @@ interface Props {
   visible: boolean
 }
 
-const registerTips = computed(() => (`首次认证：赠送${registerSendModel3Count.value}积分基础模型 | ${registerSendModel4Count.value}积分高级模型 | ${registerSendDrawMjCount.value}积分绘画`))
+const registerTips = computed(() => (`${appStore.getLanguage() == 'en-US' ? 'First certification: free' : '首次认证：赠送'}${registerSendModel3Count.value}${appStore.getLanguage() == 'en-US' ? 'integral base model' : '积分基础模型'} | ${registerSendModel4Count.value}${appStore.getLanguage() == 'en-US' ? 'points advanced model' : '积分高级模型'} | ${registerSendDrawMjCount.value}${appStore.getLanguage() == 'en-US' ? 'points lottery model' : '积分抽奖模型'}`))
 
 function openDialog() {
 
@@ -66,13 +67,13 @@ function handleCloseDialog() {
       </div>
       <!-- register -->
       <NTabs v-if="!disabledReg" type="line" animated>
-        <NTabPane v-if="wechatRegisterStatus" name="wechat" tab="微信登录">
+        <NTabPane v-if="wechatRegisterStatus" name="wechat" :tab="$t('login.wechat')">
           <Wechat />
         </NTabPane>
-        <NTabPane v-if="emailRegisterStatus" name="email" tab="邮箱号登录">
+        <NTabPane v-if="emailRegisterStatus" name="email" :tab="$t('loginWechat.emailLogin')">
           <Email />
         </NTabPane>
-        <NTabPane v-if="phoneRegisterStatus" name="phone" tab="手机号登录">
+        <NTabPane v-if="phoneRegisterStatus" name="phone" :tab="$t('login.mobileLogin')">
           <Phone />
         </NTabPane>
       </NTabs>
@@ -83,12 +84,12 @@ function handleCloseDialog() {
         <NResult
           size="small"
           status="403"
-          title="网站已经关闭注册通道"
-          description="请联系管理员开通吧"
+          :title="$t('login.closed')"
+          :description="$t('login.contactToActivate')"
         >
           <template #footer>
             <NButton @click="authStore.setLoginDialog(false)">
-              知道了
+              {{ $t('login.understood') }}
             </NButton>
           </template>
         </NResult>

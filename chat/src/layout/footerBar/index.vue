@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { computed, onBeforeMount, ref } from 'vue'
 import { useMessage } from 'naive-ui'
 import { SvgIcon } from '@/components/common'
-import { useAuthStore, useGlobalStoreWithOut } from '@/store'
+import { useAuthStore, useGlobalStoreWithOut, useAppStore } from '@/store'
 import { fetchQueryMenuAPI } from '@/api/config'
 
 interface MenuItem {
@@ -18,12 +18,22 @@ interface MenuItem {
 }
 const menuLista = ref<MenuItem[]>([])
 const message = useMessage()
+const appStore = useAppStore()
 
 async function queryMenu() {
   const res: any = await fetchQueryMenuAPI({ menuPlatform: 0 })
   if (!res.success)
     return
   menuLista.value = res.data
+  if (appStore.getLanguage() == 'en-US'){
+    menuLista.value.forEach((item: MenuItem) => {
+      item.menuTipText = item.menuTipText.replace('ChatGPT生图', 'ChatGPT generates pictures')
+      item.menuTipText = item.menuTipText.replace('Midjourney (AI生图)', 'Midjourney (AI generated pictures)')
+      item.menuTipText = item.menuTipText.replace('AI Agent市场', 'AI Agent Market')
+      item.menuTipText = item.menuTipText.replace('会员套餐', 'Membership package')
+      item.menuTipText = item.menuTipText.replace('个人中心', 'Personal center')
+    })
+  }
 }
 const useGlobalStore = useGlobalStoreWithOut()
 const router = useRouter()
