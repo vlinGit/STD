@@ -26,27 +26,27 @@ async function getInfo() {
   <NSpin :show="loading">
     <div class="p-4 space-y-5 min-h-[200px]">
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">用户邮箱</span>
+        <span class="flex-shrink-0 w-[100px]">{{$t('setting.userEmail')}}</span>
         <div class="w-[200px]">
           {{ userInfo.email || "--" }}
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">用户姓名</span>
+        <span class="flex-shrink-0 w-[100px]">{{$t('setting.username')}}</span>
         <div class="w-[200px]">
           {{ userInfo.username || "--" }}
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">问答余额</span>
+        <span class="flex-shrink-0 w-[100px]">{{$t('setting.questionBalance')}}</span>
         <div class="w-[200px]">
-          {{ userBalance.usesLeft || "0" }} 积分
+          {{ userBalance.usesLeft || "0" }} {{$t('setting.integral')}}
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">绘画余额</span>
+        <span class="flex-shrink-0 w-[100px]">{{$t('setting.paintingBalanceNoMJ')}}</span>
         <div class="w-[200px]">
-          {{ userBalance.paintCount || "0" }} 积分
+          {{ userBalance.paintCount || "0" }} {{$t('setting.integral')}}
         </div>
       </div>
       <div class="flex items-center space-x-4">
@@ -56,7 +56,7 @@ async function getInfo() {
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">使用金额</span>
+        <span class="flex-shrink-0 w-[100px]">{{$t('setting.amountUsed')}}</span>
         <div class="w-[200px]">
           {{ userBalance.useTokens || "0" }} Token
         </div>

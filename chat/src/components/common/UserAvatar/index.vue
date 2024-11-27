@@ -38,10 +38,10 @@ function openDialog() {
     </div>
     <div class="flex-1 min-w-0 ml-2">
       <h2 v-if="loginComplete" class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap cursor-pointer" @click="show = true">
-        {{ userInfo.username ?? '未登录' }}
+        {{ userInfo.username ?? $t('setting.notLoggedIn') }}
       </h2>
       <NButton v-if="!loginComplete" text @click="authStore.setLoginDialog(true)">
-        登录/注册
+        {{ $t('setting.loginRegister') }}
       </NButton>
       <!-- <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
         <span> 点击购买卡密</span>

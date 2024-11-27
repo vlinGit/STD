@@ -39,7 +39,7 @@ interface Props {
       >
     </div>
     <div v-if="!tips && props.progress" class="progress">
-      绘制进度： {{ props.progress }}%
+      {{$t('base.drawProgress')}} ： {{ props.progress }}%
     </div>
     <div v-if="tips" class="progress">
       {{ props.tips }}

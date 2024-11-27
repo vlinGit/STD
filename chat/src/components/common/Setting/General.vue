@@ -131,7 +131,7 @@ function handleImportButtonClick(): void {
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.avatarLink') }}</span>
         <div class="flex-1">
-          <NInput v-model:value="avatar" placeholder="请填写头像地址" />
+          <NInput v-model:value="avatar" :placeholder="$t('setting.avatarAddress')" />
         </div>
         <NButton size="tiny" :disabled="btnDisabled" text type="primary" @click="updateUserInfo({ avatar })">
           {{ $t('common.update') }}
@@ -140,7 +140,7 @@ function handleImportButtonClick(): void {
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.name') }}</span>
         <div class="w-[200px]">
-          <NInput v-model:value="username" placeholder="请填写用户名" />
+          <NInput v-model:value="username" :placeholder="$t('setting.fillUsername')" />
         </div>
         <NButton size="tiny" :disabled="btnDisabled" text type="primary" @click="updateUserInfo({ username })">
           {{ $t('common.update') }}

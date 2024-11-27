@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
+import { useAppStore } from '@/store'
 
+const appStore = useAppStore()
 const props = defineProps({
   /* 图片地址 如果不是同源跨域 传入base64 */
   src: String,
@@ -154,7 +156,7 @@ const exportImage = (): Promise<string> => {
       resolve(base64Image)
     }
     else {
-      reject(new Error('无法获取canvas的2D渲染上下文'))
+      appStore.getLanguage() == 'en-US' ? reject(new Error('无法获取canvas的2D渲染上下文')) : reject(new Error('无法获取canvas的2D渲染上下文'))
     }
   })
 }

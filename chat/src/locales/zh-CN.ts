@@ -201,6 +201,16 @@ export default {
 		please: "请在",
 		pleaseExtra: " 时间内完成绑定",
 		signInRewards: "签到奖励",
+		avatarAddress: "请填写头像地址",
+		fillUsername: "请填写用户名",
+		userEmail: "用户邮箱",
+		username: "用户姓名",
+		questionBalance: "问答余额",
+		integral: "积分",
+		paintingBalanceNoMJ: "绘画余额",
+		amountUsed: "使用金额",
+		notLoggedIn: "未登录",
+		loginRegister: "登录/注册",
 	},
 	store: {
 		siderButton: "提示词商店",
@@ -488,5 +498,11 @@ export default {
 		signedIn: "已签到",
 		notSignedIn: "今日尚未签到、点击签到",
 		signedInSuccess: "今日已成功签到",
+	},
+	base: {
+		drawProgress: "绘制进度",
+		paintSameStyle: "画同款",
+		useSameStyle: "使用当前画同款",
+		copyPrompt: "复制提示词",
 	},
 };

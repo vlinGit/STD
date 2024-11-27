@@ -4,7 +4,7 @@ import { throttle } from '@/utils/functions/throttle'
 import { SvgIcon } from '@/components/common'
 import { copyText } from '@/utils/format'
 import { useMessage, NPopover } from 'naive-ui'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAppStore } from '@/store'
 import { useRouter } from 'vue-router'
 const authStore = useAuthStore()
 interface Props {
@@ -55,6 +55,7 @@ const isLogin = computed(() => authStore.isLogin)
 const width = computed(() => {
 	return props.scaleWidth?  Number(props.scaleWidth) * 2 + props.gap + 150 : 150
 });
+const appStore = useAppStore()
 
 const router = useRouter()
 /* 拿到图片高度 对定位top和right  新的一轮去插入最小值的那一列 贪心算法即可 */
@@ -142,7 +143,7 @@ function handleCopy(item: any) {
 	}
 	const { prompt } = item
 	copyText({ text: prompt })
-	ms.success('复制prompt成功')
+	appStore.getLanguage() == 'en-US' ? ms.success('Copy prompt successful') : ms.success('复制prompt成功')
 }
 
 function drawLike(item: any) {
@@ -217,7 +218,7 @@ onUnmounted(() => {
 										</span>
 									</button>
 								</template>
-								<span>画同款</span>
+								<span>{{$t('base.paintSameStyle')}}</span>
 							</n-popover>
 
 							<n-popover trigger="hover" v-if="usePropmpt" >
@@ -230,7 +231,7 @@ onUnmounted(() => {
 										</span>
 									</button>
 								</template>
-								<span>使用当前画同款</span>
+								<span>{{$t('base.useSameStyle')}}</span>
 							</n-popover>
 
 							<n-popover trigger="hover" v-if="copyPropmpt">
@@ -243,7 +244,7 @@ onUnmounted(() => {
 										</span>
 									</button>
 								</template>
-								<span>复制提示词</span>
+								<span>{{$t('base.copyPrompt')}}</span>
 							</n-popover>
 						</div>
 					</div>

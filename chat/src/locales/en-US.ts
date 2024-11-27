@@ -203,6 +203,8 @@ export default {
 		please: "Please",
 		pleaseExtra: " complete binding within time",
 		signInRewards: "Sign-in rewards",
+		avatarAddress: "Please fill in the avatar address",
+		fillUsername: "Please fill in the username",
 	},
 	store: {
 		siderButton: "Prompt Store",
@@ -505,5 +507,11 @@ export default {
 		signedIn: "Signed in",
 		notSignedIn: "Not signed in today, click to sign in",
 		signedInSuccess: "Signed in successfully today",
+	},
+	base: {
+		drawProgress: "Drawing progress",
+		paintSameStyle: "Paint the same style",
+		useSameStyle: "Use the same style as the current drawing",
+		copyPrompt: "Copy prompt word",
 	},
 };
